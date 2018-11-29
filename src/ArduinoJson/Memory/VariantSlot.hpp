@@ -30,11 +30,11 @@ struct VariantSlot {
   }
 
   void setNext(VariantSlot* slot) {
-    next = slot ? VariantSlotDiff(slot - this) : 0;
+    next = VariantSlotDiff(slot ? slot - this : 0);
   }
 
   void setPrev(VariantSlot* slot) {
-    prev = slot ? VariantSlotDiff(slot - this) : 0;
+    prev = VariantSlotDiff(slot ? slot - this : 0);
   }
 };
 
