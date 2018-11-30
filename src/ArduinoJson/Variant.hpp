@@ -167,7 +167,7 @@ class Variant : public VariantProxy<VariantData>,
   FORCE_INLINE bool set(
       T value, typename enable_if<is_integral<T>::value &&
                                   is_unsigned<T>::value>::type * = 0) const {
-    return variantSetUnsignedInteger(_data, static_cast<JsonUInt>(value));
+    return variantSetUnsignedInteger(_data, static_cast<UInt>(value));
   }
 
   // set(SerializedValue<const char *>)

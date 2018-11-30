@@ -92,8 +92,8 @@ class MsgPackSerializer {
     writeBytes(reinterpret_cast<const uint8_t*>(data), size);
   }
 
-  void visitNegativeInteger(JsonUInt value) {
-    JsonUInt negated = JsonUInt(~value + 1);
+  void visitNegativeInteger(UInt value) {
+    UInt negated = UInt(~value + 1);
     if (value <= 0x20) {
       writeInteger(int8_t(negated));
     } else if (value <= 0x80) {
@@ -114,7 +114,7 @@ class MsgPackSerializer {
 #endif
   }
 
-  void visitPositiveInteger(JsonUInt value) {
+  void visitPositiveInteger(UInt value) {
     if (value <= 0x7F) {
       writeInteger(uint8_t(value));
     } else if (value <= 0xFF) {

@@ -63,12 +63,12 @@ class JsonSerializer {
     for (size_t i = 0; i < n; i++) _writer.writeRaw(data[i]);
   }
 
-  void visitNegativeInteger(JsonUInt value) {
+  void visitNegativeInteger(UInt value) {
     _writer.writeRaw('-');
     _writer.writeInteger(value);
   }
 
-  void visitPositiveInteger(JsonUInt value) {
+  void visitPositiveInteger(UInt value) {
     _writer.writeInteger(value);
   }
 

@@ -44,7 +44,7 @@ struct RawData {
 // The enum VariantType determines which member is in use.
 union VariantContent {
   Float asFloat;
-  JsonUInt asInteger;
+  UInt asInteger;
   ArrayData asArray;
   ObjectData asObject;
   const char *asString;

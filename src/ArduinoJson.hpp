@@ -34,7 +34,7 @@ using ARDUINOJSON_NAMESPACE::DynamicJsonDocument;
 typedef ARDUINOJSON_NAMESPACE::Integer JsonInteger;
 typedef ARDUINOJSON_NAMESPACE::Float JsonFloat;
 using ARDUINOJSON_NAMESPACE::JsonKey;
-using ARDUINOJSON_NAMESPACE::JsonUInt;
+typedef ARDUINOJSON_NAMESPACE::UInt JsonUInt;
 typedef ARDUINOJSON_NAMESPACE::Pair JsonPair;
 typedef ARDUINOJSON_NAMESPACE::Variant JsonVariant;
 typedef ARDUINOJSON_NAMESPACE::VariantConst JsonVariantConst;

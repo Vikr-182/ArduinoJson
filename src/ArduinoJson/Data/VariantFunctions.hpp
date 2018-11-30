@@ -97,7 +97,7 @@ inline const ObjectData* variantAsObject(const VariantData* var) {
 inline bool variantSetBoolean(VariantData* var, bool value) {
   if (!var) return false;
   var->type = JSON_BOOLEAN;
-  var->content.asInteger = static_cast<JsonUInt>(value);
+  var->content.asInteger = static_cast<UInt>(value);
   return true;
 }
 
@@ -113,18 +113,18 @@ inline bool variantSetSignedInteger(VariantData* var, T value) {
   if (!var) return false;
   if (value >= 0) {
     var->type = JSON_POSITIVE_INTEGER;
-    var->content.asInteger = static_cast<JsonUInt>(value);
+    var->content.asInteger = static_cast<UInt>(value);
   } else {
     var->type = JSON_NEGATIVE_INTEGER;
-    var->content.asInteger = ~static_cast<JsonUInt>(value) + 1;
+    var->content.asInteger = ~static_cast<UInt>(value) + 1;
   }
   return true;
 }
 
-inline bool variantSetUnsignedInteger(VariantData* var, JsonUInt value) {
+inline bool variantSetUnsignedInteger(VariantData* var, UInt value) {
   if (!var) return false;
   var->type = JSON_POSITIVE_INTEGER;
-  var->content.asInteger = static_cast<JsonUInt>(value);
+  var->content.asInteger = static_cast<UInt>(value);
   return true;
 }
 
