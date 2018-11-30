@@ -6,9 +6,9 @@
 
 namespace ARDUINOJSON_NAMESPACE {
 
-class JsonKey {
+class Key {
  public:
-  JsonKey(const VariantSlot* slot) : _slot(slot) {}
+  Key(const VariantSlot* slot) : _slot(slot) {}
 
   operator const char*() const {
     return c_str();
@@ -22,7 +22,7 @@ class JsonKey {
     return _slot == 0 || _slot->key == 0;
   }
 
-  friend bool operator==(JsonKey lhs, const char* rhs) {
+  friend bool operator==(Key lhs, const char* rhs) {
     if (lhs.isNull()) return rhs == 0;
     return rhs ? !strcmp(lhs, rhs) : false;
   }

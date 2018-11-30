@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "JsonKey.hpp"
+#include "Key.hpp"
 #include "Variant.hpp"
 
 namespace ARDUINOJSON_NAMESPACE {
@@ -17,7 +17,7 @@ class Pair {
     }
   }
 
-  JsonKey key() const {
+  Key key() const {
     return _key;
   }
 
@@ -26,7 +26,7 @@ class Pair {
   }
 
  private:
-  JsonKey _key;
+  Key _key;
   Variant _value;
 };
 
@@ -38,7 +38,7 @@ class PairConst {
     }
   }
 
-  JsonKey key() const {
+  Key key() const {
     return _key;
   }
 
@@ -47,7 +47,7 @@ class PairConst {
   }
 
  private:
-  JsonKey _key;
+  Key _key;
   VariantConst _value;
 };
 }  // namespace ARDUINOJSON_NAMESPACE

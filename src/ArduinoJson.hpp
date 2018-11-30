@@ -29,17 +29,17 @@
 namespace ArduinoJson {
 typedef ARDUINOJSON_NAMESPACE::Array JsonArray;
 typedef ARDUINOJSON_NAMESPACE::ArrayConst JsonArrayConst;
-using ARDUINOJSON_NAMESPACE::DeserializationError;
-using ARDUINOJSON_NAMESPACE::DynamicJsonDocument;
-typedef ARDUINOJSON_NAMESPACE::Integer JsonInteger;
 typedef ARDUINOJSON_NAMESPACE::Float JsonFloat;
-using ARDUINOJSON_NAMESPACE::JsonKey;
-typedef ARDUINOJSON_NAMESPACE::UInt JsonUInt;
-typedef ARDUINOJSON_NAMESPACE::Pair JsonPair;
-typedef ARDUINOJSON_NAMESPACE::Variant JsonVariant;
-typedef ARDUINOJSON_NAMESPACE::VariantConst JsonVariantConst;
+typedef ARDUINOJSON_NAMESPACE::Integer JsonInteger;
 typedef ARDUINOJSON_NAMESPACE::Object JsonObject;
 typedef ARDUINOJSON_NAMESPACE::ObjectConst JsonObjectConst;
+typedef ARDUINOJSON_NAMESPACE::Pair JsonPair;
+typedef ARDUINOJSON_NAMESPACE::UInt JsonUInt;
+typedef ARDUINOJSON_NAMESPACE::Variant JsonVariant;
+typedef ARDUINOJSON_NAMESPACE::VariantConst JsonVariantConst;
+using ARDUINOJSON_NAMESPACE::DeserializationError;
+using ARDUINOJSON_NAMESPACE::DynamicJsonDocument;
+using ARDUINOJSON_NAMESPACE::Key;
 using ARDUINOJSON_NAMESPACE::serialized;
 using ARDUINOJSON_NAMESPACE::StaticJsonDocument;
 }  // namespace ArduinoJson
