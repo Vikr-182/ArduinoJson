@@ -11,12 +11,12 @@
 
 namespace ARDUINOJSON_NAMESPACE {
 class Array;
-class JsonObject;
+class Object;
 
 // Forward declarations.
 class ArraySubscript;
 template <typename TKey>
-class JsonObjectSubscript;
+class ObjectSubscript;
 
 template <typename TImpl>
 class JsonVariantSubscripts {
@@ -29,18 +29,18 @@ class JsonVariantSubscripts {
   // Returns the value associated with the specified key if the variant is
   // an object.
   //
-  // JsonObjectSubscript operator[](TKey) const;
+  // ObjectSubscript operator[](TKey) const;
   // TKey = const std::string&, const String&
   template <typename TString>
   FORCE_INLINE typename enable_if<IsString<TString>::value,
-                                  JsonObjectSubscript<const TString &> >::type
+                                  ObjectSubscript<const TString &> >::type
   operator[](const TString &key) const;
   //
-  // JsonObjectSubscript operator[](TKey) const;
+  // ObjectSubscript operator[](TKey) const;
   // TKey = const char*, const char[N], const FlashStringHelper*
   template <typename TString>
   FORCE_INLINE typename enable_if<IsString<TString *>::value,
-                                  JsonObjectSubscript<TString *> >::type
+                                  ObjectSubscript<TString *> >::type
   operator[](TString *key) const;
 
  private:

@@ -5,7 +5,7 @@
 #pragma once
 
 #include "Array.hpp"
-#include "JsonObject.hpp"
+#include "Object.hpp"
 
 namespace ARDUINOJSON_NAMESPACE {
 
@@ -13,7 +13,7 @@ inline Array Array::createNestedArray() const {
   return add().to<Array>();
 }
 
-inline JsonObject Array::createNestedObject() const {
-  return add().to<JsonObject>();
+inline Object Array::createNestedObject() const {
+  return add().to<Object>();
 }
 }  // namespace ARDUINOJSON_NAMESPACE

@@ -36,10 +36,10 @@ class JsonSerializer {
     _writer.endArray();
   }
 
-  void visitObject(JsonObjectConst object) {
+  void visitObject(ObjectConst object) {
     _writer.beginObject();
 
-    JsonObjectConst::iterator it = object.begin();
+    ObjectConst::iterator it = object.begin();
     while (it != object.end()) {
       _writer.writeString(it->key());
       _writer.writeColon();

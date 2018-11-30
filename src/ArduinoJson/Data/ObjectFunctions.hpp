@@ -11,7 +11,7 @@
 namespace ARDUINOJSON_NAMESPACE {
 
 template <typename TKey>
-inline VariantSlot* objectFindSlot(const JsonObjectData* obj, TKey key) {
+inline VariantSlot* objectFindSlot(const ObjectData* obj, TKey key) {
   if (!obj) return 0;
   VariantSlot* slot = obj->head;
   while (slot) {
@@ -22,13 +22,12 @@ inline VariantSlot* objectFindSlot(const JsonObjectData* obj, TKey key) {
 }
 
 template <typename TKey>
-inline bool objectContainsKey(const JsonObjectData* obj, const TKey& key) {
+inline bool objectContainsKey(const ObjectData* obj, const TKey& key) {
   return objectFindSlot(obj, key) != 0;
 }
 
 template <typename TKey>
-inline JsonVariantData* objectAdd(JsonObjectData* obj, TKey key,
-                                  MemoryPool* pool) {
+inline JsonVariantData* objectAdd(ObjectData* obj, TKey key, MemoryPool* pool) {
   VariantSlot* slot = pool->allocVariant();
   if (!slot) return 0;
 
@@ -49,8 +48,7 @@ inline JsonVariantData* objectAdd(JsonObjectData* obj, TKey key,
 }
 
 template <typename TKey>
-inline JsonVariantData* objectSet(JsonObjectData* obj, TKey key,
-                                  MemoryPool* pool) {
+inline JsonVariantData* objectSet(ObjectData* obj, TKey key, MemoryPool* pool) {
   if (!obj) return 0;
 
   // ignore null key
@@ -64,18 +62,18 @@ inline JsonVariantData* objectSet(JsonObjectData* obj, TKey key,
 }
 
 template <typename TKey>
-inline JsonVariantData* objectGet(const JsonObjectData* obj, TKey key) {
+inline JsonVariantData* objectGet(const ObjectData* obj, TKey key) {
   VariantSlot* slot = objectFindSlot(obj, key);
   return slot ? &slot->value : 0;
 }
 
-inline void objectClear(JsonObjectData* obj) {
+inline void objectClear(ObjectData* obj) {
   if (!obj) return;
   obj->head = 0;
   obj->tail = 0;
 }
 
-inline void objectRemove(JsonObjectData* obj, VariantSlot* slot) {
+inline void objectRemove(ObjectData* obj, VariantSlot* slot) {
   if (!obj) return;
   if (!slot) return;
   VariantSlot* prev = slot->getPrev();
@@ -90,14 +88,14 @@ inline void objectRemove(JsonObjectData* obj, VariantSlot* slot) {
     obj->tail = prev;
 }
 
-inline size_t objectSize(const JsonObjectData* obj) {
+inline size_t objectSize(const ObjectData* obj) {
   if (!obj) return 0;
   return slotSize(obj->head);
 }
 
 // bool variantCopy(JsonVariantData*, const JsonVariantData*, MemoryPool*);
 
-inline bool objectCopy(JsonObjectData* dst, const JsonObjectData* src,
+inline bool objectCopy(ObjectData* dst, const ObjectData* src,
                        MemoryPool* pool) {
   if (!dst || !src) return false;
   objectClear(dst);
@@ -112,7 +110,7 @@ inline bool objectCopy(JsonObjectData* dst, const JsonObjectData* src,
   return true;
 }
 
-inline bool objectEquals(const JsonObjectData* o1, const JsonObjectData* o2) {
+inline bool objectEquals(const ObjectData* o1, const ObjectData* o2) {
   if (o1 == o2) return true;
   if (!o1 || !o2) return false;
 

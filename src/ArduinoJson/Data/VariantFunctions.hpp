@@ -80,14 +80,14 @@ inline const ArrayData* variantAsArray(const JsonVariantData* var) {
     return 0;
 }
 
-inline JsonObjectData* variantAsObject(JsonVariantData* var) {
+inline ObjectData* variantAsObject(JsonVariantData* var) {
   if (var && var->type == JSON_OBJECT)
     return &var->content.asObject;
   else
     return 0;
 }
 
-inline const JsonObjectData* variantAsObject(const JsonVariantData* var) {
+inline const ObjectData* variantAsObject(const JsonVariantData* var) {
   if (var && var->type == JSON_OBJECT)
     return &var->content.asObject;
   else
@@ -194,7 +194,7 @@ inline ArrayData* variantToArray(JsonVariantData* var) {
   return &var->content.asArray;
 }
 
-inline JsonObjectData* variantToObject(JsonVariantData* var) {
+inline ObjectData* variantToObject(JsonVariantData* var) {
   if (!var) return 0;
   var->type = JSON_OBJECT;
   var->content.asObject.head = 0;

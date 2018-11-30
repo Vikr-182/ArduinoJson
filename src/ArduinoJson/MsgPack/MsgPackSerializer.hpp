@@ -51,7 +51,7 @@ class MsgPackSerializer {
     }
   }
 
-  void visitObject(JsonObjectConst object) {
+  void visitObject(ObjectConst object) {
     size_t n = object.size();
     if (n < 0x10) {
       writeByte(uint8_t(0x80 + n));
@@ -62,8 +62,7 @@ class MsgPackSerializer {
       writeByte(0xDF);
       writeInteger(uint32_t(n));
     }
-    for (JsonObjectConst::iterator it = object.begin(); it != object.end();
-         ++it) {
+    for (ObjectConst::iterator it = object.begin(); it != object.end(); ++it) {
       visitString(it->key());
       it->value().accept(*this);
     }

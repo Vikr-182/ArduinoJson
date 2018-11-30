@@ -14,8 +14,8 @@ TEST_CASE("Polyfills/type_traits") {
     REQUIRE(
         static_cast<bool>(is_base_of<std::istream, std::istringstream>::value));
     REQUIRE(static_cast<bool>(
-        is_base_of<JsonVariantBase<JsonObjectSubscript<const char*> >,
-                   JsonObjectSubscript<const char*> >::value));
+        is_base_of<JsonVariantBase<ObjectSubscript<const char*> >,
+                   ObjectSubscript<const char*> >::value));
   }
 
   SECTION("is_array") {
@@ -59,9 +59,9 @@ TEST_CASE("Polyfills/type_traits") {
     CHECK(IsVisitable<Array>::value == true);
     CHECK(IsVisitable<ArraySubscript>::value == true);
     CHECK(IsVisitable<ArrayConst>::value == true);
-    CHECK(IsVisitable<JsonObject>::value == true);
-    CHECK(IsVisitable<JsonObjectSubscript<const char*> >::value == true);
-    CHECK(IsVisitable<JsonObjectConst>::value == true);
+    CHECK(IsVisitable<Object>::value == true);
+    CHECK(IsVisitable<ObjectSubscript<const char*> >::value == true);
+    CHECK(IsVisitable<ObjectConst>::value == true);
     CHECK(IsVisitable<DynamicJsonDocument>::value == true);
     CHECK(IsVisitable<StaticJsonDocument<10> >::value == true);
   }

@@ -15,7 +15,7 @@
 
 namespace ARDUINOJSON_NAMESPACE {
 
-class JsonObject;
+class Object;
 class ArraySubscript;
 
 template <typename TData>
@@ -92,7 +92,7 @@ class Array : public ArrayProxy<ArrayData>, public Visitable {
   //
   // bool add(TValue);
   // TValue = bool, long, int, short, float, double, serialized, JsonVariant,
-  //          std::string, String, JsonObject
+  //          std::string, String, Object
   template <typename T>
   FORCE_INLINE bool add(const T& value) const {
     return add().set(value);
@@ -181,7 +181,7 @@ class Array : public ArrayProxy<ArrayData>, public Visitable {
   }
 
   FORCE_INLINE Array createNestedArray() const;
-  FORCE_INLINE JsonObject createNestedObject() const;
+  FORCE_INLINE Object createNestedObject() const;
 
   FORCE_INLINE ArraySubscript operator[](size_t index) const;
 

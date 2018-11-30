@@ -8,7 +8,7 @@
 #include "JsonVariant.hpp"
 
 namespace ARDUINOJSON_NAMESPACE {
-// A key value pair for JsonObjectData.
+// A key value pair for ObjectData.
 class JsonPair {
  public:
   JsonPair(MemoryPool* memoryPool, VariantSlot* slot) : _key(slot) {

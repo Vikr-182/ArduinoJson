@@ -5,7 +5,7 @@
 #pragma once
 
 #include "Data/ObjectFunctions.hpp"
-#include "JsonObjectIterator.hpp"
+#include "ObjectIterator.hpp"
 
 // Returns the size (in bytes) of an object with n elements.
 // Can be very handy to determine the size of a StaticMemoryPool.
@@ -15,7 +15,7 @@
 namespace ARDUINOJSON_NAMESPACE {
 
 template <typename TData>
-class JsonObjectProxy {
+class ObjectProxy {
  public:
   // Tells weither the specified key is present and associated with a value.
   //
@@ -42,20 +42,19 @@ class JsonObjectProxy {
   }
 
  protected:
-  JsonObjectProxy(TData* data) : _data(data) {}
+  ObjectProxy(TData* data) : _data(data) {}
   TData* _data;
 };
 
-class JsonObjectConst : public JsonObjectProxy<const JsonObjectData>,
-                        public Visitable {
-  friend class JsonObject;
-  typedef JsonObjectProxy<const JsonObjectData> proxy_type;
+class ObjectConst : public ObjectProxy<const ObjectData>, public Visitable {
+  friend class Object;
+  typedef ObjectProxy<const ObjectData> proxy_type;
 
  public:
-  typedef JsonObjectConstIterator iterator;
+  typedef ObjectConstIterator iterator;
 
-  JsonObjectConst() : proxy_type(0) {}
-  JsonObjectConst(const JsonObjectData* data) : proxy_type(data) {}
+  ObjectConst() : proxy_type(0) {}
+  ObjectConst(const ObjectData* data) : proxy_type(data) {}
 
   template <typename Visitor>
   FORCE_INLINE void accept(Visitor& visitor) const {
@@ -79,7 +78,7 @@ class JsonObjectConst : public JsonObjectProxy<const JsonObjectData>,
   // TValue get<TValue>(TKey) const;
   // TKey = const std::string&, const String&
   // TValue = bool, char, long, int, short, float, double,
-  //          std::string, String, ArrayConst, JsonObjectConst
+  //          std::string, String, ArrayConst, ObjectConst
   template <typename TKey>
   FORCE_INLINE JsonVariantConst get(const TKey& key) const {
     return get_impl(makeString(key));
@@ -88,7 +87,7 @@ class JsonObjectConst : public JsonObjectProxy<const JsonObjectData>,
   // TValue get<TValue>(TKey) const;
   // TKey = char*, const char*, const FlashStringHelper*
   // TValue = bool, char, long, int, short, float, double,
-  //          std::string, String, ArrayConst, JsonObjectConst
+  //          std::string, String, ArrayConst, ObjectConst
   template <typename TKey>
   FORCE_INLINE JsonVariantConst get(TKey* key) const {
     return get_impl(makeString(key));
@@ -112,7 +111,7 @@ class JsonObjectConst : public JsonObjectProxy<const JsonObjectData>,
     return get_impl(makeString(key));
   }
 
-  FORCE_INLINE bool operator==(JsonObjectConst rhs) const {
+  FORCE_INLINE bool operator==(ObjectConst rhs) const {
     return objectEquals(_data, rhs._data);
   }
 
@@ -123,22 +122,22 @@ class JsonObjectConst : public JsonObjectProxy<const JsonObjectData>,
   }
 };
 
-class JsonObject : public JsonObjectProxy<JsonObjectData>, public Visitable {
-  typedef JsonObjectProxy<JsonObjectData> proxy_type;
+class Object : public ObjectProxy<ObjectData>, public Visitable {
+  typedef ObjectProxy<ObjectData> proxy_type;
 
  public:
-  typedef JsonObjectIterator iterator;
+  typedef ObjectIterator iterator;
 
-  FORCE_INLINE JsonObject() : proxy_type(0), _memoryPool(0) {}
-  FORCE_INLINE JsonObject(MemoryPool* buf, JsonObjectData* data)
+  FORCE_INLINE Object() : proxy_type(0), _memoryPool(0) {}
+  FORCE_INLINE Object(MemoryPool* buf, ObjectData* data)
       : proxy_type(data), _memoryPool(buf) {}
 
   operator JsonVariant() const {
     return JsonVariant(_memoryPool, getVariantData(_data));
   }
 
-  operator JsonObjectConst() const {
-    return JsonObjectConst(_data);
+  operator ObjectConst() const {
+    return ObjectConst(_data);
   }
 
   FORCE_INLINE iterator begin() const {
@@ -154,7 +153,7 @@ class JsonObject : public JsonObjectProxy<JsonObjectData>, public Visitable {
     objectClear(_data);
   }
 
-  FORCE_INLINE bool copyFrom(JsonObjectConst src) {
+  FORCE_INLINE bool copyFrom(ObjectConst src) {
     return objectCopy(_data, src._data, _memoryPool);
   }
 
@@ -169,20 +168,20 @@ class JsonObject : public JsonObjectProxy<JsonObjectData>, public Visitable {
   template <typename TKey>
   FORCE_INLINE Array createNestedArray(TKey* key) const;
 
-  // Creates and adds a JsonObject.
+  // Creates and adds a Object.
   //
-  // JsonObject createNestedObject(TKey);
+  // Object createNestedObject(TKey);
   // TKey = const std::string&, const String&
   template <typename TKey>
-  FORCE_INLINE JsonObject createNestedObject(const TKey& key) const {
-    return set(key).template to<JsonObject>();
+  FORCE_INLINE Object createNestedObject(const TKey& key) const {
+    return set(key).template to<Object>();
   }
   //
-  // JsonObject createNestedObject(TKey);
+  // Object createNestedObject(TKey);
   // TKey = char*, const char*, char[], const char[], const FlashStringHelper*
   template <typename TKey>
-  FORCE_INLINE JsonObject createNestedObject(TKey* key) const {
-    return set(key).template to<JsonObject>();
+  FORCE_INLINE Object createNestedObject(TKey* key) const {
+    return set(key).template to<Object>();
   }
 
   // Gets the value associated with the specified key.
@@ -190,7 +189,7 @@ class JsonObject : public JsonObjectProxy<JsonObjectData>, public Visitable {
   // TValue get<TValue>(TKey) const;
   // TKey = const std::string&, const String&
   // TValue = bool, char, long, int, short, float, double,
-  //          std::string, String, Array, JsonObject
+  //          std::string, String, Array, Object
   template <typename TKey>
   FORCE_INLINE JsonVariant get(const TKey& key) const {
     return get_impl(makeString(key));
@@ -199,7 +198,7 @@ class JsonObject : public JsonObjectProxy<JsonObjectData>, public Visitable {
   // TValue get<TValue>(TKey) const;
   // TKey = char*, const char*, const FlashStringHelper*
   // TValue = bool, char, long, int, short, float, double,
-  //          std::string, String, Array, JsonObject
+  //          std::string, String, Array, Object
   template <typename TKey>
   FORCE_INLINE JsonVariant get(TKey* key) const {
     return get_impl(makeString(key));
@@ -207,22 +206,21 @@ class JsonObject : public JsonObjectProxy<JsonObjectData>, public Visitable {
 
   // Gets or sets the value associated with the specified key.
   //
-  // JsonObjectSubscript operator[](TKey)
+  // ObjectSubscript operator[](TKey)
   // TKey = const std::string&, const String&
   template <typename TKey>
-  FORCE_INLINE JsonObjectSubscript<const TKey&> operator[](
-      const TKey& key) const {
-    return JsonObjectSubscript<const TKey&>(*this, key);
+  FORCE_INLINE ObjectSubscript<const TKey&> operator[](const TKey& key) const {
+    return ObjectSubscript<const TKey&>(*this, key);
   }
   //
-  // JsonObjectSubscript operator[](TKey)
+  // ObjectSubscript operator[](TKey)
   // TKey = char*, const char*, char[], const char[N], const FlashStringHelper*
   template <typename TKey>
-  FORCE_INLINE JsonObjectSubscript<TKey*> operator[](TKey* key) const {
-    return JsonObjectSubscript<TKey*>(*this, key);
+  FORCE_INLINE ObjectSubscript<TKey*> operator[](TKey* key) const {
+    return ObjectSubscript<TKey*>(*this, key);
   }
 
-  FORCE_INLINE bool operator==(JsonObject rhs) const {
+  FORCE_INLINE bool operator==(Object rhs) const {
     return objectEquals(_data, rhs._data);
   }
 
@@ -266,7 +264,7 @@ class JsonObject : public JsonObjectProxy<JsonObjectData>, public Visitable {
 
   template <typename Visitor>
   FORCE_INLINE void accept(Visitor& visitor) const {
-    JsonObjectConst(_data).accept(visitor);
+    ObjectConst(_data).accept(visitor);
   }
 
  private:

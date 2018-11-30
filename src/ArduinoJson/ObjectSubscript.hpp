@@ -16,13 +16,12 @@
 namespace ARDUINOJSON_NAMESPACE {
 
 template <typename TStringRef>
-class JsonObjectSubscript
-    : public JsonVariantBase<JsonObjectSubscript<TStringRef> >,
-      public Visitable {
-  typedef JsonObjectSubscript<TStringRef> this_type;
+class ObjectSubscript : public JsonVariantBase<ObjectSubscript<TStringRef> >,
+                        public Visitable {
+  typedef ObjectSubscript<TStringRef> this_type;
 
  public:
-  FORCE_INLINE JsonObjectSubscript(JsonObject object, TStringRef key)
+  FORCE_INLINE ObjectSubscript(Object object, TStringRef key)
       : _object(object), _key(key) {}
 
   operator JsonVariantConst() const {
@@ -38,7 +37,7 @@ class JsonObjectSubscript
   //
   // operator=(const TValue&);
   // TValue = bool, char, long, int, short, float, double,
-  //          std::string, String, Array, JsonObject
+  //          std::string, String, Array, Object
   template <typename TValue>
   FORCE_INLINE typename enable_if<!is_array<TValue>::value, this_type &>::type
   operator=(const TValue &src) {
@@ -78,7 +77,7 @@ class JsonObjectSubscript
   // bool set(const TValue&);
   // TValue = bool, char, long, int, short, float, double, serialized,
   // JsonVariant,
-  //          std::string, String, Array, JsonObject
+  //          std::string, String, Array, Object
   template <typename TValue>
   FORCE_INLINE typename enable_if<!is_array<TValue>::value, bool>::type set(
       const TValue &value) {
@@ -106,24 +105,24 @@ class JsonObjectSubscript
     return _object.set(_key);
   }
 
-  JsonObject _object;
+  Object _object;
   TStringRef _key;
 };
 
 template <typename TImpl>
 template <typename TString>
 inline typename enable_if<IsString<TString>::value,
-                          JsonObjectSubscript<const TString &> >::type
+                          ObjectSubscript<const TString &> >::type
     JsonVariantSubscripts<TImpl>::operator[](const TString &key) const {
-  return impl()->template as<JsonObject>()[key];
+  return impl()->template as<Object>()[key];
 }
 
 template <typename TImpl>
 template <typename TString>
 inline typename enable_if<IsString<TString *>::value,
-                          JsonObjectSubscript<TString *> >::type
+                          ObjectSubscript<TString *> >::type
     JsonVariantSubscripts<TImpl>::operator[](TString *key) const {
-  return impl()->template as<JsonObject>()[key];
+  return impl()->template as<Object>()[key];
 }
 
 }  // namespace ARDUINOJSON_NAMESPACE

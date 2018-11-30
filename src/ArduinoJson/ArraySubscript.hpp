@@ -28,7 +28,7 @@ class ArraySubscript : public JsonVariantBase<ArraySubscript>,
   //
   // operator=(const TValue&)
   // TValue = bool, long, int, short, float, double, serialized, JsonVariant,
-  //          std::string, String, Array, JsonObject
+  //          std::string, String, Array, Object
   template <typename T>
   FORCE_INLINE ArraySubscript& operator=(const T& src) {
     get_impl().set(src);
@@ -66,7 +66,7 @@ class ArraySubscript : public JsonVariantBase<ArraySubscript>,
   //
   // bool set(const TValue&)
   // TValue = bool, long, int, short, float, double, serialized, JsonVariant,
-  //          std::string, String, Array, JsonObject
+  //          std::string, String, Array, Object
   template <typename TValue>
   FORCE_INLINE bool set(const TValue& value) const {
     return get_impl().set(value);

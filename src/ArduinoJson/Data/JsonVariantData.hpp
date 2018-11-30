@@ -25,7 +25,7 @@ enum JsonVariantType {
   JSON_FLOAT
 };
 
-struct JsonObjectData {
+struct ObjectData {
   struct VariantSlot *head;
   struct VariantSlot *tail;
 };
@@ -46,7 +46,7 @@ union JsonVariantContent {
   JsonFloat asFloat;
   JsonUInt asInteger;
   ArrayData asArray;
-  JsonObjectData asObject;
+  ObjectData asObject;
   const char *asString;
   struct {
     const char *data;
@@ -69,7 +69,7 @@ inline JsonVariantData *getVariantData(ArrayData *arr) {
                                              offset);
 }
 
-inline JsonVariantData *getVariantData(JsonObjectData *obj) {
+inline JsonVariantData *getVariantData(ObjectData *obj) {
   const ptrdiff_t offset = offsetof(JsonVariantData, content) -
                            offsetof(JsonVariantContent, asObject);
   if (!obj) return 0;

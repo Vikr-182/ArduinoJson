@@ -6,7 +6,7 @@
 
 namespace ARDUINOJSON_NAMESPACE {
 class Array;
-class JsonObject;
+class Object;
 class JsonVariant;
 
 // A metafunction that returns the type of the value returned by
@@ -19,8 +19,8 @@ struct JsonVariantTo<Array> {
   typedef Array type;
 };
 template <>
-struct JsonVariantTo<JsonObject> {
-  typedef JsonObject type;
+struct JsonVariantTo<Object> {
+  typedef Object type;
 };
 template <>
 struct JsonVariantTo<JsonVariant> {
