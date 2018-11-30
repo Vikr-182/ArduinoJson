@@ -15,9 +15,7 @@ inline VariantData* arrayAdd(ArrayData* arr, MemoryPool* pool) {
   VariantSlot* slot = pool->allocVariant();
   if (!slot) return 0;
 
-  slot->next = 0;
-  slot->type = JSON_NULL;
-  slot->keyIsOwned = false;
+  slot->init();
 
   if (arr->tail) {
     slot->attachTo(arr->tail);

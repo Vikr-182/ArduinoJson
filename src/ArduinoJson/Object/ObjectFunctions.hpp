@@ -31,8 +31,7 @@ inline VariantData* objectAdd(ObjectData* obj, TKey key, MemoryPool* pool) {
   VariantSlot* slot = pool->allocVariant();
   if (!slot) return 0;
 
-  slot->next = 0;
-  slot->type = JSON_NULL;
+  slot->init();
 
   if (obj->tail) {
     slot->attachTo(obj->tail);
@@ -97,10 +96,10 @@ inline bool objectCopy(ObjectData* dst, const ObjectData* src,
   objectClear(dst);
   for (VariantSlot* s = src->head; s; s = s->getNext()) {
     VariantData* var;
-    if (s->keyIsOwned)
-      var = objectAdd(dst, ZeroTerminatedRamString(s->key), pool);
+    if (s->ownsKey())
+      var = objectAdd(dst, ZeroTerminatedRamString(s->key()), pool);
     else
-      var = objectAdd(dst, ZeroTerminatedRamStringConst(s->key), pool);
+      var = objectAdd(dst, ZeroTerminatedRamStringConst(s->key()), pool);
     if (!variantCopy(var, s->getData(), pool)) return false;
   }
   return true;

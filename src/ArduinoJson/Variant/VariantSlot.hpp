@@ -11,15 +11,17 @@ namespace ARDUINOJSON_NAMESPACE {
 
 typedef conditional<sizeof(void*) <= 2, int8_t, int16_t>::type VariantSlotDiff;
 
-struct VariantSlot {
+class VariantSlot {
   // CAUTION: same layout as VariantData
   // we cannot use composition because it adds padding
-  VariantContent content;
-  bool keyIsOwned : 1;
-  VariantType type : 7;
-  VariantSlotDiff next;
-  const char* key;
+  // (+20% on ESP8266 for example)
+  VariantContent _content;
+  bool _keyIsOwned : 1;
+  VariantType _type : 7;
+  VariantSlotDiff _next;
+  const char* _key;
 
+ public:
   // Must be a POD!
   // - no constructor
   // - no destructor
@@ -35,7 +37,7 @@ struct VariantSlot {
   }
 
   VariantSlot* getNext() {
-    return next ? this + next : 0;
+    return _next ? this + _next : 0;
   }
 
   const VariantSlot* getNext() const {
@@ -45,8 +47,8 @@ struct VariantSlot {
   VariantSlot* getNext(size_t distance) {
     VariantSlot* slot = this;
     while (distance--) {
-      if (!slot->next) return 0;
-      slot += slot->next;
+      if (!slot->_next) return 0;
+      slot += slot->_next;
     }
     return slot;
   }
@@ -65,11 +67,30 @@ struct VariantSlot {
   }
 
   void setNext(VariantSlot* slot) {
-    this->next = VariantSlotDiff(slot ? slot - this : 0);
+    _next = VariantSlotDiff(slot ? slot - this : 0);
   }
 
   void attachTo(VariantSlot* tail) {
-    tail->next = VariantSlotDiff(this - tail);
+    tail->_next = VariantSlotDiff(this - tail);
+  }
+
+  void setKey(const char* k, bool owned) {
+    _keyIsOwned = owned;
+    _key = k;
+  }
+
+  const char* key() const {
+    return _key;
+  }
+
+  bool ownsKey() const {
+    return _keyIsOwned;
+  }
+
+  void init() {
+    _next = 0;
+    _type = JSON_NULL;
+    _keyIsOwned = false;
   }
 };
 
