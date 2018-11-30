@@ -16,20 +16,20 @@ inline bool slotSetKey(VariantSlot* var, TKey key, MemoryPool* pool) {
   char* dup = key.save(pool);
   if (!dup) return false;
   var->key = dup;
-  var->value.keyIsOwned = true;
+  var->keyIsOwned = true;
   return true;
 }
 
 inline bool slotSetKey(VariantSlot* var, ZeroTerminatedRamStringConst key,
                        MemoryPool*) {
   var->key = key.c_str();
-  var->value.keyIsOwned = false;
+  var->keyIsOwned = false;
   return true;
 }
 
 inline bool slotSetKey(VariantSlot* var, StringInMemoryPool key, MemoryPool*) {
   var->key = key.c_str();
-  var->value.keyIsOwned = true;
+  var->keyIsOwned = true;
   return true;
 }
 

@@ -12,7 +12,11 @@ namespace ARDUINOJSON_NAMESPACE {
 typedef conditional<sizeof(void*) <= 2, int8_t, int16_t>::type VariantSlotDiff;
 
 struct VariantSlot {
-  VariantData value;
+  // CAUTION: same layout as VariantData
+  // we cannot use composition because it adds padding
+  VariantContent content;
+  bool keyIsOwned : 1;
+  VariantType type : 7;
   VariantSlotDiff next;
   const char* key;
 
@@ -21,6 +25,14 @@ struct VariantSlot {
   // - no destructor
   // - no virtual
   // - no inheritance
+
+  VariantData* getData() {
+    return reinterpret_cast<VariantData*>(this);
+  }
+
+  const VariantData* getData() const {
+    return reinterpret_cast<const VariantData*>(this);
+  }
 
   VariantSlot* getNext() {
     return next ? this + next : 0;

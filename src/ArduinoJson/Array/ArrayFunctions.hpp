@@ -16,8 +16,8 @@ inline VariantData* arrayAdd(ArrayData* arr, MemoryPool* pool) {
   if (!slot) return 0;
 
   slot->next = 0;
-  slot->value.type = JSON_NULL;
-  slot->value.keyIsOwned = false;
+  slot->type = JSON_NULL;
+  slot->keyIsOwned = false;
 
   if (arr->tail) {
     slot->attachTo(arr->tail);
@@ -27,7 +27,7 @@ inline VariantData* arrayAdd(ArrayData* arr, MemoryPool* pool) {
     arr->tail = slot;
   }
 
-  return &slot->value;
+  return slot->getData();
 }
 
 inline VariantSlot* arrayGetSlot(const ArrayData* arr, size_t index) {
@@ -37,7 +37,7 @@ inline VariantSlot* arrayGetSlot(const ArrayData* arr, size_t index) {
 
 inline VariantData* arrayGet(const ArrayData* arr, size_t index) {
   VariantSlot* slot = arrayGetSlot(arr, index);
-  return slot ? &slot->value : 0;
+  return slot ? slot->getData() : 0;
 }
 
 inline void arrayRemove(ArrayData* arr, VariantSlot* slot) {
@@ -69,7 +69,7 @@ inline bool arrayCopy(ArrayData* dst, const ArrayData* src, MemoryPool* pool) {
   if (!dst || !src) return false;
   arrayClear(dst);
   for (VariantSlot* s = src->head; s; s = s->getNext()) {
-    if (!variantCopy(arrayAdd(dst, pool), &s->value, pool)) return false;
+    if (!variantCopy(arrayAdd(dst, pool), s->getData(), pool)) return false;
   }
   return true;
 }
@@ -84,7 +84,7 @@ inline bool arrayEquals(const ArrayData* a1, const ArrayData* a2) {
   for (;;) {
     if (s1 == s2) return true;
     if (!s1 || !s2) return false;
-    if (!variantEquals(&s1->value, &s2->value)) return false;
+    if (!variantEquals(s1->getData(), s2->getData())) return false;
     s1 = s1->getNext();
     s2 = s2->getNext();
   }

@@ -32,7 +32,7 @@ inline VariantData* objectAdd(ObjectData* obj, TKey key, MemoryPool* pool) {
   if (!slot) return 0;
 
   slot->next = 0;
-  slot->value.type = JSON_NULL;
+  slot->type = JSON_NULL;
 
   if (obj->tail) {
     slot->attachTo(obj->tail);
@@ -43,7 +43,7 @@ inline VariantData* objectAdd(ObjectData* obj, TKey key, MemoryPool* pool) {
   }
 
   if (!slotSetKey(slot, key, pool)) return 0;
-  return &slot->value;
+  return slot->getData();
 }
 
 template <typename TKey>
@@ -55,7 +55,7 @@ inline VariantData* objectSet(ObjectData* obj, TKey key, MemoryPool* pool) {
 
   // search a matching key
   VariantSlot* slot = objectFindSlot(obj, key);
-  if (slot) return &slot->value;
+  if (slot) return slot->getData();
 
   return objectAdd(obj, key, pool);
 }
@@ -63,7 +63,7 @@ inline VariantData* objectSet(ObjectData* obj, TKey key, MemoryPool* pool) {
 template <typename TKey>
 inline VariantData* objectGet(const ObjectData* obj, TKey key) {
   VariantSlot* slot = objectFindSlot(obj, key);
-  return slot ? &slot->value : 0;
+  return slot ? slot->getData() : 0;
 }
 
 inline void objectClear(ObjectData* obj) {
@@ -97,11 +97,11 @@ inline bool objectCopy(ObjectData* dst, const ObjectData* src,
   objectClear(dst);
   for (VariantSlot* s = src->head; s; s = s->getNext()) {
     VariantData* var;
-    if (s->value.keyIsOwned)
+    if (s->keyIsOwned)
       var = objectAdd(dst, ZeroTerminatedRamString(s->key), pool);
     else
       var = objectAdd(dst, ZeroTerminatedRamStringConst(s->key), pool);
-    if (!variantCopy(var, &s->value, pool)) return false;
+    if (!variantCopy(var, s->getData(), pool)) return false;
   }
   return true;
 }
@@ -111,7 +111,7 @@ inline bool objectEquals(const ObjectData* o1, const ObjectData* o2) {
   if (!o1 || !o2) return false;
 
   for (VariantSlot* s = o1->head; s; s = s->getNext()) {
-    VariantData* v1 = &s->value;
+    VariantData* v1 = s->getData();
     VariantData* v2 = objectGet(o2, makeString(slotGetKey(s)));
     if (!variantEquals(v1, v2)) return false;
   }
