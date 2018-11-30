@@ -5,17 +5,17 @@
 #pragma once
 
 #include "ArrayRef.hpp"
-#include "Object.hpp"
+#include "ObjectRef.hpp"
 
 namespace ARDUINOJSON_NAMESPACE {
 
 template <typename TString>
-inline ArrayRef Object::createNestedArray(const TString& key) const {
+inline ArrayRef ObjectRef::createNestedArray(const TString& key) const {
   return set(key).template to<ArrayRef>();
 }
 
 template <typename TString>
-inline ArrayRef Object::createNestedArray(TString* key) const {
+inline ArrayRef ObjectRef::createNestedArray(TString* key) const {
   return set(key).template to<ArrayRef>();
 }
 }  // namespace ARDUINOJSON_NAMESPACE

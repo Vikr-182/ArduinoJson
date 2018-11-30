@@ -7,7 +7,7 @@
 #include "ArduinoJson/Namespace.hpp"
 
 #include "ArduinoJson/ArrayRef.hpp"
-#include "ArduinoJson/Object.hpp"
+#include "ArduinoJson/ObjectRef.hpp"
 #include "ArduinoJson/Variant.hpp"
 
 #include "ArduinoJson/DynamicJsonDocument.hpp"
@@ -31,8 +31,8 @@ typedef ARDUINOJSON_NAMESPACE::ArrayRef JsonArray;
 typedef ARDUINOJSON_NAMESPACE::ArrayConstRef JsonArrayConst;
 typedef ARDUINOJSON_NAMESPACE::Float JsonFloat;
 typedef ARDUINOJSON_NAMESPACE::Integer JsonInteger;
-typedef ARDUINOJSON_NAMESPACE::Object JsonObject;
-typedef ARDUINOJSON_NAMESPACE::ObjectConst JsonObjectConst;
+typedef ARDUINOJSON_NAMESPACE::ObjectRef JsonObject;
+typedef ARDUINOJSON_NAMESPACE::ObjectConstRef JsonObjectConst;
 typedef ARDUINOJSON_NAMESPACE::Pair JsonPair;
 typedef ARDUINOJSON_NAMESPACE::UInt JsonUInt;
 typedef ARDUINOJSON_NAMESPACE::Variant JsonVariant;

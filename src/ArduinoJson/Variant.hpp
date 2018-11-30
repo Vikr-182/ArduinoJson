@@ -22,7 +22,7 @@ namespace ARDUINOJSON_NAMESPACE {
 
 // Forward declarations.
 class ArrayRef;
-class Object;
+class ObjectRef;
 
 // Contains the methods shared by Variant and VariantConst
 template <typename TData>
@@ -83,13 +83,12 @@ class VariantProxy {
     return variantIsArray(_data);
   }
   //
-  // bool is<Object> const;
-  // bool is<const Object> const;
+  // bool is<ObjectRef> const;
+  // bool is<const ObjectRef> const;
   template <typename T>
-  FORCE_INLINE
-      typename enable_if<is_same<typename remove_const<T>::type, Object>::value,
-                         bool>::type
-      is() const {
+  FORCE_INLINE typename enable_if<
+      is_same<typename remove_const<T>::type, ObjectRef>::value, bool>::type
+  is() const {
     return variantIsObject(_data);
   }
 
@@ -117,7 +116,7 @@ class VariantProxy {
 // - a boolean
 // - a char, short, int or a long (signed or unsigned)
 // - a string (const char*)
-// - a reference to a ArrayRef or Object
+// - a reference to a ArrayRef or ObjectRef
 class Variant : public VariantProxy<VariantData>,
                 public VariantBase<Variant>,
                 public Visitable {
@@ -219,7 +218,7 @@ class Variant : public VariantProxy<VariantData>,
 
   FORCE_INLINE bool set(ArrayRef array) const;
   FORCE_INLINE bool set(const ArraySubscript &) const;
-  FORCE_INLINE bool set(Object object) const;
+  FORCE_INLINE bool set(ObjectRef object) const;
   template <typename TString>
   FORCE_INLINE bool set(const ObjectSubscript<TString> &) const;
 
@@ -229,7 +228,7 @@ class Variant : public VariantProxy<VariantData>,
   // String as<String>() const;
   template <typename T>
   FORCE_INLINE typename enable_if<!is_same<T, ArrayRef>::value &&
-                                      !is_same<T, Object>::value &&
+                                      !is_same<T, ObjectRef>::value &&
                                       !is_same<T, Variant>::value,
                                   typename VariantAs<T>::type>::type
   as() const {
@@ -242,10 +241,10 @@ class Variant : public VariantProxy<VariantData>,
   FORCE_INLINE typename enable_if<is_same<T, ArrayRef>::value, T>::type as()
       const;
   //
-  // Object as<Object>() const;
-  // const Object as<const Object>() const;
+  // ObjectRef as<ObjectRef>() const;
+  // const ObjectRef as<const ObjectRef>() const;
   template <typename T>
-  FORCE_INLINE typename enable_if<is_same<T, Object>::value, T>::type as()
+  FORCE_INLINE typename enable_if<is_same<T, ObjectRef>::value, T>::type as()
       const;
   //
   // Variant as<Variant> const;
@@ -272,11 +271,11 @@ class Variant : public VariantProxy<VariantData>,
   template <typename T>
   typename enable_if<is_same<T, ArrayRef>::value, ArrayRef>::type to() const;
   //
-  // Object to<Object>()
+  // ObjectRef to<ObjectRef>()
   template <typename T>
-  typename enable_if<is_same<T, Object>::value, Object>::type to() const;
+  typename enable_if<is_same<T, ObjectRef>::value, ObjectRef>::type to() const;
   //
-  // Object to<Variant>()
+  // ObjectRef to<Variant>()
   template <typename T>
   typename enable_if<is_same<T, Variant>::value, Variant>::type to() const;
 

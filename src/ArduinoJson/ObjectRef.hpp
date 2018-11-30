@@ -15,7 +15,7 @@
 namespace ARDUINOJSON_NAMESPACE {
 
 template <typename TData>
-class ObjectProxy {
+class ObjectRefBase {
  public:
   // Tells weither the specified key is present and associated with a value.
   //
@@ -42,19 +42,20 @@ class ObjectProxy {
   }
 
  protected:
-  ObjectProxy(TData* data) : _data(data) {}
+  ObjectRefBase(TData* data) : _data(data) {}
   TData* _data;
 };
 
-class ObjectConst : public ObjectProxy<const ObjectData>, public Visitable {
-  friend class Object;
-  typedef ObjectProxy<const ObjectData> proxy_type;
+class ObjectConstRef : public ObjectRefBase<const ObjectData>,
+                       public Visitable {
+  friend class ObjectRef;
+  typedef ObjectRefBase<const ObjectData> base_type;
 
  public:
   typedef ObjectConstIterator iterator;
 
-  ObjectConst() : proxy_type(0) {}
-  ObjectConst(const ObjectData* data) : proxy_type(data) {}
+  ObjectConstRef() : base_type(0) {}
+  ObjectConstRef(const ObjectData* data) : base_type(data) {}
 
   template <typename Visitor>
   FORCE_INLINE void accept(Visitor& visitor) const {
@@ -78,7 +79,7 @@ class ObjectConst : public ObjectProxy<const ObjectData>, public Visitable {
   // TValue get<TValue>(TKey) const;
   // TKey = const std::string&, const String&
   // TValue = bool, char, long, int, short, float, double,
-  //          std::string, String, ArrayConstRef, ObjectConst
+  //          std::string, String, ArrayConstRef, ObjectConstRef
   template <typename TKey>
   FORCE_INLINE VariantConst get(const TKey& key) const {
     return get_impl(makeString(key));
@@ -87,7 +88,7 @@ class ObjectConst : public ObjectProxy<const ObjectData>, public Visitable {
   // TValue get<TValue>(TKey) const;
   // TKey = char*, const char*, const FlashStringHelper*
   // TValue = bool, char, long, int, short, float, double,
-  //          std::string, String, ArrayConstRef, ObjectConst
+  //          std::string, String, ArrayConstRef, ObjectConstRef
   template <typename TKey>
   FORCE_INLINE VariantConst get(TKey* key) const {
     return get_impl(makeString(key));
@@ -110,7 +111,7 @@ class ObjectConst : public ObjectProxy<const ObjectData>, public Visitable {
     return get_impl(makeString(key));
   }
 
-  FORCE_INLINE bool operator==(ObjectConst rhs) const {
+  FORCE_INLINE bool operator==(ObjectConstRef rhs) const {
     return objectEquals(_data, rhs._data);
   }
 
@@ -121,22 +122,22 @@ class ObjectConst : public ObjectProxy<const ObjectData>, public Visitable {
   }
 };
 
-class Object : public ObjectProxy<ObjectData>, public Visitable {
-  typedef ObjectProxy<ObjectData> proxy_type;
+class ObjectRef : public ObjectRefBase<ObjectData>, public Visitable {
+  typedef ObjectRefBase<ObjectData> base_type;
 
  public:
   typedef ObjectIterator iterator;
 
-  FORCE_INLINE Object() : proxy_type(0), _memoryPool(0) {}
-  FORCE_INLINE Object(MemoryPool* buf, ObjectData* data)
-      : proxy_type(data), _memoryPool(buf) {}
+  FORCE_INLINE ObjectRef() : base_type(0), _memoryPool(0) {}
+  FORCE_INLINE ObjectRef(MemoryPool* buf, ObjectData* data)
+      : base_type(data), _memoryPool(buf) {}
 
   operator Variant() const {
     return Variant(_memoryPool, getVariantData(_data));
   }
 
-  operator ObjectConst() const {
-    return ObjectConst(_data);
+  operator ObjectConstRef() const {
+    return ObjectConstRef(_data);
   }
 
   FORCE_INLINE iterator begin() const {
@@ -152,7 +153,7 @@ class Object : public ObjectProxy<ObjectData>, public Visitable {
     objectClear(_data);
   }
 
-  FORCE_INLINE bool copyFrom(ObjectConst src) {
+  FORCE_INLINE bool copyFrom(ObjectConstRef src) {
     return objectCopy(_data, src._data, _memoryPool);
   }
 
@@ -167,20 +168,20 @@ class Object : public ObjectProxy<ObjectData>, public Visitable {
   template <typename TKey>
   FORCE_INLINE ArrayRef createNestedArray(TKey* key) const;
 
-  // Creates and adds a Object.
+  // Creates and adds a ObjectRef.
   //
-  // Object createNestedObject(TKey);
+  // ObjectRef createNestedObject(TKey);
   // TKey = const std::string&, const String&
   template <typename TKey>
-  FORCE_INLINE Object createNestedObject(const TKey& key) const {
-    return set(key).template to<Object>();
+  FORCE_INLINE ObjectRef createNestedObject(const TKey& key) const {
+    return set(key).template to<ObjectRef>();
   }
   //
-  // Object createNestedObject(TKey);
+  // ObjectRef createNestedObject(TKey);
   // TKey = char*, const char*, char[], const char[], const FlashStringHelper*
   template <typename TKey>
-  FORCE_INLINE Object createNestedObject(TKey* key) const {
-    return set(key).template to<Object>();
+  FORCE_INLINE ObjectRef createNestedObject(TKey* key) const {
+    return set(key).template to<ObjectRef>();
   }
 
   // Gets the value associated with the specified key.
@@ -188,7 +189,7 @@ class Object : public ObjectProxy<ObjectData>, public Visitable {
   // TValue get<TValue>(TKey) const;
   // TKey = const std::string&, const String&
   // TValue = bool, char, long, int, short, float, double,
-  //          std::string, String, ArrayRef, Object
+  //          std::string, String, ArrayRef, ObjectRef
   template <typename TKey>
   FORCE_INLINE Variant get(const TKey& key) const {
     return get_impl(makeString(key));
@@ -197,7 +198,7 @@ class Object : public ObjectProxy<ObjectData>, public Visitable {
   // TValue get<TValue>(TKey) const;
   // TKey = char*, const char*, const FlashStringHelper*
   // TValue = bool, char, long, int, short, float, double,
-  //          std::string, String, ArrayRef, Object
+  //          std::string, String, ArrayRef, ObjectRef
   template <typename TKey>
   FORCE_INLINE Variant get(TKey* key) const {
     return get_impl(makeString(key));
@@ -219,7 +220,7 @@ class Object : public ObjectProxy<ObjectData>, public Visitable {
     return ObjectSubscript<TKey*>(*this, key);
   }
 
-  FORCE_INLINE bool operator==(Object rhs) const {
+  FORCE_INLINE bool operator==(ObjectRef rhs) const {
     return objectEquals(_data, rhs._data);
   }
 
@@ -263,7 +264,7 @@ class Object : public ObjectProxy<ObjectData>, public Visitable {
 
   template <typename Visitor>
   FORCE_INLINE void accept(Visitor& visitor) const {
-    ObjectConst(_data).accept(visitor);
+    ObjectConstRef(_data).accept(visitor);
   }
 
  private:

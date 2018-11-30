@@ -282,13 +282,13 @@ class MsgPackDeserializer {
   }
 
   DeserializationError readObject(Variant variant, size_t n) {
-    Object object = variant.to<Object>();
+    ObjectRef object = variant.to<ObjectRef>();
     if (object.isNull()) return DeserializationError::NoMemory;
 
     return readObject(object, n);
   }
 
-  DeserializationError readObject(Object object, size_t n) {
+  DeserializationError readObject(ObjectRef object, size_t n) {
     if (_nestingLimit == 0) return DeserializationError::TooDeep;
     --_nestingLimit;
     for (; n; --n) {

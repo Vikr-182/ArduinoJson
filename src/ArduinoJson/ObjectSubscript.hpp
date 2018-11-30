@@ -21,7 +21,7 @@ class ObjectSubscript : public VariantBase<ObjectSubscript<TStringRef> >,
   typedef ObjectSubscript<TStringRef> this_type;
 
  public:
-  FORCE_INLINE ObjectSubscript(Object object, TStringRef key)
+  FORCE_INLINE ObjectSubscript(ObjectRef object, TStringRef key)
       : _object(object), _key(key) {}
 
   operator VariantConst() const {
@@ -37,7 +37,7 @@ class ObjectSubscript : public VariantBase<ObjectSubscript<TStringRef> >,
   //
   // operator=(const TValue&);
   // TValue = bool, char, long, int, short, float, double,
-  //          std::string, String, ArrayRef, Object
+  //          std::string, String, ArrayRef, ObjectRef
   template <typename TValue>
   FORCE_INLINE typename enable_if<!is_array<TValue>::value, this_type &>::type
   operator=(const TValue &src) {
@@ -77,7 +77,7 @@ class ObjectSubscript : public VariantBase<ObjectSubscript<TStringRef> >,
   // bool set(const TValue&);
   // TValue = bool, char, long, int, short, float, double, serialized,
   // Variant,
-  //          std::string, String, ArrayRef, Object
+  //          std::string, String, ArrayRef, ObjectRef
   template <typename TValue>
   FORCE_INLINE typename enable_if<!is_array<TValue>::value, bool>::type set(
       const TValue &value) {
@@ -105,7 +105,7 @@ class ObjectSubscript : public VariantBase<ObjectSubscript<TStringRef> >,
     return _object.set(_key);
   }
 
-  Object _object;
+  ObjectRef _object;
   TStringRef _key;
 };
 
@@ -114,7 +114,7 @@ template <typename TString>
 inline typename enable_if<IsString<TString>::value,
                           ObjectSubscript<const TString &> >::type
     VariantSubscripts<TImpl>::operator[](const TString &key) const {
-  return impl()->template as<Object>()[key];
+  return impl()->template as<ObjectRef>()[key];
 }
 
 template <typename TImpl>
@@ -122,7 +122,7 @@ template <typename TString>
 inline typename enable_if<IsString<TString *>::value,
                           ObjectSubscript<TString *> >::type
     VariantSubscripts<TImpl>::operator[](TString *key) const {
-  return impl()->template as<Object>()[key];
+  return impl()->template as<ObjectRef>()[key];
 }
 
 }  // namespace ARDUINOJSON_NAMESPACE

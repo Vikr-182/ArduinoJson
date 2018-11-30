@@ -11,7 +11,7 @@
 
 namespace ARDUINOJSON_NAMESPACE {
 class ArrayRef;
-class Object;
+class ObjectRef;
 
 // Forward declarations.
 class ArraySubscript;

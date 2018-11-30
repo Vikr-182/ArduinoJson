@@ -21,8 +21,8 @@ inline bool Variant::set(const ArraySubscript& value) const {
   return set(value.as<Variant>());
 }
 
-inline bool Variant::set(Object object) const {
-  return to<Object>().copyFrom(object);
+inline bool Variant::set(ObjectRef object) const {
+  return to<ObjectRef>().copyFrom(object);
 }
 
 template <typename TString>
@@ -45,9 +45,9 @@ inline typename enable_if<is_same<T, ArrayRef>::value, T>::type Variant::as()
 }
 
 template <typename T>
-inline typename enable_if<is_same<T, Object>::value, T>::type Variant::as()
+inline typename enable_if<is_same<T, ObjectRef>::value, T>::type Variant::as()
     const {
-  return Object(_memoryPool, variantAsObject(_data));
+  return ObjectRef(_memoryPool, variantAsObject(_data));
 }
 
 template <typename T>
@@ -57,9 +57,9 @@ Variant::to() const {
 }
 
 template <typename T>
-typename enable_if<is_same<T, Object>::value, Object>::type Variant::to()
+typename enable_if<is_same<T, ObjectRef>::value, ObjectRef>::type Variant::to()
     const {
-  return Object(_memoryPool, variantToObject(_data));
+  return ObjectRef(_memoryPool, variantToObject(_data));
 }
 
 template <typename T>
@@ -86,7 +86,7 @@ inline void VariantConst::accept(Visitor& visitor) const {
       return visitor.visitArray(ArrayConstRef(&_data->content.asArray));
 
     case JSON_OBJECT:
-      return visitor.visitObject(ObjectConst(&_data->content.asObject));
+      return visitor.visitObject(ObjectConstRef(&_data->content.asObject));
 
     case JSON_LINKED_STRING:
     case JSON_OWNED_STRING:

@@ -109,7 +109,7 @@ class JsonDeserializer {
   DeserializationError parseObject(Variant variant) {
     if (_nestingLimit == 0) return DeserializationError::TooDeep;
 
-    Object object = variant.to<Object>();
+    ObjectRef object = variant.to<ObjectRef>();
     if (object.isNull()) return DeserializationError::NoMemory;
 
     // Check opening brace
