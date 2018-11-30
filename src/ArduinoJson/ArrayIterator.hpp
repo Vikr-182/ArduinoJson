@@ -5,7 +5,7 @@
 #pragma once
 
 #include "Data/SlotFunctions.hpp"
-#include "Variant.hpp"
+#include "VariantRef.hpp"
 
 namespace ARDUINOJSON_NAMESPACE {
 
@@ -14,16 +14,16 @@ class VariantPtr {
   VariantPtr(MemoryPool *memoryPool, VariantData *data)
       : _variant(memoryPool, data) {}
 
-  Variant *operator->() {
+  VariantRef *operator->() {
     return &_variant;
   }
 
-  Variant &operator*() {
+  VariantRef &operator*() {
     return _variant;
   }
 
  private:
-  Variant _variant;
+  VariantRef _variant;
 };
 
 class ArrayIterator {
@@ -32,8 +32,8 @@ class ArrayIterator {
   explicit ArrayIterator(MemoryPool *memoryPool, VariantSlot *slot)
       : _memoryPool(memoryPool), _slot(slot) {}
 
-  Variant operator*() const {
-    return Variant(_memoryPool, &_slot->value);
+  VariantRef operator*() const {
+    return VariantRef(_memoryPool, &_slot->value);
   }
   VariantPtr operator->() {
     return VariantPtr(_memoryPool, &_slot->value);
@@ -70,16 +70,16 @@ class VariantConstPtr {
  public:
   VariantConstPtr(const VariantData *data) : _variant(data) {}
 
-  VariantConst *operator->() {
+  VariantConstRef *operator->() {
     return &_variant;
   }
 
-  VariantConst &operator*() {
+  VariantConstRef &operator*() {
     return _variant;
   }
 
  private:
-  VariantConst _variant;
+  VariantConstRef _variant;
 };
 
 class ArrayConstRefIterator {
@@ -87,8 +87,8 @@ class ArrayConstRefIterator {
   ArrayConstRefIterator() : _slot(0) {}
   explicit ArrayConstRefIterator(const VariantSlot *slot) : _slot(slot) {}
 
-  VariantConst operator*() const {
-    return VariantConst(&_slot->value);
+  VariantConstRef operator*() const {
+    return VariantConstRef(&_slot->value);
   }
   VariantConstPtr operator->() {
     return VariantConstPtr(&_slot->value);

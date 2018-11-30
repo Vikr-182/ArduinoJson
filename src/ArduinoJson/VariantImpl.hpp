@@ -7,75 +7,75 @@
 #include "Configuration.hpp"
 #include "Numbers/parseFloat.hpp"
 #include "Numbers/parseInteger.hpp"
-#include "Variant.hpp"
+#include "VariantRef.hpp"
 
 #include <string.h>  // for strcmp
 
 namespace ARDUINOJSON_NAMESPACE {
 
-inline bool Variant::set(ArrayRef array) const {
+inline bool VariantRef::set(ArrayRef array) const {
   return to<ArrayRef>().copyFrom(array);
 }
 
-inline bool Variant::set(const ArraySubscript& value) const {
-  return set(value.as<Variant>());
+inline bool VariantRef::set(const ArraySubscript& value) const {
+  return set(value.as<VariantRef>());
 }
 
-inline bool Variant::set(ObjectRef object) const {
+inline bool VariantRef::set(ObjectRef object) const {
   return to<ObjectRef>().copyFrom(object);
 }
 
 template <typename TString>
-inline bool Variant::set(const ObjectSubscript<TString>& value) const {
-  return set(value.template as<Variant>());
+inline bool VariantRef::set(const ObjectSubscript<TString>& value) const {
+  return set(value.template as<VariantRef>());
 }
 
-inline bool Variant::set(VariantConst value) const {
+inline bool VariantRef::set(VariantConstRef value) const {
   return variantCopy(_data, value._data, _memoryPool);
 }
 
-inline bool Variant::set(Variant value) const {
+inline bool VariantRef::set(VariantRef value) const {
   return variantCopy(_data, value._data, _memoryPool);
 }
 
 template <typename T>
-inline typename enable_if<is_same<T, ArrayRef>::value, T>::type Variant::as()
+inline typename enable_if<is_same<T, ArrayRef>::value, T>::type VariantRef::as()
     const {
   return ArrayRef(_memoryPool, variantAsArray(_data));
 }
 
 template <typename T>
-inline typename enable_if<is_same<T, ObjectRef>::value, T>::type Variant::as()
-    const {
+inline typename enable_if<is_same<T, ObjectRef>::value, T>::type
+VariantRef::as() const {
   return ObjectRef(_memoryPool, variantAsObject(_data));
 }
 
 template <typename T>
 inline typename enable_if<is_same<T, ArrayRef>::value, ArrayRef>::type
-Variant::to() const {
+VariantRef::to() const {
   return ArrayRef(_memoryPool, variantToArray(_data));
 }
 
 template <typename T>
-typename enable_if<is_same<T, ObjectRef>::value, ObjectRef>::type Variant::to()
-    const {
+typename enable_if<is_same<T, ObjectRef>::value, ObjectRef>::type
+VariantRef::to() const {
   return ObjectRef(_memoryPool, variantToObject(_data));
 }
 
 template <typename T>
-typename enable_if<is_same<T, Variant>::value, Variant>::type Variant::to()
-    const {
+typename enable_if<is_same<T, VariantRef>::value, VariantRef>::type
+VariantRef::to() const {
   variantSetNull(_data);
   return *this;
 }
 
 template <typename Visitor>
-inline void Variant::accept(Visitor& visitor) const {
-  return VariantConst(_data).accept(visitor);
+inline void VariantRef::accept(Visitor& visitor) const {
+  return VariantConstRef(_data).accept(visitor);
 }
 
 template <typename Visitor>
-inline void VariantConst::accept(Visitor& visitor) const {
+inline void VariantConstRef::accept(Visitor& visitor) const {
   if (!_data) return visitor.visitNull();
 
   switch (_data->type) {
@@ -111,7 +111,7 @@ inline void VariantConst::accept(Visitor& visitor) const {
   }
 }
 
-inline VariantConst VariantConst::operator[](size_t index) const {
+inline VariantConstRef VariantConstRef::operator[](size_t index) const {
   return ArrayConstRef(variantAsArray(_data))[index];
 }
 

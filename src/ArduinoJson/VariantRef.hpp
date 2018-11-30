@@ -14,8 +14,8 @@
 #include "Numbers/parseFloat.hpp"
 #include "Numbers/parseInteger.hpp"
 #include "Polyfills/type_traits.hpp"
-#include "Variant.hpp"
 #include "VariantBase.hpp"
+#include "VariantRef.hpp"
 #include "Visitable.hpp"
 
 namespace ARDUINOJSON_NAMESPACE {
@@ -24,9 +24,9 @@ namespace ARDUINOJSON_NAMESPACE {
 class ArrayRef;
 class ObjectRef;
 
-// Contains the methods shared by Variant and VariantConst
+// Contains the methods shared by VariantRef and VariantConstRef
 template <typename TData>
-class VariantProxy {
+class VariantRefBase {
  public:
   // Tells wether the variant has the specified type.
   // Returns true if the variant has type type T, false otherwise.
@@ -106,7 +106,7 @@ class VariantProxy {
   }
 
  protected:
-  VariantProxy(TData *data) : _data(data) {}
+  VariantRefBase(TData *data) : _data(data) {}
   TData *_data;
 };
 
@@ -117,19 +117,19 @@ class VariantProxy {
 // - a char, short, int or a long (signed or unsigned)
 // - a string (const char*)
 // - a reference to a ArrayRef or ObjectRef
-class Variant : public VariantProxy<VariantData>,
-                public VariantBase<Variant>,
-                public Visitable {
-  typedef VariantProxy<VariantData> proxy_type;
-  friend class VariantConst;
+class VariantRef : public VariantRefBase<VariantData>,
+                   public VariantBase<VariantRef>,
+                   public Visitable {
+  typedef VariantRefBase<VariantData> base_type;
+  friend class VariantConstRef;
 
  public:
   // Intenal use only
-  FORCE_INLINE Variant(MemoryPool *memoryPool, VariantData *data)
-      : proxy_type(data), _memoryPool(memoryPool) {}
+  FORCE_INLINE VariantRef(MemoryPool *memoryPool, VariantData *data)
+      : base_type(data), _memoryPool(memoryPool) {}
 
-  // Creates an uninitialized Variant
-  FORCE_INLINE Variant() : proxy_type(0), _memoryPool(0) {}
+  // Creates an uninitialized VariantRef
+  FORCE_INLINE VariantRef() : base_type(0), _memoryPool(0) {}
 
   // set(bool value)
   FORCE_INLINE bool set(bool value) const {
@@ -213,8 +213,8 @@ class Variant : public VariantProxy<VariantData>,
     return variantSetString(_data, value.c_str());
   }
 
-  bool set(VariantConst value) const;
-  bool set(Variant value) const;
+  bool set(VariantConstRef value) const;
+  bool set(VariantRef value) const;
 
   FORCE_INLINE bool set(ArrayRef array) const;
   FORCE_INLINE bool set(const ArraySubscript &) const;
@@ -229,7 +229,7 @@ class Variant : public VariantProxy<VariantData>,
   template <typename T>
   FORCE_INLINE typename enable_if<!is_same<T, ArrayRef>::value &&
                                       !is_same<T, ObjectRef>::value &&
-                                      !is_same<T, Variant>::value,
+                                      !is_same<T, VariantRef>::value,
                                   typename VariantAs<T>::type>::type
   as() const {
     return variantAs<T>(_data);
@@ -247,9 +247,9 @@ class Variant : public VariantProxy<VariantData>,
   FORCE_INLINE typename enable_if<is_same<T, ObjectRef>::value, T>::type as()
       const;
   //
-  // Variant as<Variant> const;
+  // VariantRef as<VariantRef> const;
   template <typename T>
-  FORCE_INLINE typename enable_if<is_same<T, Variant>::value, T>::type as()
+  FORCE_INLINE typename enable_if<is_same<T, VariantRef>::value, T>::type as()
       const {
     return *this;
   }
@@ -257,11 +257,11 @@ class Variant : public VariantProxy<VariantData>,
   template <typename Visitor>
   void accept(Visitor &visitor) const;
 
-  FORCE_INLINE bool operator==(Variant lhs) const {
+  FORCE_INLINE bool operator==(VariantRef lhs) const {
     return variantEquals(_data, lhs._data);
   }
 
-  FORCE_INLINE bool operator!=(Variant lhs) const {
+  FORCE_INLINE bool operator!=(VariantRef lhs) const {
     return !variantEquals(_data, lhs._data);
   }
 
@@ -275,24 +275,25 @@ class Variant : public VariantProxy<VariantData>,
   template <typename T>
   typename enable_if<is_same<T, ObjectRef>::value, ObjectRef>::type to() const;
   //
-  // ObjectRef to<Variant>()
+  // ObjectRef to<VariantRef>()
   template <typename T>
-  typename enable_if<is_same<T, Variant>::value, Variant>::type to() const;
+  typename enable_if<is_same<T, VariantRef>::value, VariantRef>::type to()
+      const;
 
  private:
   MemoryPool *_memoryPool;
 };
 
-class VariantConst : public VariantProxy<const VariantData>,
-                     public VariantBase<VariantConst>,
-                     public Visitable {
-  typedef VariantProxy<const VariantData> proxy_type;
-  friend class Variant;
+class VariantConstRef : public VariantRefBase<const VariantData>,
+                        public VariantBase<VariantConstRef>,
+                        public Visitable {
+  typedef VariantRefBase<const VariantData> base_type;
+  friend class VariantRef;
 
  public:
-  VariantConst() : proxy_type(0) {}
-  VariantConst(const VariantData *data) : proxy_type(data) {}
-  VariantConst(Variant var) : proxy_type(var._data) {}
+  VariantConstRef() : base_type(0) {}
+  VariantConstRef(const VariantData *data) : base_type(data) {}
+  VariantConstRef(VariantRef var) : base_type(var._data) {}
 
   template <typename Visitor>
   void accept(Visitor &visitor) const;
@@ -304,24 +305,25 @@ class VariantConst : public VariantProxy<const VariantData>,
     return variantAs<typename VariantConstAs<T>::type>(_data);
   }
 
-  FORCE_INLINE VariantConst operator[](size_t index) const;
+  FORCE_INLINE VariantConstRef operator[](size_t index) const;
 
   //
-  // const VariantConst operator[](TKey) const;
+  // const VariantConstRef operator[](TKey) const;
   // TKey = const std::string&, const String&
   template <typename TString>
-  FORCE_INLINE typename enable_if<IsString<TString>::value, VariantConst>::type
-  operator[](const TString &key) const {
-    return VariantConst(objectGet(variantAsObject(_data), makeString(key)));
+  FORCE_INLINE
+      typename enable_if<IsString<TString>::value, VariantConstRef>::type
+      operator[](const TString &key) const {
+    return VariantConstRef(objectGet(variantAsObject(_data), makeString(key)));
   }
   //
-  // VariantConst operator[](TKey);
+  // VariantConstRef operator[](TKey);
   // TKey = const char*, const char[N], const FlashStringHelper*
   template <typename TString>
   FORCE_INLINE
-      typename enable_if<IsString<TString *>::value, VariantConst>::type
+      typename enable_if<IsString<TString *>::value, VariantConstRef>::type
       operator[](TString *key) const {
-    return VariantConst(objectGet(variantAsObject(_data), makeString(key)));
+    return VariantConstRef(objectGet(variantAsObject(_data), makeString(key)));
   }
 };
 }  // namespace ARDUINOJSON_NAMESPACE

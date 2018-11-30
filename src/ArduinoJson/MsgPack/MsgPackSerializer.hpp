@@ -7,7 +7,7 @@
 #include "../Polyfills/type_traits.hpp"
 #include "../Serialization/measure.hpp"
 #include "../Serialization/serialize.hpp"
-#include "../Variant.hpp"
+#include "../VariantRef.hpp"
 #include "./endianess.hpp"
 
 namespace ARDUINOJSON_NAMESPACE {

@@ -81,7 +81,7 @@ class ObjectConstRef : public ObjectRefBase<const ObjectData>,
   // TValue = bool, char, long, int, short, float, double,
   //          std::string, String, ArrayConstRef, ObjectConstRef
   template <typename TKey>
-  FORCE_INLINE VariantConst get(const TKey& key) const {
+  FORCE_INLINE VariantConstRef get(const TKey& key) const {
     return get_impl(makeString(key));
   }
   //
@@ -90,23 +90,23 @@ class ObjectConstRef : public ObjectRefBase<const ObjectData>,
   // TValue = bool, char, long, int, short, float, double,
   //          std::string, String, ArrayConstRef, ObjectConstRef
   template <typename TKey>
-  FORCE_INLINE VariantConst get(TKey* key) const {
+  FORCE_INLINE VariantConstRef get(TKey* key) const {
     return get_impl(makeString(key));
   }
 
   //
-  // VariantConst operator[](TKey) const;
+  // VariantConstRef operator[](TKey) const;
   // TKey = const std::string&, const String&
   template <typename TKey>
-  FORCE_INLINE typename enable_if<IsString<TKey>::value, VariantConst>::type
+  FORCE_INLINE typename enable_if<IsString<TKey>::value, VariantConstRef>::type
   operator[](const TKey& key) const {
     return get_impl(makeString(key));
   }
   //
-  // VariantConst operator[](TKey) const;
+  // VariantConstRef operator[](TKey) const;
   // TKey = const char*, const char[N], const FlashStringHelper*
   template <typename TKey>
-  FORCE_INLINE typename enable_if<IsString<TKey*>::value, VariantConst>::type
+  FORCE_INLINE typename enable_if<IsString<TKey*>::value, VariantConstRef>::type
   operator[](TKey* key) const {
     return get_impl(makeString(key));
   }
@@ -117,8 +117,8 @@ class ObjectConstRef : public ObjectRefBase<const ObjectData>,
 
  private:
   template <typename TKey>
-  FORCE_INLINE VariantConst get_impl(TKey key) const {
-    return VariantConst(objectGet(_data, key));
+  FORCE_INLINE VariantConstRef get_impl(TKey key) const {
+    return VariantConstRef(objectGet(_data, key));
   }
 };
 
@@ -132,8 +132,8 @@ class ObjectRef : public ObjectRefBase<ObjectData>, public Visitable {
   FORCE_INLINE ObjectRef(MemoryPool* buf, ObjectData* data)
       : base_type(data), _memoryPool(buf) {}
 
-  operator Variant() const {
-    return Variant(_memoryPool, getVariantData(_data));
+  operator VariantRef() const {
+    return VariantRef(_memoryPool, getVariantData(_data));
   }
 
   operator ObjectConstRef() const {
@@ -191,7 +191,7 @@ class ObjectRef : public ObjectRefBase<ObjectData>, public Visitable {
   // TValue = bool, char, long, int, short, float, double,
   //          std::string, String, ArrayRef, ObjectRef
   template <typename TKey>
-  FORCE_INLINE Variant get(const TKey& key) const {
+  FORCE_INLINE VariantRef get(const TKey& key) const {
     return get_impl(makeString(key));
   }
   //
@@ -200,7 +200,7 @@ class ObjectRef : public ObjectRefBase<ObjectData>, public Visitable {
   // TValue = bool, char, long, int, short, float, double,
   //          std::string, String, ArrayRef, ObjectRef
   template <typename TKey>
-  FORCE_INLINE Variant get(TKey* key) const {
+  FORCE_INLINE VariantRef get(TKey* key) const {
     return get_impl(makeString(key));
   }
 
@@ -245,20 +245,20 @@ class ObjectRef : public ObjectRefBase<ObjectData>, public Visitable {
   }
 
   template <typename TKey>
-  FORCE_INLINE Variant set(TKey* key) const {
+  FORCE_INLINE VariantRef set(TKey* key) const {
     return set_impl(makeString(key));
   }
 
   template <typename TKey>
-  FORCE_INLINE Variant set(const TKey& key) const {
+  FORCE_INLINE VariantRef set(const TKey& key) const {
     return set_impl(makeString(key));
   }
 
-  FORCE_INLINE Variant set(StringInMemoryPool key) const {
+  FORCE_INLINE VariantRef set(StringInMemoryPool key) const {
     return set_impl(key);
   }
 
-  FORCE_INLINE Variant set(ZeroTerminatedRamStringConst key) const {
+  FORCE_INLINE VariantRef set(ZeroTerminatedRamStringConst key) const {
     return set_impl(key);
   }
 
@@ -269,13 +269,13 @@ class ObjectRef : public ObjectRefBase<ObjectData>, public Visitable {
 
  private:
   template <typename TStringRef>
-  FORCE_INLINE Variant get_impl(TStringRef key) const {
-    return Variant(_memoryPool, objectGet(_data, key));
+  FORCE_INLINE VariantRef get_impl(TStringRef key) const {
+    return VariantRef(_memoryPool, objectGet(_data, key));
   }
 
   template <typename TKey>
-  FORCE_INLINE Variant set_impl(TKey key) const {
-    return Variant(_memoryPool, objectSet(_data, key, _memoryPool));
+  FORCE_INLINE VariantRef set_impl(TKey key) const {
+    return VariantRef(_memoryPool, objectSet(_data, key, _memoryPool));
   }
 
   template <typename TStringRef>

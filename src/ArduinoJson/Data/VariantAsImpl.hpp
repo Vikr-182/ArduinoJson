@@ -5,15 +5,15 @@
 #pragma once
 
 #include "../Serialization/DynamicStringWriter.hpp"
-#include "../Variant.hpp"
+#include "../VariantRef.hpp"
 #include "VariantFunctions.hpp"
 
 namespace ARDUINOJSON_NAMESPACE {
 
 template <typename T>
-inline typename enable_if<is_same<VariantConst, T>::value, T>::type variantAs(
-    const VariantData* _data) {
-  return VariantConst(_data);
+inline typename enable_if<is_same<VariantConstRef, T>::value, T>::type
+variantAs(const VariantData* _data) {
+  return VariantConstRef(_data);
 }
 
 template <typename T>
@@ -22,7 +22,7 @@ inline typename enable_if<IsWriteableString<T>::value, T>::type variantAs(
   const char* cstr = variantAsString(_data);
   if (cstr) return T(cstr);
   T s;
-  serializeJson(VariantConst(_data), s);
+  serializeJson(VariantConstRef(_data), s);
   return s;
 }
 

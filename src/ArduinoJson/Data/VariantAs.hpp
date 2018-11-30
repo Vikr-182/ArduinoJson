@@ -13,11 +13,11 @@ class ArrayRef;
 class ArrayConstRef;
 class ObjectRef;
 class ObjectConstRef;
-class Variant;
-class VariantConst;
+class VariantRef;
+class VariantConstRef;
 
 // A metafunction that returns the type of the value returned by
-// Variant::as<T>()
+// VariantRef::as<T>()
 template <typename T>
 struct VariantAs {
   typedef T type;
@@ -29,15 +29,15 @@ struct VariantAs<char*> {
 };
 
 // A metafunction that returns the type of the value returned by
-// Variant::as<T>()
+// VariantRef::as<T>()
 template <typename T>
 struct VariantConstAs {
   typedef typename VariantAs<T>::type type;
 };
 
 template <>
-struct VariantConstAs<Variant> {
-  typedef VariantConst type;
+struct VariantConstAs<VariantRef> {
+  typedef VariantConstRef type;
 };
 
 template <>
@@ -79,8 +79,8 @@ variantAs(const VariantData* _data) {
 }
 
 template <typename T>
-inline typename enable_if<is_same<VariantConst, T>::value, T>::type variantAs(
-    const VariantData* _data);
+inline typename enable_if<is_same<VariantConstRef, T>::value, T>::type
+variantAs(const VariantData* _data);
 
 template <typename T>
 inline typename enable_if<IsWriteableString<T>::value, T>::type variantAs(

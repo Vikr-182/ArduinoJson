@@ -6,7 +6,7 @@
 
 #include "Data/VariantTo.hpp"
 #include "Memory/MemoryPool.hpp"
-#include "Variant.hpp"
+#include "VariantRef.hpp"
 
 namespace ARDUINOJSON_NAMESPACE {
 
@@ -65,16 +65,16 @@ class JsonDocument : public Visitable {
 
   void copy(const JsonDocument& src) {
     nestingLimit = src.nestingLimit;
-    to<Variant>().set(src.as<Variant>());
+    to<VariantRef>().set(src.as<VariantRef>());
   }
 
  private:
-  Variant getVariant() {
-    return Variant(&_memoryPool, &_rootData);
+  VariantRef getVariant() {
+    return VariantRef(&_memoryPool, &_rootData);
   }
 
-  VariantConst getVariant() const {
-    return VariantConst(&_rootData);
+  VariantConstRef getVariant() const {
+    return VariantConstRef(&_rootData);
   }
 
   MemoryPool _memoryPool;

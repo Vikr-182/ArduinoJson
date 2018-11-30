@@ -7,7 +7,7 @@
 #include "../Deserialization/deserialize.hpp"
 #include "../Memory/MemoryPool.hpp"
 #include "../Polyfills/type_traits.hpp"
-#include "../Variant.hpp"
+#include "../VariantRef.hpp"
 #include "./endianess.hpp"
 #include "./ieee754.hpp"
 
@@ -27,7 +27,7 @@ class MsgPackDeserializer {
         _stringStorage(stringStorage),
         _nestingLimit(nestingLimit) {}
 
-  DeserializationError parse(Variant variant) {
+  DeserializationError parse(VariantRef variant) {
     uint8_t code;
     if (!readByte(code)) return DeserializationError::IncompleteInput;
 
@@ -174,7 +174,7 @@ class MsgPackDeserializer {
   }
 
   template <typename T>
-  DeserializationError readInteger(Variant variant) {
+  DeserializationError readInteger(VariantRef variant) {
     T value;
     if (!readInteger(value)) return DeserializationError::IncompleteInput;
     variant.set(value);
@@ -183,7 +183,7 @@ class MsgPackDeserializer {
 
   template <typename T>
   typename enable_if<sizeof(T) == 4, DeserializationError>::type readFloat(
-      Variant variant) {
+      VariantRef variant) {
     T value;
     if (!readBytes(value)) return DeserializationError::IncompleteInput;
     fixEndianess(value);
@@ -193,7 +193,7 @@ class MsgPackDeserializer {
 
   template <typename T>
   typename enable_if<sizeof(T) == 8, DeserializationError>::type readDouble(
-      Variant variant) {
+      VariantRef variant) {
     T value;
     if (!readBytes(value)) return DeserializationError::IncompleteInput;
     fixEndianess(value);
@@ -203,7 +203,7 @@ class MsgPackDeserializer {
 
   template <typename T>
   typename enable_if<sizeof(T) == 4, DeserializationError>::type readDouble(
-      Variant variant) {
+      VariantRef variant) {
     uint8_t i[8];  // input is 8 bytes
     T value;       // output is 4 bytes
     uint8_t *o = reinterpret_cast<uint8_t *>(&value);
@@ -215,7 +215,7 @@ class MsgPackDeserializer {
   }
 
   template <typename T>
-  DeserializationError readString(Variant variant) {
+  DeserializationError readString(VariantRef variant) {
     T size;
     if (!readInteger(size)) return DeserializationError::IncompleteInput;
     return readString(variant, size);
@@ -228,7 +228,7 @@ class MsgPackDeserializer {
     return readString(str, size);
   }
 
-  DeserializationError readString(Variant variant, size_t n) {
+  DeserializationError readString(VariantRef variant, size_t n) {
     StringType s;
     DeserializationError err = readString(s, n);
     if (!err) variant.set(s);
@@ -248,13 +248,13 @@ class MsgPackDeserializer {
   }
 
   template <typename TSize>
-  DeserializationError readArray(Variant variant) {
+  DeserializationError readArray(VariantRef variant) {
     TSize size;
     if (!readInteger(size)) return DeserializationError::IncompleteInput;
     return readArray(variant, size);
   }
 
-  DeserializationError readArray(Variant variant, size_t n) {
+  DeserializationError readArray(VariantRef variant, size_t n) {
     ArrayRef array = variant.to<ArrayRef>();
     if (array.isNull()) return DeserializationError::NoMemory;
     return readArray(array, n);
@@ -264,7 +264,7 @@ class MsgPackDeserializer {
     if (_nestingLimit == 0) return DeserializationError::TooDeep;
     --_nestingLimit;
     for (; n; --n) {
-      Variant value = array.add();
+      VariantRef value = array.add();
       if (value.isInvalid()) return DeserializationError::NoMemory;
 
       DeserializationError err = parse(value);
@@ -275,13 +275,13 @@ class MsgPackDeserializer {
   }
 
   template <typename TSize>
-  DeserializationError readObject(Variant variant) {
+  DeserializationError readObject(VariantRef variant) {
     TSize size;
     if (!readInteger(size)) return DeserializationError::IncompleteInput;
     return readObject(variant, size);
   }
 
-  DeserializationError readObject(Variant variant, size_t n) {
+  DeserializationError readObject(VariantRef variant, size_t n) {
     ObjectRef object = variant.to<ObjectRef>();
     if (object.isNull()) return DeserializationError::NoMemory;
 
@@ -296,7 +296,7 @@ class MsgPackDeserializer {
       DeserializationError err = parseKey(key);
       if (err) return err;
 
-      Variant value = object.set(key);
+      VariantRef value = object.set(key);
       if (value.isInvalid()) return DeserializationError::NoMemory;
 
       err = parse(value);

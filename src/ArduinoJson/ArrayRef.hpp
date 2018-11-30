@@ -25,8 +25,8 @@ class ArrayRefBase {
     return _data == 0;
   }
 
-  FORCE_INLINE VariantConst operator[](size_t index) const {
-    return VariantConst(arrayGet(_data, index));
+  FORCE_INLINE VariantConstRef operator[](size_t index) const {
+    return VariantConstRef(arrayGet(_data, index));
   }
 
   FORCE_INLINE size_t size() const {
@@ -80,8 +80,8 @@ class ArrayRef : public ArrayRefBase<ArrayData>, public Visitable {
   FORCE_INLINE ArrayRef(MemoryPool* pool, ArrayData* data)
       : base_type(data), _memoryPool(pool) {}
 
-  operator Variant() {
-    return Variant(_memoryPool, getVariantData(_data));
+  operator VariantRef() {
+    return VariantRef(_memoryPool, getVariantData(_data));
   }
 
   operator ArrayConstRef() const {
@@ -91,7 +91,7 @@ class ArrayRef : public ArrayRefBase<ArrayData>, public Visitable {
   // Adds the specified value at the end of the array.
   //
   // bool add(TValue);
-  // TValue = bool, long, int, short, float, double, serialized, Variant,
+  // TValue = bool, long, int, short, float, double, serialized, VariantRef,
   //          std::string, String, ObjectRef
   template <typename T>
   FORCE_INLINE bool add(const T& value) const {
@@ -109,8 +109,8 @@ class ArrayRef : public ArrayRefBase<ArrayData>, public Visitable {
     return add().set(value);
   }
 
-  Variant add() const {
-    return Variant(_memoryPool, arrayAdd(_data, _memoryPool));
+  VariantRef add() const {
+    return VariantRef(_memoryPool, arrayAdd(_data, _memoryPool));
   }
 
   FORCE_INLINE iterator begin() const {
@@ -190,8 +190,8 @@ class ArrayRef : public ArrayRefBase<ArrayData>, public Visitable {
   }
 
   // Gets the value at the specified index.
-  FORCE_INLINE Variant get(size_t index) const {
-    return Variant(_memoryPool, arrayGet(_data, index));
+  FORCE_INLINE VariantRef get(size_t index) const {
+    return VariantRef(_memoryPool, arrayGet(_data, index));
   }
 
   // Removes element at specified position.

@@ -54,8 +54,8 @@ TEST_CASE("Polyfills/type_traits") {
   SECTION("IsVisitable") {
     CHECK(IsVisitable<DeserializationError>::value == false);
     CHECK(IsVisitable<JsonPair>::value == false);
-    CHECK(IsVisitable<Variant>::value == true);
-    CHECK(IsVisitable<VariantConst>::value == true);
+    CHECK(IsVisitable<VariantRef>::value == true);
+    CHECK(IsVisitable<VariantConstRef>::value == true);
     CHECK(IsVisitable<ArrayRef>::value == true);
     CHECK(IsVisitable<ArraySubscript>::value == true);
     CHECK(IsVisitable<ArrayConstRef>::value == true);

@@ -8,7 +8,7 @@
 
 #include "ArduinoJson/ArrayRef.hpp"
 #include "ArduinoJson/ObjectRef.hpp"
-#include "ArduinoJson/Variant.hpp"
+#include "ArduinoJson/VariantRef.hpp"
 
 #include "ArduinoJson/DynamicJsonDocument.hpp"
 #include "ArduinoJson/StaticJsonDocument.hpp"
@@ -35,8 +35,8 @@ typedef ARDUINOJSON_NAMESPACE::ObjectRef JsonObject;
 typedef ARDUINOJSON_NAMESPACE::ObjectConstRef JsonObjectConst;
 typedef ARDUINOJSON_NAMESPACE::Pair JsonPair;
 typedef ARDUINOJSON_NAMESPACE::UInt JsonUInt;
-typedef ARDUINOJSON_NAMESPACE::Variant JsonVariant;
-typedef ARDUINOJSON_NAMESPACE::VariantConst JsonVariantConst;
+typedef ARDUINOJSON_NAMESPACE::VariantRef JsonVariant;
+typedef ARDUINOJSON_NAMESPACE::VariantConstRef JsonVariantConst;
 using ARDUINOJSON_NAMESPACE::DeserializationError;
 using ARDUINOJSON_NAMESPACE::DynamicJsonDocument;
 using ARDUINOJSON_NAMESPACE::Key;

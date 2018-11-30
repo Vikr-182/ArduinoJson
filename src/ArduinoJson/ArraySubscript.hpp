@@ -19,14 +19,14 @@ class ArraySubscript : public VariantBase<ArraySubscript>, public Visitable {
       : _array(array), _index(index) {}
 
   FORCE_INLINE ArraySubscript& operator=(const ArraySubscript& src) {
-    get_impl().set(src.as<VariantConst>());
+    get_impl().set(src.as<VariantConstRef>());
     return *this;
   }
 
   // Replaces the value
   //
   // operator=(const TValue&)
-  // TValue = bool, long, int, short, float, double, serialized, Variant,
+  // TValue = bool, long, int, short, float, double, serialized, VariantRef,
   //          std::string, String, ArrayRef, ObjectRef
   template <typename T>
   FORCE_INLINE ArraySubscript& operator=(const T& src) {
@@ -64,7 +64,7 @@ class ArraySubscript : public VariantBase<ArraySubscript>, public Visitable {
   // Replaces the value
   //
   // bool set(const TValue&)
-  // TValue = bool, long, int, short, float, double, serialized, Variant,
+  // TValue = bool, long, int, short, float, double, serialized, VariantRef,
   //          std::string, String, ArrayRef, ObjectRef
   template <typename TValue>
   FORCE_INLINE bool set(const TValue& value) const {
@@ -88,7 +88,7 @@ class ArraySubscript : public VariantBase<ArraySubscript>, public Visitable {
   }
 
  private:
-  FORCE_INLINE Variant get_impl() const {
+  FORCE_INLINE VariantRef get_impl() const {
     return _array.get(_index);
   }
 

@@ -24,7 +24,7 @@ class ObjectSubscript : public VariantBase<ObjectSubscript<TStringRef> >,
   FORCE_INLINE ObjectSubscript(ObjectRef object, TStringRef key)
       : _object(object), _key(key) {}
 
-  operator VariantConst() const {
+  operator VariantConstRef() const {
     return get_impl();
   }
 
@@ -76,7 +76,7 @@ class ObjectSubscript : public VariantBase<ObjectSubscript<TStringRef> >,
   //
   // bool set(const TValue&);
   // TValue = bool, char, long, int, short, float, double, serialized,
-  // Variant,
+  // VariantRef,
   //          std::string, String, ArrayRef, ObjectRef
   template <typename TValue>
   FORCE_INLINE typename enable_if<!is_array<TValue>::value, bool>::type set(
@@ -97,11 +97,11 @@ class ObjectSubscript : public VariantBase<ObjectSubscript<TStringRef> >,
   }
 
  private:
-  FORCE_INLINE Variant get_impl() const {
+  FORCE_INLINE VariantRef get_impl() const {
     return _object.get(_key);
   }
 
-  FORCE_INLINE Variant set_impl() const {
+  FORCE_INLINE VariantRef set_impl() const {
     return _object.set(_key);
   }
 
