@@ -38,7 +38,6 @@ inline VariantData* objectAdd(ObjectData* obj, TKey key, MemoryPool* pool) {
     slot->attachTo(obj->tail);
     obj->tail = slot;
   } else {
-    slot->prev = 0;
     obj->head = slot;
     obj->tail = slot;
   }
@@ -76,16 +75,13 @@ inline void objectClear(ObjectData* obj) {
 inline void objectRemove(ObjectData* obj, VariantSlot* slot) {
   if (!obj) return;
   if (!slot) return;
-  VariantSlot* prev = slot->getPrev();
+  VariantSlot* prev = slot->getPrev(obj->head);
   VariantSlot* next = slot->getNext();
   if (prev)
     prev->setNext(next);
   else
     obj->head = next;
-  if (next)
-    next->setPrev(prev);
-  else
-    obj->tail = prev;
+  if (!next) obj->tail = prev;
 }
 
 inline size_t objectSize(const ObjectData* obj) {

@@ -23,7 +23,6 @@ inline VariantData* arrayAdd(ArrayData* arr, MemoryPool* pool) {
     slot->attachTo(arr->tail);
     arr->tail = slot;
   } else {
-    slot->prev = 0;
     arr->head = slot;
     arr->tail = slot;
   }
@@ -44,14 +43,14 @@ inline VariantData* arrayGet(const ArrayData* arr, size_t index) {
 inline void arrayRemove(ArrayData* arr, VariantSlot* slot) {
   if (!arr || !slot) return;
 
-  if (slot->prev)
-    slot->getPrev()->setNext(slot->getNext());
+  VariantSlot* prev = slot->getPrev(arr->head);
+  VariantSlot* next = slot->getNext();
+
+  if (prev)
+    prev->setNext(next);
   else
-    arr->head = slot->getNext();
-  if (slot->next)
-    slot->getNext()->setPrev(slot->getPrev());
-  else
-    arr->tail = slot->getPrev();
+    arr->head = next;
+  if (!next) arr->tail = prev;
 }
 
 inline void arrayRemove(ArrayData* arr, size_t index) {

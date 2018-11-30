@@ -14,10 +14,13 @@ typedef conditional<sizeof(void*) <= 2, int8_t, int16_t>::type VariantSlotDiff;
 struct VariantSlot {
   VariantData value;
   VariantSlotDiff next;
-  VariantSlotDiff prev;
   const char* key;
 
-  // Must be a POD! so no constructor, nor destructor, nor virtual
+  // Must be a POD!
+  // - no constructor
+  // - no destructor
+  // - no virtual
+  // - no inheritance
 
   VariantSlot* getNext() {
     return next ? this + next : 0;
@@ -36,26 +39,25 @@ struct VariantSlot {
     return slot;
   }
 
-  const VariantSlot* getNext(size_t distance) const {
-    return const_cast<VariantSlot*>(this)->getNext(distance);
+  VariantSlot* getPrev(VariantSlot* head) {
+    while (head) {
+      VariantSlot* nxt = head->getNext();
+      if (nxt == this) return head;
+      head = nxt;
+    }
+    return head;
   }
 
-  VariantSlot* getPrev() {
-    return prev ? this + prev : 0;
+  const VariantSlot* getNext(size_t distance) const {
+    return const_cast<VariantSlot*>(this)->getNext(distance);
   }
 
   void setNext(VariantSlot* slot) {
     this->next = VariantSlotDiff(slot ? slot - this : 0);
   }
 
-  void setPrev(VariantSlot* slot) {
-    this->prev = VariantSlotDiff(slot ? slot - this : 0);
-  }
-
   void attachTo(VariantSlot* tail) {
-    VariantSlotDiff offset = VariantSlotDiff(tail - this);
-    this->prev = offset;
-    tail->next = VariantSlotDiff(-offset);
+    tail->next = VariantSlotDiff(this - tail);
   }
 };
 
