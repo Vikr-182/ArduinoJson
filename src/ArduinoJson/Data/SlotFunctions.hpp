@@ -38,17 +38,17 @@ inline const char* slotGetKey(const VariantSlot* var) {
 }
 
 inline const VariantSlot* slotAdvance(const VariantSlot* var, size_t distance) {
-  while (distance && var) {
-    var = var->getNext();
-    distance--;
+  if (!var) return 0;
+  while (distance-- && var->next) {
+    var += var->next;
   }
   return var;
 }
 
 inline VariantSlot* slotAdvance(VariantSlot* var, size_t distance) {
-  while (distance && var) {
-    var = var->getNext();
-    distance--;
+  if (!var) return 0;
+  while (distance-- && var->next) {
+    var += var->next;
   }
   return var;
 }
