@@ -34,7 +34,7 @@ inline JsonVariantData* arrayAdd(JsonArrayData* arr, MemoryPool* pool) {
 
 inline VariantSlot* arrayGetSlot(const JsonArrayData* arr, size_t index) {
   if (!arr) return 0;
-  return slotAdvance(arr->head, index);
+  return arr->head->getNext(index);
 }
 
 inline JsonVariantData* arrayGet(const JsonArrayData* arr, size_t index) {

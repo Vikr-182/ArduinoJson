@@ -24,7 +24,20 @@ struct VariantSlot {
   }
 
   const VariantSlot* getNext() const {
-    return next ? this + next : 0;
+    return const_cast<VariantSlot*>(this)->getNext();
+  }
+
+  VariantSlot* getNext(size_t distance) {
+    VariantSlot* slot = this;
+    while (distance--) {
+      if (!slot->next) return 0;
+      slot += slot->next;
+    }
+    return slot;
+  }
+
+  const VariantSlot* getNext(size_t distance) const {
+    return const_cast<VariantSlot*>(this)->getNext(distance);
   }
 
   VariantSlot* getPrev() {

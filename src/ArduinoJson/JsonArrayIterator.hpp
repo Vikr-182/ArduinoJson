@@ -53,7 +53,7 @@ class JsonArrayIterator {
   }
 
   JsonArrayIterator &operator+=(size_t distance) {
-    _slot = slotAdvance(_slot, distance);
+    _slot = _slot->getNext(distance);
     return *this;
   }
 
@@ -108,7 +108,7 @@ class JsonArrayConstIterator {
   }
 
   JsonArrayConstIterator &operator+=(size_t distance) {
-    _slot = slotAdvance(_slot, distance);
+    _slot = _slot->getNext(distance);
     return *this;
   }
 
