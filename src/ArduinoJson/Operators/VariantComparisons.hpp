@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "VariantRef.hpp"
+#include "../Variant/VariantRef.hpp"
 
 namespace ARDUINOJSON_NAMESPACE {
 template <typename T>

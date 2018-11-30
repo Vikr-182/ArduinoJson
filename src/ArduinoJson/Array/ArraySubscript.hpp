@@ -5,7 +5,7 @@
 #pragma once
 
 #include "../Configuration.hpp"
-#include "../Variant/VariantBase.hpp"
+#include "../Operators/VariantOperators.hpp"
 
 #ifdef _MSC_VER
 #pragma warning(push)
@@ -13,7 +13,8 @@
 #endif
 
 namespace ARDUINOJSON_NAMESPACE {
-class ArraySubscript : public VariantBase<ArraySubscript>, public Visitable {
+class ArraySubscript : public VariantOperators<ArraySubscript>,
+                       public Visitable {
  public:
   FORCE_INLINE ArraySubscript(ArrayRef array, size_t index)
       : _array(array), _index(index) {}

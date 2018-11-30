@@ -12,8 +12,8 @@
 namespace ARDUINOJSON_NAMESPACE {
 
 template <typename TImpl>
-class VariantBase : public VariantCasts<TImpl>,
-                    public VariantComparisons<TImpl>,
-                    public VariantOr<TImpl>,
-                    public VariantSubscripts<TImpl> {};
+class VariantOperators : public VariantCasts<TImpl>,
+                         public VariantComparisons<TImpl>,
+                         public VariantOr<TImpl>,
+                         public VariantSubscripts<TImpl> {};
 }  // namespace ARDUINOJSON_NAMESPACE

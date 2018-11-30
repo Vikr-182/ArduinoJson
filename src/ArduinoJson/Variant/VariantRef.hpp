@@ -11,9 +11,9 @@
 #include "../Misc/Visitable.hpp"
 #include "../Numbers/parseFloat.hpp"
 #include "../Numbers/parseInteger.hpp"
+#include "../Operators/VariantOperators.hpp"
 #include "../Polyfills/type_traits.hpp"
 #include "VariantAs.hpp"
-#include "VariantBase.hpp"
 #include "VariantData.hpp"
 #include "VariantFunctions.hpp"
 #include "VariantRef.hpp"
@@ -118,7 +118,7 @@ class VariantRefBase {
 // - a string (const char*)
 // - a reference to a ArrayRef or ObjectRef
 class VariantRef : public VariantRefBase<VariantData>,
-                   public VariantBase<VariantRef>,
+                   public VariantOperators<VariantRef>,
                    public Visitable {
   typedef VariantRefBase<VariantData> base_type;
   friend class VariantConstRef;
@@ -285,7 +285,7 @@ class VariantRef : public VariantRefBase<VariantData>,
 };
 
 class VariantConstRef : public VariantRefBase<const VariantData>,
-                        public VariantBase<VariantConstRef>,
+                        public VariantOperators<VariantConstRef>,
                         public Visitable {
   typedef VariantRefBase<const VariantData> base_type;
   friend class VariantRef;

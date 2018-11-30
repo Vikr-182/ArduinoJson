@@ -13,9 +13,6 @@ TEST_CASE("Polyfills/type_traits") {
         static_cast<bool>(is_base_of<std::istream, std::ostringstream>::value));
     REQUIRE(
         static_cast<bool>(is_base_of<std::istream, std::istringstream>::value));
-    REQUIRE(
-        static_cast<bool>(is_base_of<VariantBase<ObjectSubscript<const char*> >,
-                                     ObjectSubscript<const char*> >::value));
   }
 
   SECTION("is_array") {

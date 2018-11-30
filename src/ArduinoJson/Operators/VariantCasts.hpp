@@ -5,7 +5,6 @@
 #pragma once
 
 #include "../Polyfills/attributes.hpp"
-#include "VariantAs.hpp"
 
 namespace ARDUINOJSON_NAMESPACE {
 

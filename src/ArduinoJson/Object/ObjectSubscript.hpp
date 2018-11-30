@@ -5,8 +5,8 @@
 #pragma once
 
 #include "../Configuration.hpp"
+#include "../Operators/VariantOperators.hpp"
 #include "../Polyfills/type_traits.hpp"
-#include "../Variant/VariantBase.hpp"
 
 #ifdef _MSC_VER
 #pragma warning(push)
@@ -16,7 +16,7 @@
 namespace ARDUINOJSON_NAMESPACE {
 
 template <typename TStringRef>
-class ObjectSubscript : public VariantBase<ObjectSubscript<TStringRef> >,
+class ObjectSubscript : public VariantOperators<ObjectSubscript<TStringRef> >,
                         public Visitable {
   typedef ObjectSubscript<TStringRef> this_type;
 

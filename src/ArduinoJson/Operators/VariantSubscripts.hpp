@@ -7,7 +7,7 @@
 #include "../Polyfills/attributes.hpp"
 #include "../Polyfills/type_traits.hpp"
 #include "../Strings/StringTypes.hpp"
-#include "VariantAs.hpp"
+#include "../Variant/VariantAs.hpp"
 
 namespace ARDUINOJSON_NAMESPACE {
 class ArrayRef;
