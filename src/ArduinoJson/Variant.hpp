@@ -21,7 +21,7 @@
 namespace ARDUINOJSON_NAMESPACE {
 
 // Forward declarations.
-class Array;
+class ArrayRef;
 class Object;
 
 // Contains the methods shared by Variant and VariantConst
@@ -74,13 +74,12 @@ class VariantProxy {
     return variantIsString(_data);
   }
   //
-  // bool is<Array> const;
-  // bool is<const Array> const;
+  // bool is<ArrayRef> const;
+  // bool is<const ArrayRef> const;
   template <typename T>
-  FORCE_INLINE
-      typename enable_if<is_same<typename remove_const<T>::type, Array>::value,
-                         bool>::type
-      is() const {
+  FORCE_INLINE typename enable_if<
+      is_same<typename remove_const<T>::type, ArrayRef>::value, bool>::type
+  is() const {
     return variantIsArray(_data);
   }
   //
@@ -118,7 +117,7 @@ class VariantProxy {
 // - a boolean
 // - a char, short, int or a long (signed or unsigned)
 // - a string (const char*)
-// - a reference to a Array or Object
+// - a reference to a ArrayRef or Object
 class Variant : public VariantProxy<VariantData>,
                 public VariantBase<Variant>,
                 public Visitable {
@@ -218,7 +217,7 @@ class Variant : public VariantProxy<VariantData>,
   bool set(VariantConst value) const;
   bool set(Variant value) const;
 
-  FORCE_INLINE bool set(Array array) const;
+  FORCE_INLINE bool set(ArrayRef array) const;
   FORCE_INLINE bool set(const ArraySubscript &) const;
   FORCE_INLINE bool set(Object object) const;
   template <typename TString>
@@ -229,7 +228,7 @@ class Variant : public VariantProxy<VariantData>,
   // std::string as<std::string>() const;
   // String as<String>() const;
   template <typename T>
-  FORCE_INLINE typename enable_if<!is_same<T, Array>::value &&
+  FORCE_INLINE typename enable_if<!is_same<T, ArrayRef>::value &&
                                       !is_same<T, Object>::value &&
                                       !is_same<T, Variant>::value,
                                   typename VariantAs<T>::type>::type
@@ -237,10 +236,11 @@ class Variant : public VariantProxy<VariantData>,
     return variantAs<T>(_data);
   }
   //
-  // Array as<Array>() const;
-  // const Array as<const Array>() const;
+  // ArrayRef as<ArrayRef>() const;
+  // const ArrayRef as<const ArrayRef>() const;
   template <typename T>
-  FORCE_INLINE typename enable_if<is_same<T, Array>::value, T>::type as() const;
+  FORCE_INLINE typename enable_if<is_same<T, ArrayRef>::value, T>::type as()
+      const;
   //
   // Object as<Object>() const;
   // const Object as<const Object>() const;
@@ -268,9 +268,9 @@ class Variant : public VariantProxy<VariantData>,
 
   // Change the type of the variant
   //
-  // Array to<Array>()
+  // ArrayRef to<ArrayRef>()
   template <typename T>
-  typename enable_if<is_same<T, Array>::value, Array>::type to() const;
+  typename enable_if<is_same<T, ArrayRef>::value, ArrayRef>::type to() const;
   //
   // Object to<Object>()
   template <typename T>

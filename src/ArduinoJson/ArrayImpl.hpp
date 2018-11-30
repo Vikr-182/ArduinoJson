@@ -4,16 +4,16 @@
 
 #pragma once
 
-#include "Array.hpp"
+#include "ArrayRef.hpp"
 #include "Object.hpp"
 
 namespace ARDUINOJSON_NAMESPACE {
 
-inline Array Array::createNestedArray() const {
-  return add().to<Array>();
+inline ArrayRef ArrayRef::createNestedArray() const {
+  return add().to<ArrayRef>();
 }
 
-inline Object Array::createNestedObject() const {
+inline Object ArrayRef::createNestedObject() const {
   return add().to<Object>();
 }
 }  // namespace ARDUINOJSON_NAMESPACE

@@ -6,7 +6,7 @@
 
 #include "ArduinoJson/Namespace.hpp"
 
-#include "ArduinoJson/Array.hpp"
+#include "ArduinoJson/ArrayRef.hpp"
 #include "ArduinoJson/Object.hpp"
 #include "ArduinoJson/Variant.hpp"
 
@@ -27,8 +27,8 @@
 #include "ArduinoJson/MsgPack/MsgPackSerializer.hpp"
 
 namespace ArduinoJson {
-typedef ARDUINOJSON_NAMESPACE::Array JsonArray;
-typedef ARDUINOJSON_NAMESPACE::ArrayConst JsonArrayConst;
+typedef ARDUINOJSON_NAMESPACE::ArrayRef JsonArray;
+typedef ARDUINOJSON_NAMESPACE::ArrayConstRef JsonArrayConst;
 typedef ARDUINOJSON_NAMESPACE::Float JsonFloat;
 typedef ARDUINOJSON_NAMESPACE::Integer JsonInteger;
 typedef ARDUINOJSON_NAMESPACE::Object JsonObject;

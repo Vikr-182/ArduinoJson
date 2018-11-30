@@ -19,7 +19,7 @@ class Object;
 class ArraySubscript;
 
 template <typename TData>
-class ArrayProxy {
+class ArrayRefBase {
  public:
   FORCE_INLINE bool isNull() const {
     return _data == 0;
@@ -34,16 +34,16 @@ class ArrayProxy {
   }
 
  protected:
-  ArrayProxy(TData* data) : _data(data) {}
+  ArrayRefBase(TData* data) : _data(data) {}
   TData* _data;
 };
 
-class ArrayConst : public ArrayProxy<const ArrayData>, public Visitable {
-  friend class Array;
-  typedef ArrayProxy<const ArrayData> proxy_type;
+class ArrayConstRef : public ArrayRefBase<const ArrayData>, public Visitable {
+  friend class ArrayRef;
+  typedef ArrayRefBase<const ArrayData> base_type;
 
  public:
-  typedef ArrayConstIterator iterator;
+  typedef ArrayConstRefIterator iterator;
 
   template <typename Visitor>
   FORCE_INLINE void accept(Visitor& visitor) const {
@@ -62,30 +62,30 @@ class ArrayConst : public ArrayProxy<const ArrayData>, public Visitable {
     return iterator();
   }
 
-  FORCE_INLINE ArrayConst() : proxy_type(0) {}
-  FORCE_INLINE ArrayConst(const ArrayData* data) : proxy_type(data) {}
+  FORCE_INLINE ArrayConstRef() : base_type(0) {}
+  FORCE_INLINE ArrayConstRef(const ArrayData* data) : base_type(data) {}
 
-  FORCE_INLINE bool operator==(ArrayConst rhs) const {
+  FORCE_INLINE bool operator==(ArrayConstRef rhs) const {
     return arrayEquals(_data, rhs._data);
   }
 };
 
-class Array : public ArrayProxy<ArrayData>, public Visitable {
-  typedef ArrayProxy<ArrayData> proxy_type;
+class ArrayRef : public ArrayRefBase<ArrayData>, public Visitable {
+  typedef ArrayRefBase<ArrayData> base_type;
 
  public:
   typedef ArrayIterator iterator;
 
-  FORCE_INLINE Array() : proxy_type(0), _memoryPool(0) {}
-  FORCE_INLINE Array(MemoryPool* pool, ArrayData* data)
-      : proxy_type(data), _memoryPool(pool) {}
+  FORCE_INLINE ArrayRef() : base_type(0), _memoryPool(0) {}
+  FORCE_INLINE ArrayRef(MemoryPool* pool, ArrayData* data)
+      : base_type(data), _memoryPool(pool) {}
 
   operator Variant() {
     return Variant(_memoryPool, getVariantData(_data));
   }
 
-  operator ArrayConst() const {
-    return ArrayConst(_data);
+  operator ArrayConstRef() const {
+    return ArrayConstRef(_data);
   }
 
   // Adds the specified value at the end of the array.
@@ -98,7 +98,7 @@ class Array : public ArrayProxy<ArrayData>, public Visitable {
     return add().set(value);
   }
   // Adds the specified value at the end of the array.
-  FORCE_INLINE bool add(Array value) const {
+  FORCE_INLINE bool add(ArrayRef value) const {
     return add().set(value);
   }
   //
@@ -143,7 +143,7 @@ class Array : public ArrayProxy<ArrayData>, public Visitable {
   bool copyFrom(T (&array)[N1][N2]) const {
     bool ok = true;
     for (size_t i = 0; i < N1; i++) {
-      Array nestedArray = createNestedArray();
+      ArrayRef nestedArray = createNestedArray();
       for (size_t j = 0; j < N2; j++) {
         ok &= nestedArray.add(array[i][j]);
       }
@@ -151,8 +151,8 @@ class Array : public ArrayProxy<ArrayData>, public Visitable {
     return ok;
   }
 
-  // Copy a Array
-  FORCE_INLINE bool copyFrom(Array src) const {
+  // Copy a ArrayRef
+  FORCE_INLINE bool copyFrom(ArrayRef src) const {
     return arrayCopy(_data, src._data, _memoryPool);
   }
 
@@ -176,16 +176,16 @@ class Array : public ArrayProxy<ArrayData>, public Visitable {
     if (!_data) return;
     size_t i = 0;
     for (iterator it = begin(); it != end() && i < N1; ++it) {
-      it->as<Array>().copyTo(array[i++]);
+      it->as<ArrayRef>().copyTo(array[i++]);
     }
   }
 
-  FORCE_INLINE Array createNestedArray() const;
+  FORCE_INLINE ArrayRef createNestedArray() const;
   FORCE_INLINE Object createNestedObject() const;
 
   FORCE_INLINE ArraySubscript operator[](size_t index) const;
 
-  FORCE_INLINE bool operator==(Array rhs) const {
+  FORCE_INLINE bool operator==(ArrayRef rhs) const {
     return arrayEquals(_data, rhs._data);
   }
 
@@ -206,7 +206,7 @@ class Array : public ArrayProxy<ArrayData>, public Visitable {
 
   template <typename Visitor>
   FORCE_INLINE void accept(Visitor& visitor) const {
-    ArrayConst(_data).accept(visitor);
+    ArrayConstRef(_data).accept(visitor);
   }
 
  private:

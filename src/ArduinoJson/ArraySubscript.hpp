@@ -15,7 +15,7 @@
 namespace ARDUINOJSON_NAMESPACE {
 class ArraySubscript : public VariantBase<ArraySubscript>, public Visitable {
  public:
-  FORCE_INLINE ArraySubscript(Array array, size_t index)
+  FORCE_INLINE ArraySubscript(ArrayRef array, size_t index)
       : _array(array), _index(index) {}
 
   FORCE_INLINE ArraySubscript& operator=(const ArraySubscript& src) {
@@ -27,7 +27,7 @@ class ArraySubscript : public VariantBase<ArraySubscript>, public Visitable {
   //
   // operator=(const TValue&)
   // TValue = bool, long, int, short, float, double, serialized, Variant,
-  //          std::string, String, Array, Object
+  //          std::string, String, ArrayRef, Object
   template <typename T>
   FORCE_INLINE ArraySubscript& operator=(const T& src) {
     get_impl().set(src);
@@ -65,7 +65,7 @@ class ArraySubscript : public VariantBase<ArraySubscript>, public Visitable {
   //
   // bool set(const TValue&)
   // TValue = bool, long, int, short, float, double, serialized, Variant,
-  //          std::string, String, Array, Object
+  //          std::string, String, ArrayRef, Object
   template <typename TValue>
   FORCE_INLINE bool set(const TValue& value) const {
     return get_impl().set(value);
@@ -92,16 +92,16 @@ class ArraySubscript : public VariantBase<ArraySubscript>, public Visitable {
     return _array.get(_index);
   }
 
-  Array _array;
+  ArrayRef _array;
   const size_t _index;
 };
 
 template <typename TImpl>
 inline ArraySubscript VariantSubscripts<TImpl>::operator[](size_t index) const {
-  return impl()->template as<Array>()[index];
+  return impl()->template as<ArrayRef>()[index];
 }
 
-inline ArraySubscript Array::operator[](size_t index) const {
+inline ArraySubscript ArrayRef::operator[](size_t index) const {
   return ArraySubscript(*this, index);
 }
 }  // namespace ARDUINOJSON_NAMESPACE

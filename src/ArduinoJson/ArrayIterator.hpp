@@ -82,10 +82,10 @@ class VariantConstPtr {
   VariantConst _variant;
 };
 
-class ArrayConstIterator {
+class ArrayConstRefIterator {
  public:
-  ArrayConstIterator() : _slot(0) {}
-  explicit ArrayConstIterator(const VariantSlot *slot) : _slot(slot) {}
+  ArrayConstRefIterator() : _slot(0) {}
+  explicit ArrayConstRefIterator(const VariantSlot *slot) : _slot(slot) {}
 
   VariantConst operator*() const {
     return VariantConst(&_slot->value);
@@ -94,20 +94,20 @@ class ArrayConstIterator {
     return VariantConstPtr(&_slot->value);
   }
 
-  bool operator==(const ArrayConstIterator &other) const {
+  bool operator==(const ArrayConstRefIterator &other) const {
     return _slot == other._slot;
   }
 
-  bool operator!=(const ArrayConstIterator &other) const {
+  bool operator!=(const ArrayConstRefIterator &other) const {
     return _slot != other._slot;
   }
 
-  ArrayConstIterator &operator++() {
+  ArrayConstRefIterator &operator++() {
     _slot = _slot->getNext();
     return *this;
   }
 
-  ArrayConstIterator &operator+=(size_t distance) {
+  ArrayConstRefIterator &operator+=(size_t distance) {
     _slot = _slot->getNext(distance);
     return *this;
   }

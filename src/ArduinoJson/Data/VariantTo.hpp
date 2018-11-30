@@ -5,7 +5,7 @@
 #pragma once
 
 namespace ARDUINOJSON_NAMESPACE {
-class Array;
+class ArrayRef;
 class Object;
 class Variant;
 
@@ -15,8 +15,8 @@ template <typename T>
 struct VariantTo {};
 
 template <>
-struct VariantTo<Array> {
-  typedef Array type;
+struct VariantTo<ArrayRef> {
+  typedef ArrayRef type;
 };
 template <>
 struct VariantTo<Object> {

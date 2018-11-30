@@ -10,7 +10,7 @@
 #include "Strings/StringTypes.hpp"
 
 namespace ARDUINOJSON_NAMESPACE {
-class Array;
+class ArrayRef;
 class Object;
 
 // Forward declarations.

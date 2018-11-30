@@ -13,8 +13,8 @@
 
 namespace ARDUINOJSON_NAMESPACE {
 
-inline bool Variant::set(Array array) const {
-  return to<Array>().copyFrom(array);
+inline bool Variant::set(ArrayRef array) const {
+  return to<ArrayRef>().copyFrom(array);
 }
 
 inline bool Variant::set(const ArraySubscript& value) const {
@@ -39,9 +39,9 @@ inline bool Variant::set(Variant value) const {
 }
 
 template <typename T>
-inline typename enable_if<is_same<T, Array>::value, T>::type Variant::as()
+inline typename enable_if<is_same<T, ArrayRef>::value, T>::type Variant::as()
     const {
-  return Array(_memoryPool, variantAsArray(_data));
+  return ArrayRef(_memoryPool, variantAsArray(_data));
 }
 
 template <typename T>
@@ -51,9 +51,9 @@ inline typename enable_if<is_same<T, Object>::value, T>::type Variant::as()
 }
 
 template <typename T>
-inline typename enable_if<is_same<T, Array>::value, Array>::type Variant::to()
-    const {
-  return Array(_memoryPool, variantToArray(_data));
+inline typename enable_if<is_same<T, ArrayRef>::value, ArrayRef>::type
+Variant::to() const {
+  return ArrayRef(_memoryPool, variantToArray(_data));
 }
 
 template <typename T>
@@ -83,7 +83,7 @@ inline void VariantConst::accept(Visitor& visitor) const {
       return visitor.visitFloat(_data->content.asFloat);
 
     case JSON_ARRAY:
-      return visitor.visitArray(ArrayConst(&_data->content.asArray));
+      return visitor.visitArray(ArrayConstRef(&_data->content.asArray));
 
     case JSON_OBJECT:
       return visitor.visitObject(ObjectConst(&_data->content.asObject));
@@ -112,7 +112,7 @@ inline void VariantConst::accept(Visitor& visitor) const {
 }
 
 inline VariantConst VariantConst::operator[](size_t index) const {
-  return ArrayConst(variantAsArray(_data))[index];
+  return ArrayConstRef(variantAsArray(_data))[index];
 }
 
 }  // namespace ARDUINOJSON_NAMESPACE

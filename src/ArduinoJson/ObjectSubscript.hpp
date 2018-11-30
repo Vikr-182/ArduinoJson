@@ -37,7 +37,7 @@ class ObjectSubscript : public VariantBase<ObjectSubscript<TStringRef> >,
   //
   // operator=(const TValue&);
   // TValue = bool, char, long, int, short, float, double,
-  //          std::string, String, Array, Object
+  //          std::string, String, ArrayRef, Object
   template <typename TValue>
   FORCE_INLINE typename enable_if<!is_array<TValue>::value, this_type &>::type
   operator=(const TValue &src) {
@@ -77,7 +77,7 @@ class ObjectSubscript : public VariantBase<ObjectSubscript<TStringRef> >,
   // bool set(const TValue&);
   // TValue = bool, char, long, int, short, float, double, serialized,
   // Variant,
-  //          std::string, String, Array, Object
+  //          std::string, String, ArrayRef, Object
   template <typename TValue>
   FORCE_INLINE typename enable_if<!is_array<TValue>::value, bool>::type set(
       const TValue &value) {

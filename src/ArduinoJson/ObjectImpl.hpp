@@ -4,18 +4,18 @@
 
 #pragma once
 
-#include "Array.hpp"
+#include "ArrayRef.hpp"
 #include "Object.hpp"
 
 namespace ARDUINOJSON_NAMESPACE {
 
 template <typename TString>
-inline Array Object::createNestedArray(const TString& key) const {
-  return set(key).template to<Array>();
+inline ArrayRef Object::createNestedArray(const TString& key) const {
+  return set(key).template to<ArrayRef>();
 }
 
 template <typename TString>
-inline Array Object::createNestedArray(TString* key) const {
-  return set(key).template to<Array>();
+inline ArrayRef Object::createNestedArray(TString* key) const {
+  return set(key).template to<ArrayRef>();
 }
 }  // namespace ARDUINOJSON_NAMESPACE

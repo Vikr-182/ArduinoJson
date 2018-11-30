@@ -255,12 +255,12 @@ class MsgPackDeserializer {
   }
 
   DeserializationError readArray(Variant variant, size_t n) {
-    Array array = variant.to<Array>();
+    ArrayRef array = variant.to<ArrayRef>();
     if (array.isNull()) return DeserializationError::NoMemory;
     return readArray(array, n);
   }
 
-  DeserializationError readArray(Array array, size_t n) {
+  DeserializationError readArray(ArrayRef array, size_t n) {
     if (_nestingLimit == 0) return DeserializationError::TooDeep;
     --_nestingLimit;
     for (; n; --n) {

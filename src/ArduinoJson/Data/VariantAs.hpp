@@ -9,8 +9,8 @@
 
 namespace ARDUINOJSON_NAMESPACE {
 
-class Array;
-class ArrayConst;
+class ArrayRef;
+class ArrayConstRef;
 class Object;
 class ObjectConst;
 class Variant;
@@ -46,8 +46,8 @@ struct VariantConstAs<Object> {
 };
 
 template <>
-struct VariantConstAs<Array> {
-  typedef ArrayConst type;
+struct VariantConstAs<ArrayRef> {
+  typedef ArrayConstRef type;
 };
 
 // ---

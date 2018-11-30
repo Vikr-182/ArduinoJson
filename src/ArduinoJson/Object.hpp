@@ -78,7 +78,7 @@ class ObjectConst : public ObjectProxy<const ObjectData>, public Visitable {
   // TValue get<TValue>(TKey) const;
   // TKey = const std::string&, const String&
   // TValue = bool, char, long, int, short, float, double,
-  //          std::string, String, ArrayConst, ObjectConst
+  //          std::string, String, ArrayConstRef, ObjectConst
   template <typename TKey>
   FORCE_INLINE VariantConst get(const TKey& key) const {
     return get_impl(makeString(key));
@@ -87,7 +87,7 @@ class ObjectConst : public ObjectProxy<const ObjectData>, public Visitable {
   // TValue get<TValue>(TKey) const;
   // TKey = char*, const char*, const FlashStringHelper*
   // TValue = bool, char, long, int, short, float, double,
-  //          std::string, String, ArrayConst, ObjectConst
+  //          std::string, String, ArrayConstRef, ObjectConst
   template <typename TKey>
   FORCE_INLINE VariantConst get(TKey* key) const {
     return get_impl(makeString(key));
@@ -156,16 +156,16 @@ class Object : public ObjectProxy<ObjectData>, public Visitable {
     return objectCopy(_data, src._data, _memoryPool);
   }
 
-  // Creates and adds a Array.
+  // Creates and adds a ArrayRef.
   //
-  // Array createNestedArray(TKey);
+  // ArrayRef createNestedArray(TKey);
   // TKey = const std::string&, const String&
   template <typename TKey>
-  FORCE_INLINE Array createNestedArray(const TKey& key) const;
-  // Array createNestedArray(TKey);
+  FORCE_INLINE ArrayRef createNestedArray(const TKey& key) const;
+  // ArrayRef createNestedArray(TKey);
   // TKey = char*, const char*, char[], const char[], const FlashStringHelper*
   template <typename TKey>
-  FORCE_INLINE Array createNestedArray(TKey* key) const;
+  FORCE_INLINE ArrayRef createNestedArray(TKey* key) const;
 
   // Creates and adds a Object.
   //
@@ -188,7 +188,7 @@ class Object : public ObjectProxy<ObjectData>, public Visitable {
   // TValue get<TValue>(TKey) const;
   // TKey = const std::string&, const String&
   // TValue = bool, char, long, int, short, float, double,
-  //          std::string, String, Array, Object
+  //          std::string, String, ArrayRef, Object
   template <typename TKey>
   FORCE_INLINE Variant get(const TKey& key) const {
     return get_impl(makeString(key));
@@ -197,7 +197,7 @@ class Object : public ObjectProxy<ObjectData>, public Visitable {
   // TValue get<TValue>(TKey) const;
   // TKey = char*, const char*, const FlashStringHelper*
   // TValue = bool, char, long, int, short, float, double,
-  //          std::string, String, Array, Object
+  //          std::string, String, ArrayRef, Object
   template <typename TKey>
   FORCE_INLINE Variant get(TKey* key) const {
     return get_impl(makeString(key));
