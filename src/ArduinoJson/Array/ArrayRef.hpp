@@ -4,9 +4,9 @@
 
 #pragma once
 
+#include "../Variant/VariantData.hpp"
+#include "ArrayFunctions.hpp"
 #include "ArrayIterator.hpp"
-#include "Data/ArrayFunctions.hpp"
-#include "Data/VariantData.hpp"
 
 // Returns the size (in bytes) of an array with n elements.
 // Can be very handy to determine the size of a StaticMemoryPool.

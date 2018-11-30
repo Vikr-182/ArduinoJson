@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "Data/SlotFunctions.hpp"
+#include "../Variant/SlotFunctions.hpp"
 #include "Pair.hpp"
 
 namespace ARDUINOJSON_NAMESPACE {

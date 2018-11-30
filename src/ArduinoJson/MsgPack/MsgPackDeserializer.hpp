@@ -7,9 +7,9 @@
 #include "../Deserialization/deserialize.hpp"
 #include "../Memory/MemoryPool.hpp"
 #include "../Polyfills/type_traits.hpp"
-#include "../VariantRef.hpp"
-#include "./endianess.hpp"
-#include "./ieee754.hpp"
+#include "../Variant/VariantRef.hpp"
+#include "endianess.hpp"
+#include "ieee754.hpp"
 
 namespace ARDUINOJSON_NAMESPACE {
 

@@ -6,10 +6,10 @@
 
 #include <stdint.h>
 #include <string.h>  // for strlen
-#include "../Data/Integer.hpp"
 #include "../Numbers/FloatParts.hpp"
+#include "../Numbers/Integer.hpp"
 #include "../Polyfills/attributes.hpp"
-#include "./EscapeSequence.hpp"
+#include "EscapeSequence.hpp"
 
 namespace ARDUINOJSON_NAMESPACE {
 

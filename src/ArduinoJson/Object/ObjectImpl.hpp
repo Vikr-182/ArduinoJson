@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "ArrayRef.hpp"
+#include "../Array/ArrayRef.hpp"
 #include "ObjectRef.hpp"
 
 namespace ARDUINOJSON_NAMESPACE {

@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "Strings/StringTypes.hpp"
+#include "../Strings/StringTypes.hpp"
 
 namespace ARDUINOJSON_NAMESPACE {
 

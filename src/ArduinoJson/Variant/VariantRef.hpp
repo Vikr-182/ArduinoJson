@@ -7,16 +7,16 @@
 #include <stddef.h>
 #include <stdint.h>  // for uint8_t
 
-#include "Data/VariantAs.hpp"
-#include "Data/VariantData.hpp"
-#include "Data/VariantFunctions.hpp"
-#include "Memory/MemoryPool.hpp"
-#include "Numbers/parseFloat.hpp"
-#include "Numbers/parseInteger.hpp"
-#include "Polyfills/type_traits.hpp"
+#include "../Memory/MemoryPool.hpp"
+#include "../Misc/Visitable.hpp"
+#include "../Numbers/parseFloat.hpp"
+#include "../Numbers/parseInteger.hpp"
+#include "../Polyfills/type_traits.hpp"
+#include "VariantAs.hpp"
 #include "VariantBase.hpp"
+#include "VariantData.hpp"
+#include "VariantFunctions.hpp"
 #include "VariantRef.hpp"
-#include "Visitable.hpp"
 
 namespace ARDUINOJSON_NAMESPACE {
 

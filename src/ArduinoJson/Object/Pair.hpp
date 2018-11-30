@@ -4,8 +4,8 @@
 
 #pragma once
 
+#include "../Variant/VariantRef.hpp"
 #include "Key.hpp"
-#include "VariantRef.hpp"
 
 namespace ARDUINOJSON_NAMESPACE {
 // A key value pair for ObjectData.

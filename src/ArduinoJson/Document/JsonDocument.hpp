@@ -4,9 +4,9 @@
 
 #pragma once
 
-#include "Data/VariantTo.hpp"
-#include "Memory/MemoryPool.hpp"
-#include "VariantRef.hpp"
+#include "../Memory/MemoryPool.hpp"
+#include "../Variant/VariantRef.hpp"
+#include "../Variant/VariantTo.hpp"
 
 namespace ARDUINOJSON_NAMESPACE {
 

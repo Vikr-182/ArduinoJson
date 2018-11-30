@@ -4,8 +4,8 @@
 
 #pragma once
 
-#include "Data/VariantAs.hpp"
-#include "Polyfills/attributes.hpp"
+#include "../Polyfills/attributes.hpp"
+#include "VariantAs.hpp"
 
 namespace ARDUINOJSON_NAMESPACE {
 

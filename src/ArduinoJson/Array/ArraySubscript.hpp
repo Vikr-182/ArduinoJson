@@ -4,8 +4,8 @@
 
 #pragma once
 
-#include "Configuration.hpp"
-#include "VariantBase.hpp"
+#include "../Configuration.hpp"
+#include "../Variant/VariantBase.hpp"
 
 #ifdef _MSC_VER
 #pragma warning(push)

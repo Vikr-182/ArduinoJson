@@ -5,8 +5,8 @@
 #pragma once
 
 #include "../Serialization/DynamicStringWriter.hpp"
-#include "../VariantRef.hpp"
 #include "VariantFunctions.hpp"
+#include "VariantRef.hpp"
 
 namespace ARDUINOJSON_NAMESPACE {
 

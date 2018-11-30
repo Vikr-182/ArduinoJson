@@ -4,9 +4,9 @@
 
 #pragma once
 
+#include "../Misc/Visitable.hpp"
 #include "../Serialization/measure.hpp"
 #include "../Serialization/serialize.hpp"
-#include "../Visitable.hpp"
 #include "JsonWriter.hpp"
 
 namespace ARDUINOJSON_NAMESPACE {

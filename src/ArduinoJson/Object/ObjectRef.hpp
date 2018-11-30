@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "Data/ObjectFunctions.hpp"
+#include "ObjectFunctions.hpp"
 #include "ObjectIterator.hpp"
 
 // Returns the size (in bytes) of an object with n elements.

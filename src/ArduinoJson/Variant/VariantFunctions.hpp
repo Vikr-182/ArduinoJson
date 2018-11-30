@@ -4,11 +4,11 @@
 
 #pragma once
 
+#include "../Array/ArrayFunctions.hpp"
+#include "../Misc/SerializedValue.hpp"
 #include "../Numbers/parseFloat.hpp"
 #include "../Numbers/parseInteger.hpp"
-#include "../SerializedValue.hpp"
-#include "ArrayFunctions.hpp"
-#include "ObjectFunctions.hpp"
+#include "../Object/ObjectFunctions.hpp"
 #include "VariantData.hpp"
 
 namespace ARDUINOJSON_NAMESPACE {

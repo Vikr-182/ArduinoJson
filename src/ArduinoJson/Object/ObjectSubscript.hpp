@@ -4,9 +4,9 @@
 
 #pragma once
 
-#include "Configuration.hpp"
-#include "Polyfills/type_traits.hpp"
-#include "VariantBase.hpp"
+#include "../Configuration.hpp"
+#include "../Polyfills/type_traits.hpp"
+#include "../Variant/VariantBase.hpp"
 
 #ifdef _MSC_VER
 #pragma warning(push)

@@ -9,8 +9,8 @@
 #include "../Numbers/isFloat.hpp"
 #include "../Numbers/isInteger.hpp"
 #include "../Polyfills/type_traits.hpp"
-#include "../VariantRef.hpp"
-#include "./EscapeSequence.hpp"
+#include "../Variant/VariantRef.hpp"
+#include "EscapeSequence.hpp"
 
 namespace ARDUINOJSON_NAMESPACE {
 

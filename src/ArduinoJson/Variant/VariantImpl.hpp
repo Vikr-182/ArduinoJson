@@ -4,9 +4,9 @@
 
 #pragma once
 
-#include "Configuration.hpp"
-#include "Numbers/parseFloat.hpp"
-#include "Numbers/parseInteger.hpp"
+#include "../Configuration.hpp"
+#include "../Numbers/parseFloat.hpp"
+#include "../Numbers/parseInteger.hpp"
 #include "VariantRef.hpp"
 
 #include <string.h>  // for strcmp

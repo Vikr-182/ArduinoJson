@@ -4,8 +4,8 @@
 
 #pragma once
 
-#include "Data/SlotFunctions.hpp"
-#include "VariantRef.hpp"
+#include "../Variant/SlotFunctions.hpp"
+#include "../Variant/VariantRef.hpp"
 
 namespace ARDUINOJSON_NAMESPACE {
 
