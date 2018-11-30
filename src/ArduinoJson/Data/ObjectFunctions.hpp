@@ -36,8 +36,7 @@ inline JsonVariantData* objectAdd(JsonObjectData* obj, TKey key,
   slot->value.type = JSON_NULL;
 
   if (obj->tail) {
-    slot->setPrev(obj->tail);
-    obj->tail->setNext(slot);
+    slot->attachTo(obj->tail);
     obj->tail = slot;
   } else {
     slot->prev = 0;

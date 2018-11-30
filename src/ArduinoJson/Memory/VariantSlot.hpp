@@ -17,6 +17,8 @@ struct VariantSlot {
   VariantSlotDiff prev;
   const char* key;
 
+  // Must be a POD! so no constructor, nor destructor, nor virtual
+
   VariantSlot* getNext() {
     return next ? this + next : 0;
   }
@@ -30,11 +32,17 @@ struct VariantSlot {
   }
 
   void setNext(VariantSlot* slot) {
-    next = VariantSlotDiff(slot ? slot - this : 0);
+    this->next = VariantSlotDiff(slot ? slot - this : 0);
   }
 
   void setPrev(VariantSlot* slot) {
-    prev = VariantSlotDiff(slot ? slot - this : 0);
+    this->prev = VariantSlotDiff(slot ? slot - this : 0);
+  }
+
+  void attachTo(VariantSlot* tail) {
+    VariantSlotDiff offset = VariantSlotDiff(tail - this);
+    this->prev = offset;
+    tail->next = VariantSlotDiff(-offset);
   }
 };
 
