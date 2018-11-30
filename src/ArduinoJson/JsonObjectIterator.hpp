@@ -49,7 +49,7 @@ class JsonObjectIterator {
   }
 
   JsonObjectIterator &operator++() {
-    if (_slot) _slot = _slot->getNext();
+    _slot = _slot->getNext();
     return *this;
   }
 
@@ -105,7 +105,7 @@ class JsonObjectConstIterator {
   }
 
   JsonObjectConstIterator &operator++() {
-    if (_slot) _slot = _slot->getNext();
+    _slot = _slot->getNext();
     return *this;
   }
 
