@@ -5,77 +5,77 @@
 #pragma once
 
 #include "Configuration.hpp"
-#include "JsonVariant.hpp"
 #include "Numbers/parseFloat.hpp"
 #include "Numbers/parseInteger.hpp"
+#include "Variant.hpp"
 
 #include <string.h>  // for strcmp
 
 namespace ARDUINOJSON_NAMESPACE {
 
-inline bool JsonVariant::set(Array array) const {
+inline bool Variant::set(Array array) const {
   return to<Array>().copyFrom(array);
 }
 
-inline bool JsonVariant::set(const ArraySubscript& value) const {
-  return set(value.as<JsonVariant>());
+inline bool Variant::set(const ArraySubscript& value) const {
+  return set(value.as<Variant>());
 }
 
-inline bool JsonVariant::set(Object object) const {
+inline bool Variant::set(Object object) const {
   return to<Object>().copyFrom(object);
 }
 
 template <typename TString>
-inline bool JsonVariant::set(const ObjectSubscript<TString>& value) const {
-  return set(value.template as<JsonVariant>());
+inline bool Variant::set(const ObjectSubscript<TString>& value) const {
+  return set(value.template as<Variant>());
 }
 
-inline bool JsonVariant::set(JsonVariantConst value) const {
+inline bool Variant::set(VariantConst value) const {
   return variantCopy(_data, value._data, _memoryPool);
 }
 
-inline bool JsonVariant::set(JsonVariant value) const {
+inline bool Variant::set(Variant value) const {
   return variantCopy(_data, value._data, _memoryPool);
 }
 
 template <typename T>
-inline typename enable_if<is_same<T, Array>::value, T>::type JsonVariant::as()
+inline typename enable_if<is_same<T, Array>::value, T>::type Variant::as()
     const {
   return Array(_memoryPool, variantAsArray(_data));
 }
 
 template <typename T>
-inline typename enable_if<is_same<T, Object>::value, T>::type JsonVariant::as()
+inline typename enable_if<is_same<T, Object>::value, T>::type Variant::as()
     const {
   return Object(_memoryPool, variantAsObject(_data));
 }
 
 template <typename T>
-inline typename enable_if<is_same<T, Array>::value, Array>::type
-JsonVariant::to() const {
+inline typename enable_if<is_same<T, Array>::value, Array>::type Variant::to()
+    const {
   return Array(_memoryPool, variantToArray(_data));
 }
 
 template <typename T>
-typename enable_if<is_same<T, Object>::value, Object>::type JsonVariant::to()
+typename enable_if<is_same<T, Object>::value, Object>::type Variant::to()
     const {
   return Object(_memoryPool, variantToObject(_data));
 }
 
 template <typename T>
-typename enable_if<is_same<T, JsonVariant>::value, JsonVariant>::type
-JsonVariant::to() const {
+typename enable_if<is_same<T, Variant>::value, Variant>::type Variant::to()
+    const {
   variantSetNull(_data);
   return *this;
 }
 
 template <typename Visitor>
-inline void JsonVariant::accept(Visitor& visitor) const {
-  return JsonVariantConst(_data).accept(visitor);
+inline void Variant::accept(Visitor& visitor) const {
+  return VariantConst(_data).accept(visitor);
 }
 
 template <typename Visitor>
-inline void JsonVariantConst::accept(Visitor& visitor) const {
+inline void VariantConst::accept(Visitor& visitor) const {
   if (!_data) return visitor.visitNull();
 
   switch (_data->type) {
@@ -111,7 +111,7 @@ inline void JsonVariantConst::accept(Visitor& visitor) const {
   }
 }
 
-inline JsonVariantConst JsonVariantConst::operator[](size_t index) const {
+inline VariantConst VariantConst::operator[](size_t index) const {
   return ArrayConst(variantAsArray(_data))[index];
 }
 

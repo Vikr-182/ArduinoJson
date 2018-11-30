@@ -5,8 +5,8 @@
 #pragma once
 
 #include "../Memory/MemoryPool.hpp"
-#include "JsonVariantData.hpp"
 #include "SlotFunctions.hpp"
+#include "VariantData.hpp"
 
 namespace ARDUINOJSON_NAMESPACE {
 
@@ -27,7 +27,7 @@ inline bool objectContainsKey(const ObjectData* obj, const TKey& key) {
 }
 
 template <typename TKey>
-inline JsonVariantData* objectAdd(ObjectData* obj, TKey key, MemoryPool* pool) {
+inline VariantData* objectAdd(ObjectData* obj, TKey key, MemoryPool* pool) {
   VariantSlot* slot = pool->allocVariant();
   if (!slot) return 0;
 
@@ -48,7 +48,7 @@ inline JsonVariantData* objectAdd(ObjectData* obj, TKey key, MemoryPool* pool) {
 }
 
 template <typename TKey>
-inline JsonVariantData* objectSet(ObjectData* obj, TKey key, MemoryPool* pool) {
+inline VariantData* objectSet(ObjectData* obj, TKey key, MemoryPool* pool) {
   if (!obj) return 0;
 
   // ignore null key
@@ -62,7 +62,7 @@ inline JsonVariantData* objectSet(ObjectData* obj, TKey key, MemoryPool* pool) {
 }
 
 template <typename TKey>
-inline JsonVariantData* objectGet(const ObjectData* obj, TKey key) {
+inline VariantData* objectGet(const ObjectData* obj, TKey key) {
   VariantSlot* slot = objectFindSlot(obj, key);
   return slot ? &slot->value : 0;
 }
@@ -93,14 +93,14 @@ inline size_t objectSize(const ObjectData* obj) {
   return slotSize(obj->head);
 }
 
-// bool variantCopy(JsonVariantData*, const JsonVariantData*, MemoryPool*);
+// bool variantCopy(VariantData*, const VariantData*, MemoryPool*);
 
 inline bool objectCopy(ObjectData* dst, const ObjectData* src,
                        MemoryPool* pool) {
   if (!dst || !src) return false;
   objectClear(dst);
   for (VariantSlot* s = src->head; s; s = s->getNext()) {
-    JsonVariantData* var;
+    VariantData* var;
     if (s->value.keyIsOwned)
       var = objectAdd(dst, ZeroTerminatedRamString(s->key), pool);
     else
@@ -115,8 +115,8 @@ inline bool objectEquals(const ObjectData* o1, const ObjectData* o2) {
   if (!o1 || !o2) return false;
 
   for (VariantSlot* s = o1->head; s; s = s->getNext()) {
-    JsonVariantData* v1 = &s->value;
-    JsonVariantData* v2 = objectGet(o2, makeString(slotGetKey(s)));
+    VariantData* v1 = &s->value;
+    VariantData* v2 = objectGet(o2, makeString(slotGetKey(s)));
     if (!variantEquals(v1, v2)) return false;
   }
   return true;

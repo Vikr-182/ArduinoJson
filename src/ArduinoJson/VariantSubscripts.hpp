@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "Data/JsonVariantAs.hpp"
+#include "Data/VariantAs.hpp"
 #include "Polyfills/attributes.hpp"
 #include "Polyfills/type_traits.hpp"
 #include "Strings/StringTypes.hpp"
@@ -19,7 +19,7 @@ template <typename TKey>
 class ObjectSubscript;
 
 template <typename TImpl>
-class JsonVariantSubscripts {
+class VariantSubscripts {
  public:
   // Mimics an array.
   // Returns the element at specified index if the variant is an array.

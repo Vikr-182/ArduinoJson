@@ -4,9 +4,9 @@
 
 #pragma once
 
-#include "Data/JsonVariantTo.hpp"
-#include "JsonVariant.hpp"
+#include "Data/VariantTo.hpp"
 #include "Memory/MemoryPool.hpp"
+#include "Variant.hpp"
 
 namespace ARDUINOJSON_NAMESPACE {
 
@@ -20,12 +20,12 @@ class JsonDocument : public Visitable {
   }
 
   template <typename T>
-  typename JsonVariantAs<T>::type as() {
+  typename VariantAs<T>::type as() {
     return getVariant().template as<T>();
   }
 
   template <typename T>
-  typename JsonVariantConstAs<T>::type as() const {
+  typename VariantConstAs<T>::type as() const {
     return getVariant().template as<T>();
   }
 
@@ -53,7 +53,7 @@ class JsonDocument : public Visitable {
   }
 
   template <typename T>
-  typename JsonVariantTo<T>::type to() {
+  typename VariantTo<T>::type to() {
     clear();
     return getVariant().template to<T>();
   }
@@ -65,20 +65,20 @@ class JsonDocument : public Visitable {
 
   void copy(const JsonDocument& src) {
     nestingLimit = src.nestingLimit;
-    to<JsonVariant>().set(src.as<JsonVariant>());
+    to<Variant>().set(src.as<Variant>());
   }
 
  private:
-  JsonVariant getVariant() {
-    return JsonVariant(&_memoryPool, &_rootData);
+  Variant getVariant() {
+    return Variant(&_memoryPool, &_rootData);
   }
 
-  JsonVariantConst getVariant() const {
-    return JsonVariantConst(&_rootData);
+  VariantConst getVariant() const {
+    return VariantConst(&_rootData);
   }
 
   MemoryPool _memoryPool;
-  JsonVariantData _rootData;
+  VariantData _rootData;
 };
 
 }  // namespace ARDUINOJSON_NAMESPACE

@@ -4,12 +4,12 @@
 
 #pragma once
 
-#include "JsonVariantData.hpp"
 #include "SlotFunctions.hpp"
+#include "VariantData.hpp"
 
 namespace ARDUINOJSON_NAMESPACE {
 
-inline JsonVariantData* arrayAdd(ArrayData* arr, MemoryPool* pool) {
+inline VariantData* arrayAdd(ArrayData* arr, MemoryPool* pool) {
   if (!arr) return 0;
 
   VariantSlot* slot = pool->allocVariant();
@@ -36,7 +36,7 @@ inline VariantSlot* arrayGetSlot(const ArrayData* arr, size_t index) {
   return arr->head->getNext(index);
 }
 
-inline JsonVariantData* arrayGet(const ArrayData* arr, size_t index) {
+inline VariantData* arrayGet(const ArrayData* arr, size_t index) {
   VariantSlot* slot = arrayGetSlot(arr, index);
   return slot ? &slot->value : 0;
 }
@@ -64,7 +64,7 @@ inline void arrayClear(ArrayData* arr) {
   arr->tail = 0;
 }
 
-bool variantCopy(JsonVariantData*, const JsonVariantData*, MemoryPool*);
+bool variantCopy(VariantData*, const VariantData*, MemoryPool*);
 
 inline bool arrayCopy(ArrayData* dst, const ArrayData* src, MemoryPool* pool) {
   if (!dst || !src) return false;
@@ -75,7 +75,7 @@ inline bool arrayCopy(ArrayData* dst, const ArrayData* src, MemoryPool* pool) {
   return true;
 }
 
-bool variantEquals(const JsonVariantData*, const JsonVariantData*);
+bool variantEquals(const VariantData*, const VariantData*);
 
 inline bool arrayEquals(const ArrayData* a1, const ArrayData* a2) {
   if (a1 == a2) return true;

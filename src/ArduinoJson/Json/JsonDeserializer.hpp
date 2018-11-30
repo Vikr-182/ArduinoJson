@@ -5,11 +5,11 @@
 #pragma once
 
 #include "../Deserialization/deserialize.hpp"
-#include "../JsonVariant.hpp"
 #include "../Memory/MemoryPool.hpp"
 #include "../Numbers/isFloat.hpp"
 #include "../Numbers/isInteger.hpp"
 #include "../Polyfills/type_traits.hpp"
+#include "../Variant.hpp"
 #include "./EscapeSequence.hpp"
 
 namespace ARDUINOJSON_NAMESPACE {
@@ -28,7 +28,7 @@ class JsonDeserializer {
         _stringStorage(stringStorage),
         _nestingLimit(nestingLimit),
         _loaded(false) {}
-  DeserializationError parse(JsonVariant variant) {
+  DeserializationError parse(Variant variant) {
     DeserializationError err = skipSpacesAndComments();
     if (err) return err;
 
@@ -68,7 +68,7 @@ class JsonDeserializer {
     return true;
   }
 
-  DeserializationError parseArray(JsonVariant variant) {
+  DeserializationError parseArray(Variant variant) {
     if (_nestingLimit == 0) return DeserializationError::TooDeep;
 
     Array array = variant.to<Array>();
@@ -87,7 +87,7 @@ class JsonDeserializer {
     // Read each value
     for (;;) {
       // Allocate slot in array
-      JsonVariant value = array.add();
+      Variant value = array.add();
       if (value.isInvalid()) return DeserializationError::NoMemory;
 
       // 1 - Parse value
@@ -106,7 +106,7 @@ class JsonDeserializer {
     }
   }
 
-  DeserializationError parseObject(JsonVariant variant) {
+  DeserializationError parseObject(Variant variant) {
     if (_nestingLimit == 0) return DeserializationError::TooDeep;
 
     Object object = variant.to<Object>();
@@ -135,7 +135,7 @@ class JsonDeserializer {
       if (!eat(':')) return DeserializationError::InvalidInput;
 
       // Allocate slot in object
-      JsonVariant value = object.set(key);
+      Variant value = object.set(key);
       if (value.isInvalid()) return DeserializationError::NoMemory;
 
       // Parse value
@@ -158,7 +158,7 @@ class JsonDeserializer {
     }
   }
 
-  DeserializationError parseValue(JsonVariant variant) {
+  DeserializationError parseValue(Variant variant) {
     if (isQuote(current())) {
       return parseStringValue(variant);
     } else {
@@ -174,7 +174,7 @@ class JsonDeserializer {
     }
   }
 
-  DeserializationError parseStringValue(JsonVariant variant) {
+  DeserializationError parseStringValue(Variant variant) {
     StringType value;
     DeserializationError err = parseQuotedString(value);
     if (err) return err;
@@ -233,7 +233,7 @@ class JsonDeserializer {
     return DeserializationError::Ok;
   }
 
-  DeserializationError parseNumericValue(JsonVariant result) {
+  DeserializationError parseNumericValue(Variant result) {
     char buffer[64];
     uint8_t n = 0;
 

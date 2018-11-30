@@ -13,9 +13,9 @@ TEST_CASE("Polyfills/type_traits") {
         static_cast<bool>(is_base_of<std::istream, std::ostringstream>::value));
     REQUIRE(
         static_cast<bool>(is_base_of<std::istream, std::istringstream>::value));
-    REQUIRE(static_cast<bool>(
-        is_base_of<JsonVariantBase<ObjectSubscript<const char*> >,
-                   ObjectSubscript<const char*> >::value));
+    REQUIRE(
+        static_cast<bool>(is_base_of<VariantBase<ObjectSubscript<const char*> >,
+                                     ObjectSubscript<const char*> >::value));
   }
 
   SECTION("is_array") {
@@ -54,8 +54,8 @@ TEST_CASE("Polyfills/type_traits") {
   SECTION("IsVisitable") {
     CHECK(IsVisitable<DeserializationError>::value == false);
     CHECK(IsVisitable<JsonPair>::value == false);
-    CHECK(IsVisitable<JsonVariant>::value == true);
-    CHECK(IsVisitable<JsonVariantConst>::value == true);
+    CHECK(IsVisitable<Variant>::value == true);
+    CHECK(IsVisitable<VariantConst>::value == true);
     CHECK(IsVisitable<Array>::value == true);
     CHECK(IsVisitable<ArraySubscript>::value == true);
     CHECK(IsVisitable<ArrayConst>::value == true);

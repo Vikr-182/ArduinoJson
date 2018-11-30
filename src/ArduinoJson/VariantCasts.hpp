@@ -4,13 +4,13 @@
 
 #pragma once
 
-#include "Data/JsonVariantAs.hpp"
+#include "Data/VariantAs.hpp"
 #include "Polyfills/attributes.hpp"
 
 namespace ARDUINOJSON_NAMESPACE {
 
 template <typename TImpl>
-class JsonVariantCasts {
+class VariantCasts {
  public:
   template <typename T>
   FORCE_INLINE operator T() const {

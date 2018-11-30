@@ -8,12 +8,12 @@
 #include "../Numbers/parseInteger.hpp"
 #include "../SerializedValue.hpp"
 #include "ArrayFunctions.hpp"
-#include "JsonVariantData.hpp"
 #include "ObjectFunctions.hpp"
+#include "VariantData.hpp"
 
 namespace ARDUINOJSON_NAMESPACE {
 template <typename T>
-inline T variantAsIntegral(const JsonVariantData* var) {
+inline T variantAsIntegral(const VariantData* var) {
   if (!var) return 0;
   switch (var->type) {
     case JSON_POSITIVE_INTEGER:
@@ -31,13 +31,13 @@ inline T variantAsIntegral(const JsonVariantData* var) {
   }
 }
 
-inline bool variantAsBoolean(const JsonVariantData* var) {
+inline bool variantAsBoolean(const VariantData* var) {
   return variantAsIntegral<int>(var) != 0;
 }
 
 // T = float/double
 template <typename T>
-inline T variantAsFloat(const JsonVariantData* var) {
+inline T variantAsFloat(const VariantData* var) {
   if (!var) return 0;
   switch (var->type) {
     case JSON_POSITIVE_INTEGER:
@@ -55,7 +55,7 @@ inline T variantAsFloat(const JsonVariantData* var) {
   }
 }
 
-inline const char* variantAsString(const JsonVariantData* var) {
+inline const char* variantAsString(const VariantData* var) {
   if (!var) return 0;
   switch (var->type) {
     case JSON_LINKED_STRING:
@@ -66,42 +66,42 @@ inline const char* variantAsString(const JsonVariantData* var) {
   }
 }
 
-inline ArrayData* variantAsArray(JsonVariantData* var) {
+inline ArrayData* variantAsArray(VariantData* var) {
   if (var && var->type == JSON_ARRAY)
     return &var->content.asArray;
   else
     return 0;
 }
 
-inline const ArrayData* variantAsArray(const JsonVariantData* var) {
+inline const ArrayData* variantAsArray(const VariantData* var) {
   if (var && var->type == JSON_ARRAY)
     return &var->content.asArray;
   else
     return 0;
 }
 
-inline ObjectData* variantAsObject(JsonVariantData* var) {
+inline ObjectData* variantAsObject(VariantData* var) {
   if (var && var->type == JSON_OBJECT)
     return &var->content.asObject;
   else
     return 0;
 }
 
-inline const ObjectData* variantAsObject(const JsonVariantData* var) {
+inline const ObjectData* variantAsObject(const VariantData* var) {
   if (var && var->type == JSON_OBJECT)
     return &var->content.asObject;
   else
     return 0;
 }
 
-inline bool variantSetBoolean(JsonVariantData* var, bool value) {
+inline bool variantSetBoolean(VariantData* var, bool value) {
   if (!var) return false;
   var->type = JSON_BOOLEAN;
   var->content.asInteger = static_cast<JsonUInt>(value);
   return true;
 }
 
-inline bool variantSetFloat(JsonVariantData* var, JsonFloat value) {
+inline bool variantSetFloat(VariantData* var, JsonFloat value) {
   if (!var) return false;
   var->type = JSON_FLOAT;
   var->content.asFloat = value;
@@ -109,7 +109,7 @@ inline bool variantSetFloat(JsonVariantData* var, JsonFloat value) {
 }
 
 template <typename T>
-inline bool variantSetSignedInteger(JsonVariantData* var, T value) {
+inline bool variantSetSignedInteger(VariantData* var, T value) {
   if (!var) return false;
   if (value >= 0) {
     var->type = JSON_POSITIVE_INTEGER;
@@ -121,14 +121,14 @@ inline bool variantSetSignedInteger(JsonVariantData* var, T value) {
   return true;
 }
 
-inline bool variantSetUnsignedInteger(JsonVariantData* var, JsonUInt value) {
+inline bool variantSetUnsignedInteger(VariantData* var, JsonUInt value) {
   if (!var) return false;
   var->type = JSON_POSITIVE_INTEGER;
   var->content.asInteger = static_cast<JsonUInt>(value);
   return true;
 }
 
-inline bool variantSetLinkedRaw(JsonVariantData* var,
+inline bool variantSetLinkedRaw(VariantData* var,
                                 SerializedValue<const char*> value) {
   if (!var) return false;
   var->type = JSON_LINKED_RAW;
@@ -138,7 +138,7 @@ inline bool variantSetLinkedRaw(JsonVariantData* var,
 }
 
 template <typename T>
-inline bool variantSetOwnedRaw(JsonVariantData* var, SerializedValue<T> value,
+inline bool variantSetOwnedRaw(VariantData* var, SerializedValue<T> value,
                                MemoryPool* pool) {
   if (!var) return false;
   char* dup = makeString(value.data(), value.size()).save(pool);
@@ -154,7 +154,7 @@ inline bool variantSetOwnedRaw(JsonVariantData* var, SerializedValue<T> value,
 }
 
 template <typename T>
-inline bool variantSetString(JsonVariantData* var, T value, MemoryPool* pool) {
+inline bool variantSetString(VariantData* var, T value, MemoryPool* pool) {
   if (!var) return false;
   char* dup = value.save(pool);
   if (dup) {
@@ -167,26 +167,26 @@ inline bool variantSetString(JsonVariantData* var, T value, MemoryPool* pool) {
   }
 }
 
-inline bool variantSetOwnedString(JsonVariantData* var, char* s) {
+inline bool variantSetOwnedString(VariantData* var, char* s) {
   if (!var) return false;
   var->type = JSON_OWNED_STRING;
   var->content.asString = s;
   return true;
 }
 
-inline bool variantSetString(JsonVariantData* var, const char* value) {
+inline bool variantSetString(VariantData* var, const char* value) {
   if (!var) return false;
   var->type = JSON_LINKED_STRING;
   var->content.asString = value;
   return true;
 }
 
-inline void variantSetNull(JsonVariantData* var) {
+inline void variantSetNull(VariantData* var) {
   if (!var) return;
   var->type = JSON_NULL;
 }
 
-inline ArrayData* variantToArray(JsonVariantData* var) {
+inline ArrayData* variantToArray(VariantData* var) {
   if (!var) return 0;
   var->type = JSON_ARRAY;
   var->content.asArray.head = 0;
@@ -194,7 +194,7 @@ inline ArrayData* variantToArray(JsonVariantData* var) {
   return &var->content.asArray;
 }
 
-inline ObjectData* variantToObject(JsonVariantData* var) {
+inline ObjectData* variantToObject(VariantData* var) {
   if (!var) return 0;
   var->type = JSON_OBJECT;
   var->content.asObject.head = 0;
@@ -202,7 +202,7 @@ inline ObjectData* variantToObject(JsonVariantData* var) {
   return &var->content.asObject;
 }
 
-inline bool variantCopy(JsonVariantData* dst, const JsonVariantData* src,
+inline bool variantCopy(VariantData* dst, const VariantData* src,
                         MemoryPool* pool) {
   if (!dst) return false;
   if (!src) {
@@ -229,35 +229,35 @@ inline bool variantCopy(JsonVariantData* dst, const JsonVariantData* src,
   }
 }
 
-inline bool variantIsInteger(const JsonVariantData* var) {
+inline bool variantIsInteger(const VariantData* var) {
   return var && (var->type == JSON_POSITIVE_INTEGER ||
                  var->type == JSON_NEGATIVE_INTEGER);
 }
 
-inline bool variantIsFloat(const JsonVariantData* var) {
+inline bool variantIsFloat(const VariantData* var) {
   return var &&
          (var->type == JSON_FLOAT || var->type == JSON_POSITIVE_INTEGER ||
           var->type == JSON_NEGATIVE_INTEGER);
 }
 
-inline bool variantIsString(const JsonVariantData* var) {
+inline bool variantIsString(const VariantData* var) {
   return var &&
          (var->type == JSON_LINKED_STRING || var->type == JSON_OWNED_STRING);
 }
 
-inline bool variantIsArray(const JsonVariantData* var) {
+inline bool variantIsArray(const VariantData* var) {
   return var && var->type == JSON_ARRAY;
 }
 
-inline bool variantIsObject(const JsonVariantData* var) {
+inline bool variantIsObject(const VariantData* var) {
   return var && var->type == JSON_OBJECT;
 }
 
-inline bool variantIsNull(const JsonVariantData* var) {
+inline bool variantIsNull(const VariantData* var) {
   return var == 0 || var->type == JSON_NULL;
 }
 
-inline bool variantEquals(const JsonVariantData* a, const JsonVariantData* b) {
+inline bool variantEquals(const VariantData* a, const VariantData* b) {
   if (a == b) return true;
   if (!a || !b) return false;
   if (a->type != b->type) return false;

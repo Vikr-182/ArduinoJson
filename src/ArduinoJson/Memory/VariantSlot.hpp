@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "../Data/JsonVariantData.hpp"
+#include "../Data/VariantData.hpp"
 #include "../Polyfills/type_traits.hpp"
 
 namespace ARDUINOJSON_NAMESPACE {
@@ -12,7 +12,7 @@ namespace ARDUINOJSON_NAMESPACE {
 typedef conditional<sizeof(void*) <= 2, int8_t, int16_t>::type VariantSlotDiff;
 
 struct VariantSlot {
-  JsonVariantData value;
+  VariantData value;
   VariantSlotDiff next;
   VariantSlotDiff prev;
   const char* key;

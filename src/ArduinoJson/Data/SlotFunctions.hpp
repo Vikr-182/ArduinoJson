@@ -7,7 +7,7 @@
 #include "../Memory/MemoryPool.hpp"
 #include "../Polyfills/assert.hpp"
 #include "../Strings/StringTypes.hpp"
-#include "JsonVariantData.hpp"
+#include "VariantData.hpp"
 
 namespace ARDUINOJSON_NAMESPACE {
 

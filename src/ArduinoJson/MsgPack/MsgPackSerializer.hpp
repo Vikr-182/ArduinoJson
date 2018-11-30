@@ -4,10 +4,10 @@
 
 #pragma once
 
-#include "../JsonVariant.hpp"
 #include "../Polyfills/type_traits.hpp"
 #include "../Serialization/measure.hpp"
 #include "../Serialization/serialize.hpp"
+#include "../Variant.hpp"
 #include "./endianess.hpp"
 
 namespace ARDUINOJSON_NAMESPACE {

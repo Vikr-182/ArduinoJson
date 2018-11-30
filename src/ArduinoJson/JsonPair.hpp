@@ -5,7 +5,7 @@
 #pragma once
 
 #include "JsonKey.hpp"
-#include "JsonVariant.hpp"
+#include "Variant.hpp"
 
 namespace ARDUINOJSON_NAMESPACE {
 // A key value pair for ObjectData.
@@ -13,7 +13,7 @@ class JsonPair {
  public:
   JsonPair(MemoryPool* memoryPool, VariantSlot* slot) : _key(slot) {
     if (slot) {
-      _value = JsonVariant(memoryPool, &slot->value);
+      _value = Variant(memoryPool, &slot->value);
     }
   }
 
@@ -21,20 +21,20 @@ class JsonPair {
     return _key;
   }
 
-  JsonVariant value() const {
+  Variant value() const {
     return _value;
   }
 
  private:
   JsonKey _key;
-  JsonVariant _value;
+  Variant _value;
 };
 
 class JsonPairConst {
  public:
   JsonPairConst(const VariantSlot* slot) : _key(slot) {
     if (slot) {
-      _value = JsonVariantConst(&slot->value);
+      _value = VariantConst(&slot->value);
     }
   }
 
@@ -42,12 +42,12 @@ class JsonPairConst {
     return _key;
   }
 
-  JsonVariantConst value() const {
+  VariantConst value() const {
     return _value;
   }
 
  private:
   JsonKey _key;
-  JsonVariantConst _value;
+  VariantConst _value;
 };
 }  // namespace ARDUINOJSON_NAMESPACE

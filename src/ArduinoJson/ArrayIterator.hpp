@@ -5,25 +5,25 @@
 #pragma once
 
 #include "Data/SlotFunctions.hpp"
-#include "JsonVariant.hpp"
+#include "Variant.hpp"
 
 namespace ARDUINOJSON_NAMESPACE {
 
-class JsonVariantPtr {
+class VariantPtr {
  public:
-  JsonVariantPtr(MemoryPool *memoryPool, JsonVariantData *data)
+  VariantPtr(MemoryPool *memoryPool, VariantData *data)
       : _variant(memoryPool, data) {}
 
-  JsonVariant *operator->() {
+  Variant *operator->() {
     return &_variant;
   }
 
-  JsonVariant &operator*() {
+  Variant &operator*() {
     return _variant;
   }
 
  private:
-  JsonVariant _variant;
+  Variant _variant;
 };
 
 class ArrayIterator {
@@ -32,11 +32,11 @@ class ArrayIterator {
   explicit ArrayIterator(MemoryPool *memoryPool, VariantSlot *slot)
       : _memoryPool(memoryPool), _slot(slot) {}
 
-  JsonVariant operator*() const {
-    return JsonVariant(_memoryPool, &_slot->value);
+  Variant operator*() const {
+    return Variant(_memoryPool, &_slot->value);
   }
-  JsonVariantPtr operator->() {
-    return JsonVariantPtr(_memoryPool, &_slot->value);
+  VariantPtr operator->() {
+    return VariantPtr(_memoryPool, &_slot->value);
   }
 
   bool operator==(const ArrayIterator &other) const {
@@ -66,20 +66,20 @@ class ArrayIterator {
   VariantSlot *_slot;
 };
 
-class JsonVariantConstPtr {
+class VariantConstPtr {
  public:
-  JsonVariantConstPtr(const JsonVariantData *data) : _variant(data) {}
+  VariantConstPtr(const VariantData *data) : _variant(data) {}
 
-  JsonVariantConst *operator->() {
+  VariantConst *operator->() {
     return &_variant;
   }
 
-  JsonVariantConst &operator*() {
+  VariantConst &operator*() {
     return _variant;
   }
 
  private:
-  JsonVariantConst _variant;
+  VariantConst _variant;
 };
 
 class ArrayConstIterator {
@@ -87,11 +87,11 @@ class ArrayConstIterator {
   ArrayConstIterator() : _slot(0) {}
   explicit ArrayConstIterator(const VariantSlot *slot) : _slot(slot) {}
 
-  JsonVariantConst operator*() const {
-    return JsonVariantConst(&_slot->value);
+  VariantConst operator*() const {
+    return VariantConst(&_slot->value);
   }
-  JsonVariantConstPtr operator->() {
-    return JsonVariantConstPtr(&_slot->value);
+  VariantConstPtr operator->() {
+    return VariantConstPtr(&_slot->value);
   }
 
   bool operator==(const ArrayConstIterator &other) const {

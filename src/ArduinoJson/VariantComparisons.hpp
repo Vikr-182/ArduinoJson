@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "JsonVariant.hpp"
+#include "Variant.hpp"
 
 namespace ARDUINOJSON_NAMESPACE {
 template <typename T>
@@ -15,7 +15,7 @@ struct is_simple_value {
 };
 
 template <typename TVariant>
-class JsonVariantComparisons {
+class VariantComparisons {
  public:
   // const char* == TVariant
   template <typename T>

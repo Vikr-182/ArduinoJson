@@ -5,9 +5,9 @@
 #pragma once
 
 #include "../Deserialization/deserialize.hpp"
-#include "../JsonVariant.hpp"
 #include "../Memory/MemoryPool.hpp"
 #include "../Polyfills/type_traits.hpp"
+#include "../Variant.hpp"
 #include "./endianess.hpp"
 #include "./ieee754.hpp"
 
@@ -27,7 +27,7 @@ class MsgPackDeserializer {
         _stringStorage(stringStorage),
         _nestingLimit(nestingLimit) {}
 
-  DeserializationError parse(JsonVariant variant) {
+  DeserializationError parse(Variant variant) {
     uint8_t code;
     if (!readByte(code)) return DeserializationError::IncompleteInput;
 
@@ -174,7 +174,7 @@ class MsgPackDeserializer {
   }
 
   template <typename T>
-  DeserializationError readInteger(JsonVariant variant) {
+  DeserializationError readInteger(Variant variant) {
     T value;
     if (!readInteger(value)) return DeserializationError::IncompleteInput;
     variant.set(value);
@@ -183,7 +183,7 @@ class MsgPackDeserializer {
 
   template <typename T>
   typename enable_if<sizeof(T) == 4, DeserializationError>::type readFloat(
-      JsonVariant variant) {
+      Variant variant) {
     T value;
     if (!readBytes(value)) return DeserializationError::IncompleteInput;
     fixEndianess(value);
@@ -193,7 +193,7 @@ class MsgPackDeserializer {
 
   template <typename T>
   typename enable_if<sizeof(T) == 8, DeserializationError>::type readDouble(
-      JsonVariant variant) {
+      Variant variant) {
     T value;
     if (!readBytes(value)) return DeserializationError::IncompleteInput;
     fixEndianess(value);
@@ -203,7 +203,7 @@ class MsgPackDeserializer {
 
   template <typename T>
   typename enable_if<sizeof(T) == 4, DeserializationError>::type readDouble(
-      JsonVariant variant) {
+      Variant variant) {
     uint8_t i[8];  // input is 8 bytes
     T value;       // output is 4 bytes
     uint8_t *o = reinterpret_cast<uint8_t *>(&value);
@@ -215,7 +215,7 @@ class MsgPackDeserializer {
   }
 
   template <typename T>
-  DeserializationError readString(JsonVariant variant) {
+  DeserializationError readString(Variant variant) {
     T size;
     if (!readInteger(size)) return DeserializationError::IncompleteInput;
     return readString(variant, size);
@@ -228,7 +228,7 @@ class MsgPackDeserializer {
     return readString(str, size);
   }
 
-  DeserializationError readString(JsonVariant variant, size_t n) {
+  DeserializationError readString(Variant variant, size_t n) {
     StringType s;
     DeserializationError err = readString(s, n);
     if (!err) variant.set(s);
@@ -248,13 +248,13 @@ class MsgPackDeserializer {
   }
 
   template <typename TSize>
-  DeserializationError readArray(JsonVariant variant) {
+  DeserializationError readArray(Variant variant) {
     TSize size;
     if (!readInteger(size)) return DeserializationError::IncompleteInput;
     return readArray(variant, size);
   }
 
-  DeserializationError readArray(JsonVariant variant, size_t n) {
+  DeserializationError readArray(Variant variant, size_t n) {
     Array array = variant.to<Array>();
     if (array.isNull()) return DeserializationError::NoMemory;
     return readArray(array, n);
@@ -264,7 +264,7 @@ class MsgPackDeserializer {
     if (_nestingLimit == 0) return DeserializationError::TooDeep;
     --_nestingLimit;
     for (; n; --n) {
-      JsonVariant value = array.add();
+      Variant value = array.add();
       if (value.isInvalid()) return DeserializationError::NoMemory;
 
       DeserializationError err = parse(value);
@@ -275,13 +275,13 @@ class MsgPackDeserializer {
   }
 
   template <typename TSize>
-  DeserializationError readObject(JsonVariant variant) {
+  DeserializationError readObject(Variant variant) {
     TSize size;
     if (!readInteger(size)) return DeserializationError::IncompleteInput;
     return readObject(variant, size);
   }
 
-  DeserializationError readObject(JsonVariant variant, size_t n) {
+  DeserializationError readObject(Variant variant, size_t n) {
     Object object = variant.to<Object>();
     if (object.isNull()) return DeserializationError::NoMemory;
 
@@ -296,7 +296,7 @@ class MsgPackDeserializer {
       DeserializationError err = parseKey(key);
       if (err) return err;
 
-      JsonVariant value = object.set(key);
+      Variant value = object.set(key);
       if (value.isInvalid()) return DeserializationError::NoMemory;
 
       err = parse(value);

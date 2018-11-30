@@ -6,7 +6,7 @@
 
 #include "ArrayIterator.hpp"
 #include "Data/ArrayFunctions.hpp"
-#include "Data/JsonVariantData.hpp"
+#include "Data/VariantData.hpp"
 
 // Returns the size (in bytes) of an array with n elements.
 // Can be very handy to determine the size of a StaticMemoryPool.
@@ -25,8 +25,8 @@ class ArrayProxy {
     return _data == 0;
   }
 
-  FORCE_INLINE JsonVariantConst operator[](size_t index) const {
-    return JsonVariantConst(arrayGet(_data, index));
+  FORCE_INLINE VariantConst operator[](size_t index) const {
+    return VariantConst(arrayGet(_data, index));
   }
 
   FORCE_INLINE size_t size() const {
@@ -80,8 +80,8 @@ class Array : public ArrayProxy<ArrayData>, public Visitable {
   FORCE_INLINE Array(MemoryPool* pool, ArrayData* data)
       : proxy_type(data), _memoryPool(pool) {}
 
-  operator JsonVariant() {
-    return JsonVariant(_memoryPool, getVariantData(_data));
+  operator Variant() {
+    return Variant(_memoryPool, getVariantData(_data));
   }
 
   operator ArrayConst() const {
@@ -91,7 +91,7 @@ class Array : public ArrayProxy<ArrayData>, public Visitable {
   // Adds the specified value at the end of the array.
   //
   // bool add(TValue);
-  // TValue = bool, long, int, short, float, double, serialized, JsonVariant,
+  // TValue = bool, long, int, short, float, double, serialized, Variant,
   //          std::string, String, Object
   template <typename T>
   FORCE_INLINE bool add(const T& value) const {
@@ -109,8 +109,8 @@ class Array : public ArrayProxy<ArrayData>, public Visitable {
     return add().set(value);
   }
 
-  JsonVariant add() const {
-    return JsonVariant(_memoryPool, arrayAdd(_data, _memoryPool));
+  Variant add() const {
+    return Variant(_memoryPool, arrayAdd(_data, _memoryPool));
   }
 
   FORCE_INLINE iterator begin() const {
@@ -190,8 +190,8 @@ class Array : public ArrayProxy<ArrayData>, public Visitable {
   }
 
   // Gets the value at the specified index.
-  FORCE_INLINE JsonVariant get(size_t index) const {
-    return JsonVariant(_memoryPool, arrayGet(_data, index));
+  FORCE_INLINE Variant get(size_t index) const {
+    return Variant(_memoryPool, arrayGet(_data, index));
   }
 
   // Removes element at specified position.

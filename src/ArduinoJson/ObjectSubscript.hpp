@@ -5,8 +5,8 @@
 #pragma once
 
 #include "Configuration.hpp"
-#include "JsonVariantBase.hpp"
 #include "Polyfills/type_traits.hpp"
+#include "VariantBase.hpp"
 
 #ifdef _MSC_VER
 #pragma warning(push)
@@ -16,7 +16,7 @@
 namespace ARDUINOJSON_NAMESPACE {
 
 template <typename TStringRef>
-class ObjectSubscript : public JsonVariantBase<ObjectSubscript<TStringRef> >,
+class ObjectSubscript : public VariantBase<ObjectSubscript<TStringRef> >,
                         public Visitable {
   typedef ObjectSubscript<TStringRef> this_type;
 
@@ -24,7 +24,7 @@ class ObjectSubscript : public JsonVariantBase<ObjectSubscript<TStringRef> >,
   FORCE_INLINE ObjectSubscript(Object object, TStringRef key)
       : _object(object), _key(key) {}
 
-  operator JsonVariantConst() const {
+  operator VariantConst() const {
     return get_impl();
   }
 
@@ -58,7 +58,7 @@ class ObjectSubscript : public JsonVariantBase<ObjectSubscript<TStringRef> >,
   }
 
   template <typename TValue>
-  FORCE_INLINE typename JsonVariantAs<TValue>::type as() const {
+  FORCE_INLINE typename VariantAs<TValue>::type as() const {
     return get_impl().template as<TValue>();
   }
 
@@ -68,7 +68,7 @@ class ObjectSubscript : public JsonVariantBase<ObjectSubscript<TStringRef> >,
   }
 
   template <typename TValue>
-  FORCE_INLINE typename JsonVariantTo<TValue>::type to() {
+  FORCE_INLINE typename VariantTo<TValue>::type to() {
     return set_impl().template to<TValue>();
   }
 
@@ -76,7 +76,7 @@ class ObjectSubscript : public JsonVariantBase<ObjectSubscript<TStringRef> >,
   //
   // bool set(const TValue&);
   // TValue = bool, char, long, int, short, float, double, serialized,
-  // JsonVariant,
+  // Variant,
   //          std::string, String, Array, Object
   template <typename TValue>
   FORCE_INLINE typename enable_if<!is_array<TValue>::value, bool>::type set(
@@ -97,11 +97,11 @@ class ObjectSubscript : public JsonVariantBase<ObjectSubscript<TStringRef> >,
   }
 
  private:
-  FORCE_INLINE JsonVariant get_impl() const {
+  FORCE_INLINE Variant get_impl() const {
     return _object.get(_key);
   }
 
-  FORCE_INLINE JsonVariant set_impl() const {
+  FORCE_INLINE Variant set_impl() const {
     return _object.set(_key);
   }
 
@@ -113,7 +113,7 @@ template <typename TImpl>
 template <typename TString>
 inline typename enable_if<IsString<TString>::value,
                           ObjectSubscript<const TString &> >::type
-    JsonVariantSubscripts<TImpl>::operator[](const TString &key) const {
+    VariantSubscripts<TImpl>::operator[](const TString &key) const {
   return impl()->template as<Object>()[key];
 }
 
@@ -121,7 +121,7 @@ template <typename TImpl>
 template <typename TString>
 inline typename enable_if<IsString<TString *>::value,
                           ObjectSubscript<TString *> >::type
-    JsonVariantSubscripts<TImpl>::operator[](TString *key) const {
+    VariantSubscripts<TImpl>::operator[](TString *key) const {
   return impl()->template as<Object>()[key];
 }
 

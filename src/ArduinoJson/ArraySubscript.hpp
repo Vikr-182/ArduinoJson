@@ -5,7 +5,7 @@
 #pragma once
 
 #include "Configuration.hpp"
-#include "JsonVariantBase.hpp"
+#include "VariantBase.hpp"
 
 #ifdef _MSC_VER
 #pragma warning(push)
@@ -13,21 +13,20 @@
 #endif
 
 namespace ARDUINOJSON_NAMESPACE {
-class ArraySubscript : public JsonVariantBase<ArraySubscript>,
-                       public Visitable {
+class ArraySubscript : public VariantBase<ArraySubscript>, public Visitable {
  public:
   FORCE_INLINE ArraySubscript(Array array, size_t index)
       : _array(array), _index(index) {}
 
   FORCE_INLINE ArraySubscript& operator=(const ArraySubscript& src) {
-    get_impl().set(src.as<JsonVariantConst>());
+    get_impl().set(src.as<VariantConst>());
     return *this;
   }
 
   // Replaces the value
   //
   // operator=(const TValue&)
-  // TValue = bool, long, int, short, float, double, serialized, JsonVariant,
+  // TValue = bool, long, int, short, float, double, serialized, Variant,
   //          std::string, String, Array, Object
   template <typename T>
   FORCE_INLINE ArraySubscript& operator=(const T& src) {
@@ -48,7 +47,7 @@ class ArraySubscript : public JsonVariantBase<ArraySubscript>,
   }
 
   template <typename T>
-  FORCE_INLINE typename JsonVariantAs<T>::type as() const {
+  FORCE_INLINE typename VariantAs<T>::type as() const {
     return get_impl().as<T>();
   }
 
@@ -58,14 +57,14 @@ class ArraySubscript : public JsonVariantBase<ArraySubscript>,
   }
 
   template <typename T>
-  FORCE_INLINE typename JsonVariantTo<T>::type to() const {
+  FORCE_INLINE typename VariantTo<T>::type to() const {
     return get_impl().to<T>();
   }
 
   // Replaces the value
   //
   // bool set(const TValue&)
-  // TValue = bool, long, int, short, float, double, serialized, JsonVariant,
+  // TValue = bool, long, int, short, float, double, serialized, Variant,
   //          std::string, String, Array, Object
   template <typename TValue>
   FORCE_INLINE bool set(const TValue& value) const {
@@ -89,7 +88,7 @@ class ArraySubscript : public JsonVariantBase<ArraySubscript>,
   }
 
  private:
-  FORCE_INLINE JsonVariant get_impl() const {
+  FORCE_INLINE Variant get_impl() const {
     return _array.get(_index);
   }
 
@@ -98,8 +97,7 @@ class ArraySubscript : public JsonVariantBase<ArraySubscript>,
 };
 
 template <typename TImpl>
-inline ArraySubscript JsonVariantSubscripts<TImpl>::operator[](
-    size_t index) const {
+inline ArraySubscript VariantSubscripts<TImpl>::operator[](size_t index) const {
   return impl()->template as<Array>()[index];
 }
 

@@ -11,7 +11,7 @@
 
 namespace ARDUINOJSON_NAMESPACE {
 
-enum JsonVariantType {
+enum VariantType {
   JSON_NULL,
   JSON_LINKED_RAW,
   JSON_OWNED_RAW,
@@ -40,9 +40,9 @@ struct RawData {
   size_t size;
 };
 
-// A union that defines the actual content of a JsonVariantData.
-// The enum JsonVariantType determines which member is in use.
-union JsonVariantContent {
+// A union that defines the actual content of a VariantData.
+// The enum VariantType determines which member is in use.
+union VariantContent {
   JsonFloat asFloat;
   JsonUInt asInteger;
   ArrayData asArray;
@@ -55,25 +55,25 @@ union JsonVariantContent {
 };
 
 // this struct must be a POD type to prevent error calling offsetof on clang
-struct JsonVariantData {
+struct VariantData {
   bool keyIsOwned : 1;
-  JsonVariantType type : 7;
-  JsonVariantContent content;
+  VariantType type : 7;
+  VariantContent content;
 };
 
-inline JsonVariantData *getVariantData(ArrayData *arr) {
-  const ptrdiff_t offset = offsetof(JsonVariantData, content) -
-                           offsetof(JsonVariantContent, asArray);
+inline VariantData *getVariantData(ArrayData *arr) {
+  const ptrdiff_t offset =
+      offsetof(VariantData, content) - offsetof(VariantContent, asArray);
   if (!arr) return 0;
-  return reinterpret_cast<JsonVariantData *>(reinterpret_cast<char *>(arr) -
-                                             offset);
+  return reinterpret_cast<VariantData *>(reinterpret_cast<char *>(arr) -
+                                         offset);
 }
 
-inline JsonVariantData *getVariantData(ObjectData *obj) {
-  const ptrdiff_t offset = offsetof(JsonVariantData, content) -
-                           offsetof(JsonVariantContent, asObject);
+inline VariantData *getVariantData(ObjectData *obj) {
+  const ptrdiff_t offset =
+      offsetof(VariantData, content) - offsetof(VariantContent, asObject);
   if (!obj) return 0;
-  return reinterpret_cast<JsonVariantData *>(reinterpret_cast<char *>(obj) -
-                                             offset);
+  return reinterpret_cast<VariantData *>(reinterpret_cast<char *>(obj) -
+                                         offset);
 }
 }  // namespace ARDUINOJSON_NAMESPACE

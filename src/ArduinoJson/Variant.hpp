@@ -7,15 +7,15 @@
 #include <stddef.h>
 #include <stdint.h>  // for uint8_t
 
-#include "Data/JsonVariantData.hpp"
 #include "Data/VariantAs.hpp"
+#include "Data/VariantData.hpp"
 #include "Data/VariantFunctions.hpp"
-#include "JsonVariant.hpp"
-#include "JsonVariantBase.hpp"
 #include "Memory/MemoryPool.hpp"
 #include "Numbers/parseFloat.hpp"
 #include "Numbers/parseInteger.hpp"
 #include "Polyfills/type_traits.hpp"
+#include "Variant.hpp"
+#include "VariantBase.hpp"
 #include "Visitable.hpp"
 
 namespace ARDUINOJSON_NAMESPACE {
@@ -24,9 +24,9 @@ namespace ARDUINOJSON_NAMESPACE {
 class Array;
 class Object;
 
-// Contains the methods shared by JsonVariant and JsonVariantConst
+// Contains the methods shared by Variant and VariantConst
 template <typename TData>
-class JsonVariantProxy {
+class VariantProxy {
  public:
   // Tells wether the variant has the specified type.
   // Returns true if the variant has type type T, false otherwise.
@@ -108,7 +108,7 @@ class JsonVariantProxy {
   }
 
  protected:
-  JsonVariantProxy(TData *data) : _data(data) {}
+  VariantProxy(TData *data) : _data(data) {}
   TData *_data;
 };
 
@@ -119,19 +119,19 @@ class JsonVariantProxy {
 // - a char, short, int or a long (signed or unsigned)
 // - a string (const char*)
 // - a reference to a Array or Object
-class JsonVariant : public JsonVariantProxy<JsonVariantData>,
-                    public JsonVariantBase<JsonVariant>,
-                    public Visitable {
-  typedef JsonVariantProxy<JsonVariantData> proxy_type;
-  friend class JsonVariantConst;
+class Variant : public VariantProxy<VariantData>,
+                public VariantBase<Variant>,
+                public Visitable {
+  typedef VariantProxy<VariantData> proxy_type;
+  friend class VariantConst;
 
  public:
   // Intenal use only
-  FORCE_INLINE JsonVariant(MemoryPool *memoryPool, JsonVariantData *data)
+  FORCE_INLINE Variant(MemoryPool *memoryPool, VariantData *data)
       : proxy_type(data), _memoryPool(memoryPool) {}
 
-  // Creates an uninitialized JsonVariant
-  FORCE_INLINE JsonVariant() : proxy_type(0), _memoryPool(0) {}
+  // Creates an uninitialized Variant
+  FORCE_INLINE Variant() : proxy_type(0), _memoryPool(0) {}
 
   // set(bool value)
   FORCE_INLINE bool set(bool value) const {
@@ -215,8 +215,8 @@ class JsonVariant : public JsonVariantProxy<JsonVariantData>,
     return variantSetString(_data, value.c_str());
   }
 
-  bool set(JsonVariantConst value) const;
-  bool set(JsonVariant value) const;
+  bool set(VariantConst value) const;
+  bool set(Variant value) const;
 
   FORCE_INLINE bool set(Array array) const;
   FORCE_INLINE bool set(const ArraySubscript &) const;
@@ -231,8 +231,8 @@ class JsonVariant : public JsonVariantProxy<JsonVariantData>,
   template <typename T>
   FORCE_INLINE typename enable_if<!is_same<T, Array>::value &&
                                       !is_same<T, Object>::value &&
-                                      !is_same<T, JsonVariant>::value,
-                                  typename JsonVariantAs<T>::type>::type
+                                      !is_same<T, Variant>::value,
+                                  typename VariantAs<T>::type>::type
   as() const {
     return variantAs<T>(_data);
   }
@@ -248,9 +248,9 @@ class JsonVariant : public JsonVariantProxy<JsonVariantData>,
   FORCE_INLINE typename enable_if<is_same<T, Object>::value, T>::type as()
       const;
   //
-  // JsonVariant as<JsonVariant> const;
+  // Variant as<Variant> const;
   template <typename T>
-  FORCE_INLINE typename enable_if<is_same<T, JsonVariant>::value, T>::type as()
+  FORCE_INLINE typename enable_if<is_same<T, Variant>::value, T>::type as()
       const {
     return *this;
   }
@@ -258,11 +258,11 @@ class JsonVariant : public JsonVariantProxy<JsonVariantData>,
   template <typename Visitor>
   void accept(Visitor &visitor) const;
 
-  FORCE_INLINE bool operator==(JsonVariant lhs) const {
+  FORCE_INLINE bool operator==(Variant lhs) const {
     return variantEquals(_data, lhs._data);
   }
 
-  FORCE_INLINE bool operator!=(JsonVariant lhs) const {
+  FORCE_INLINE bool operator!=(Variant lhs) const {
     return !variantEquals(_data, lhs._data);
   }
 
@@ -276,25 +276,24 @@ class JsonVariant : public JsonVariantProxy<JsonVariantData>,
   template <typename T>
   typename enable_if<is_same<T, Object>::value, Object>::type to() const;
   //
-  // Object to<JsonVariant>()
+  // Object to<Variant>()
   template <typename T>
-  typename enable_if<is_same<T, JsonVariant>::value, JsonVariant>::type to()
-      const;
+  typename enable_if<is_same<T, Variant>::value, Variant>::type to() const;
 
  private:
   MemoryPool *_memoryPool;
 };
 
-class JsonVariantConst : public JsonVariantProxy<const JsonVariantData>,
-                         public JsonVariantBase<JsonVariantConst>,
-                         public Visitable {
-  typedef JsonVariantProxy<const JsonVariantData> proxy_type;
-  friend class JsonVariant;
+class VariantConst : public VariantProxy<const VariantData>,
+                     public VariantBase<VariantConst>,
+                     public Visitable {
+  typedef VariantProxy<const VariantData> proxy_type;
+  friend class Variant;
 
  public:
-  JsonVariantConst() : proxy_type(0) {}
-  JsonVariantConst(const JsonVariantData *data) : proxy_type(data) {}
-  JsonVariantConst(JsonVariant var) : proxy_type(var._data) {}
+  VariantConst() : proxy_type(0) {}
+  VariantConst(const VariantData *data) : proxy_type(data) {}
+  VariantConst(Variant var) : proxy_type(var._data) {}
 
   template <typename Visitor>
   void accept(Visitor &visitor) const;
@@ -302,29 +301,28 @@ class JsonVariantConst : public JsonVariantProxy<const JsonVariantData>,
   // Get the variant as the specified type.
   //
   template <typename T>
-  FORCE_INLINE typename JsonVariantConstAs<T>::type as() const {
-    return variantAs<typename JsonVariantConstAs<T>::type>(_data);
+  FORCE_INLINE typename VariantConstAs<T>::type as() const {
+    return variantAs<typename VariantConstAs<T>::type>(_data);
   }
 
-  FORCE_INLINE JsonVariantConst operator[](size_t index) const;
+  FORCE_INLINE VariantConst operator[](size_t index) const;
 
   //
-  // const JsonVariantConst operator[](TKey) const;
+  // const VariantConst operator[](TKey) const;
   // TKey = const std::string&, const String&
   template <typename TString>
-  FORCE_INLINE
-      typename enable_if<IsString<TString>::value, JsonVariantConst>::type
-      operator[](const TString &key) const {
-    return JsonVariantConst(objectGet(variantAsObject(_data), makeString(key)));
+  FORCE_INLINE typename enable_if<IsString<TString>::value, VariantConst>::type
+  operator[](const TString &key) const {
+    return VariantConst(objectGet(variantAsObject(_data), makeString(key)));
   }
   //
-  // JsonVariantConst operator[](TKey);
+  // VariantConst operator[](TKey);
   // TKey = const char*, const char[N], const FlashStringHelper*
   template <typename TString>
   FORCE_INLINE
-      typename enable_if<IsString<TString *>::value, JsonVariantConst>::type
+      typename enable_if<IsString<TString *>::value, VariantConst>::type
       operator[](TString *key) const {
-    return JsonVariantConst(objectGet(variantAsObject(_data), makeString(key)));
+    return VariantConst(objectGet(variantAsObject(_data), makeString(key)));
   }
 };
 }  // namespace ARDUINOJSON_NAMESPACE
