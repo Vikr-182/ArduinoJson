@@ -17,10 +17,10 @@ inline JsonVariantData* arrayAdd(JsonArrayData* arr, MemoryPool* pool) {
 
   slot->next = 0;
   slot->value.type = JSON_NULL;
+  slot->value.keyIsOwned = false;
 
   if (arr->tail) {
-    slot->setPrev(arr->tail);
-    arr->tail->setNext(slot);
+    slot->attachTo(arr->tail);
     arr->tail = slot;
   } else {
     slot->prev = 0;
@@ -28,7 +28,6 @@ inline JsonVariantData* arrayAdd(JsonArrayData* arr, MemoryPool* pool) {
     arr->tail = slot;
   }
 
-  slot->value.keyIsOwned = false;
   return &slot->value;
 }
 
