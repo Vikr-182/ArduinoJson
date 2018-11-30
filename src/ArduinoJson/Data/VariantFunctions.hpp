@@ -101,7 +101,7 @@ inline bool variantSetBoolean(VariantData* var, bool value) {
   return true;
 }
 
-inline bool variantSetFloat(VariantData* var, JsonFloat value) {
+inline bool variantSetFloat(VariantData* var, Float value) {
   if (!var) return false;
   var->type = JSON_FLOAT;
   var->content.asFloat = value;

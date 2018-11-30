@@ -16,7 +16,7 @@ class JsonSerializer {
  public:
   JsonSerializer(TWriter &writer) : _writer(writer) {}
 
-  void visitFloat(JsonFloat value) {
+  void visitFloat(Float value) {
     _writer.writeFloat(value);
   }
 

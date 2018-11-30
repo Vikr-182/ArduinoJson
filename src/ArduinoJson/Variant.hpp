@@ -144,7 +144,7 @@ class Variant : public VariantProxy<VariantData>,
   FORCE_INLINE bool set(
       T value,
       typename enable_if<is_floating_point<T>::value>::type * = 0) const {
-    return variantSetFloat(_data, static_cast<JsonFloat>(value));
+    return variantSetFloat(_data, static_cast<Float>(value));
   }
 
   // set(char)

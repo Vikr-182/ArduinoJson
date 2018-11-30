@@ -6,8 +6,8 @@
 
 #include <stddef.h>  // ptrdiff_t, size_t
 
+#include "Float.hpp"
 #include "Integer.hpp"
-#include "JsonFloat.hpp"
 
 namespace ARDUINOJSON_NAMESPACE {
 
@@ -43,7 +43,7 @@ struct RawData {
 // A union that defines the actual content of a VariantData.
 // The enum VariantType determines which member is in use.
 union VariantContent {
-  JsonFloat asFloat;
+  Float asFloat;
   JsonUInt asInteger;
   ArrayData asArray;
   ObjectData asObject;
