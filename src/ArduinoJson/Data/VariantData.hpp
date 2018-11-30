@@ -6,8 +6,8 @@
 
 #include <stddef.h>  // ptrdiff_t, size_t
 
+#include "Integer.hpp"
 #include "JsonFloat.hpp"
-#include "JsonInteger.hpp"
 
 namespace ARDUINOJSON_NAMESPACE {
 

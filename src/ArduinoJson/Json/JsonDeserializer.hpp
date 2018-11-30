@@ -246,7 +246,7 @@ class JsonDeserializer {
     buffer[n] = 0;
 
     if (isInteger(buffer)) {
-      result.set(parseInteger<JsonInteger>(buffer));
+      result.set(parseInteger<Integer>(buffer));
     } else if (isFloat(buffer)) {
       result.set(parseFloat<JsonFloat>(buffer));
     } else if (!strcmp(buffer, "true")) {
