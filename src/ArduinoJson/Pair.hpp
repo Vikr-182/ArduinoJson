@@ -9,9 +9,9 @@
 
 namespace ARDUINOJSON_NAMESPACE {
 // A key value pair for ObjectData.
-class JsonPair {
+class Pair {
  public:
-  JsonPair(MemoryPool* memoryPool, VariantSlot* slot) : _key(slot) {
+  Pair(MemoryPool* memoryPool, VariantSlot* slot) : _key(slot) {
     if (slot) {
       _value = Variant(memoryPool, &slot->value);
     }
@@ -30,9 +30,9 @@ class JsonPair {
   Variant _value;
 };
 
-class JsonPairConst {
+class PairConst {
  public:
-  JsonPairConst(const VariantSlot* slot) : _key(slot) {
+  PairConst(const VariantSlot* slot) : _key(slot) {
     if (slot) {
       _value = VariantConst(&slot->value);
     }

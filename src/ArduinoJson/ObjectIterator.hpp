@@ -5,25 +5,25 @@
 #pragma once
 
 #include "Data/SlotFunctions.hpp"
-#include "JsonPair.hpp"
+#include "Pair.hpp"
 
 namespace ARDUINOJSON_NAMESPACE {
 
-class JsonPairPtr {
+class PairPtr {
  public:
-  JsonPairPtr(MemoryPool *memoryPool, VariantSlot *slot)
+  PairPtr(MemoryPool *memoryPool, VariantSlot *slot)
       : _pair(memoryPool, slot) {}
 
-  const JsonPair *operator->() const {
+  const Pair *operator->() const {
     return &_pair;
   }
 
-  const JsonPair &operator*() const {
+  const Pair &operator*() const {
     return _pair;
   }
 
  private:
-  JsonPair _pair;
+  Pair _pair;
 };
 
 class ObjectIterator {
@@ -33,11 +33,11 @@ class ObjectIterator {
   explicit ObjectIterator(MemoryPool *memoryPool, VariantSlot *slot)
       : _memoryPool(memoryPool), _slot(slot) {}
 
-  JsonPair operator*() const {
-    return JsonPair(_memoryPool, _slot);
+  Pair operator*() const {
+    return Pair(_memoryPool, _slot);
   }
-  JsonPairPtr operator->() {
-    return JsonPairPtr(_memoryPool, _slot);
+  PairPtr operator->() {
+    return PairPtr(_memoryPool, _slot);
   }
 
   bool operator==(const ObjectIterator &other) const {
@@ -67,20 +67,20 @@ class ObjectIterator {
   VariantSlot *_slot;
 };
 
-class JsonPairConstPtr {
+class PairConstPtr {
  public:
-  JsonPairConstPtr(const VariantSlot *slot) : _pair(slot) {}
+  PairConstPtr(const VariantSlot *slot) : _pair(slot) {}
 
-  const JsonPairConst *operator->() const {
+  const PairConst *operator->() const {
     return &_pair;
   }
 
-  const JsonPairConst &operator*() const {
+  const PairConst &operator*() const {
     return _pair;
   }
 
  private:
-  JsonPairConst _pair;
+  PairConst _pair;
 };
 
 class ObjectConstIterator {
@@ -89,11 +89,11 @@ class ObjectConstIterator {
 
   explicit ObjectConstIterator(const VariantSlot *slot) : _slot(slot) {}
 
-  JsonPairConst operator*() const {
-    return JsonPairConst(_slot);
+  PairConst operator*() const {
+    return PairConst(_slot);
   }
-  JsonPairConstPtr operator->() {
-    return JsonPairConstPtr(_slot);
+  PairConstPtr operator->() {
+    return PairConstPtr(_slot);
   }
 
   bool operator==(const ObjectConstIterator &other) const {
