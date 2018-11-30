@@ -30,7 +30,7 @@ struct JsonObjectData {
   struct VariantSlot *tail;
 };
 
-struct JsonArrayData {
+struct ArrayData {
   struct VariantSlot *head;
   struct VariantSlot *tail;
 };
@@ -45,7 +45,7 @@ struct RawData {
 union JsonVariantContent {
   JsonFloat asFloat;
   JsonUInt asInteger;
-  JsonArrayData asArray;
+  ArrayData asArray;
   JsonObjectData asObject;
   const char *asString;
   struct {
@@ -61,7 +61,7 @@ struct JsonVariantData {
   JsonVariantContent content;
 };
 
-inline JsonVariantData *getVariantData(JsonArrayData *arr) {
+inline JsonVariantData *getVariantData(ArrayData *arr) {
   const ptrdiff_t offset = offsetof(JsonVariantData, content) -
                            offsetof(JsonVariantContent, asArray);
   if (!arr) return 0;

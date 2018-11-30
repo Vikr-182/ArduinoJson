@@ -71,7 +71,7 @@ class JsonDeserializer {
   DeserializationError parseArray(JsonVariant variant) {
     if (_nestingLimit == 0) return DeserializationError::TooDeep;
 
-    JsonArray array = variant.to<JsonArray>();
+    Array array = variant.to<Array>();
     if (array.isNull()) return DeserializationError::NoMemory;
 
     // Check opening braket

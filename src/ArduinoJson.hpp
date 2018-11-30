@@ -6,16 +6,16 @@
 
 #include "ArduinoJson/Namespace.hpp"
 
-#include "ArduinoJson/JsonArray.hpp"
+#include "ArduinoJson/Array.hpp"
 #include "ArduinoJson/JsonObject.hpp"
 #include "ArduinoJson/JsonVariant.hpp"
 
 #include "ArduinoJson/DynamicJsonDocument.hpp"
 #include "ArduinoJson/StaticJsonDocument.hpp"
 
+#include "ArduinoJson/ArrayImpl.hpp"
+#include "ArduinoJson/ArraySubscript.hpp"
 #include "ArduinoJson/Data/VariantAsImpl.hpp"
-#include "ArduinoJson/JsonArrayImpl.hpp"
-#include "ArduinoJson/JsonArraySubscript.hpp"
 #include "ArduinoJson/JsonObjectImpl.hpp"
 #include "ArduinoJson/JsonObjectSubscript.hpp"
 #include "ArduinoJson/JsonVariantImpl.hpp"
@@ -27,10 +27,10 @@
 #include "ArduinoJson/MsgPack/MsgPackSerializer.hpp"
 
 namespace ArduinoJson {
+typedef ARDUINOJSON_NAMESPACE::Array JsonArray;
+typedef ARDUINOJSON_NAMESPACE::ArrayConst JsonArrayConst;
 using ARDUINOJSON_NAMESPACE::DeserializationError;
 using ARDUINOJSON_NAMESPACE::DynamicJsonDocument;
-using ARDUINOJSON_NAMESPACE::JsonArray;
-using ARDUINOJSON_NAMESPACE::JsonArrayConst;
 using ARDUINOJSON_NAMESPACE::JsonFloat;
 using ARDUINOJSON_NAMESPACE::JsonInteger;
 using ARDUINOJSON_NAMESPACE::JsonKey;

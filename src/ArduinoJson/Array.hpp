@@ -4,9 +4,9 @@
 
 #pragma once
 
+#include "ArrayIterator.hpp"
 #include "Data/ArrayFunctions.hpp"
 #include "Data/JsonVariantData.hpp"
-#include "JsonArrayIterator.hpp"
 
 // Returns the size (in bytes) of an array with n elements.
 // Can be very handy to determine the size of a StaticMemoryPool.
@@ -16,10 +16,10 @@
 namespace ARDUINOJSON_NAMESPACE {
 
 class JsonObject;
-class JsonArraySubscript;
+class ArraySubscript;
 
 template <typename TData>
-class JsonArrayProxy {
+class ArrayProxy {
  public:
   FORCE_INLINE bool isNull() const {
     return _data == 0;
@@ -34,17 +34,16 @@ class JsonArrayProxy {
   }
 
  protected:
-  JsonArrayProxy(TData* data) : _data(data) {}
+  ArrayProxy(TData* data) : _data(data) {}
   TData* _data;
 };
 
-class JsonArrayConst : public JsonArrayProxy<const JsonArrayData>,
-                       public Visitable {
-  friend class JsonArray;
-  typedef JsonArrayProxy<const JsonArrayData> proxy_type;
+class ArrayConst : public ArrayProxy<const ArrayData>, public Visitable {
+  friend class Array;
+  typedef ArrayProxy<const ArrayData> proxy_type;
 
  public:
-  typedef JsonArrayConstIterator iterator;
+  typedef ArrayConstIterator iterator;
 
   template <typename Visitor>
   FORCE_INLINE void accept(Visitor& visitor) const {
@@ -63,30 +62,30 @@ class JsonArrayConst : public JsonArrayProxy<const JsonArrayData>,
     return iterator();
   }
 
-  FORCE_INLINE JsonArrayConst() : proxy_type(0) {}
-  FORCE_INLINE JsonArrayConst(const JsonArrayData* data) : proxy_type(data) {}
+  FORCE_INLINE ArrayConst() : proxy_type(0) {}
+  FORCE_INLINE ArrayConst(const ArrayData* data) : proxy_type(data) {}
 
-  FORCE_INLINE bool operator==(JsonArrayConst rhs) const {
+  FORCE_INLINE bool operator==(ArrayConst rhs) const {
     return arrayEquals(_data, rhs._data);
   }
 };
 
-class JsonArray : public JsonArrayProxy<JsonArrayData>, public Visitable {
-  typedef JsonArrayProxy<JsonArrayData> proxy_type;
+class Array : public ArrayProxy<ArrayData>, public Visitable {
+  typedef ArrayProxy<ArrayData> proxy_type;
 
  public:
-  typedef JsonArrayIterator iterator;
+  typedef ArrayIterator iterator;
 
-  FORCE_INLINE JsonArray() : proxy_type(0), _memoryPool(0) {}
-  FORCE_INLINE JsonArray(MemoryPool* pool, JsonArrayData* data)
+  FORCE_INLINE Array() : proxy_type(0), _memoryPool(0) {}
+  FORCE_INLINE Array(MemoryPool* pool, ArrayData* data)
       : proxy_type(data), _memoryPool(pool) {}
 
   operator JsonVariant() {
     return JsonVariant(_memoryPool, getVariantData(_data));
   }
 
-  operator JsonArrayConst() const {
-    return JsonArrayConst(_data);
+  operator ArrayConst() const {
+    return ArrayConst(_data);
   }
 
   // Adds the specified value at the end of the array.
@@ -99,7 +98,7 @@ class JsonArray : public JsonArrayProxy<JsonArrayData>, public Visitable {
     return add().set(value);
   }
   // Adds the specified value at the end of the array.
-  FORCE_INLINE bool add(JsonArray value) const {
+  FORCE_INLINE bool add(Array value) const {
     return add().set(value);
   }
   //
@@ -144,7 +143,7 @@ class JsonArray : public JsonArrayProxy<JsonArrayData>, public Visitable {
   bool copyFrom(T (&array)[N1][N2]) const {
     bool ok = true;
     for (size_t i = 0; i < N1; i++) {
-      JsonArray nestedArray = createNestedArray();
+      Array nestedArray = createNestedArray();
       for (size_t j = 0; j < N2; j++) {
         ok &= nestedArray.add(array[i][j]);
       }
@@ -152,8 +151,8 @@ class JsonArray : public JsonArrayProxy<JsonArrayData>, public Visitable {
     return ok;
   }
 
-  // Copy a JsonArray
-  FORCE_INLINE bool copyFrom(JsonArray src) const {
+  // Copy a Array
+  FORCE_INLINE bool copyFrom(Array src) const {
     return arrayCopy(_data, src._data, _memoryPool);
   }
 
@@ -177,16 +176,16 @@ class JsonArray : public JsonArrayProxy<JsonArrayData>, public Visitable {
     if (!_data) return;
     size_t i = 0;
     for (iterator it = begin(); it != end() && i < N1; ++it) {
-      it->as<JsonArray>().copyTo(array[i++]);
+      it->as<Array>().copyTo(array[i++]);
     }
   }
 
-  FORCE_INLINE JsonArray createNestedArray() const;
+  FORCE_INLINE Array createNestedArray() const;
   FORCE_INLINE JsonObject createNestedObject() const;
 
-  FORCE_INLINE JsonArraySubscript operator[](size_t index) const;
+  FORCE_INLINE ArraySubscript operator[](size_t index) const;
 
-  FORCE_INLINE bool operator==(JsonArray rhs) const {
+  FORCE_INLINE bool operator==(Array rhs) const {
     return arrayEquals(_data, rhs._data);
   }
 
@@ -207,7 +206,7 @@ class JsonArray : public JsonArrayProxy<JsonArrayData>, public Visitable {
 
   template <typename Visitor>
   FORCE_INLINE void accept(Visitor& visitor) const {
-    JsonArrayConst(_data).accept(visitor);
+    ArrayConst(_data).accept(visitor);
   }
 
  private:

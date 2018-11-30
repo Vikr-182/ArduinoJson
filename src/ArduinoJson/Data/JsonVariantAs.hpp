@@ -6,8 +6,8 @@
 
 namespace ARDUINOJSON_NAMESPACE {
 
-class JsonArray;
-class JsonArrayConst;
+class Array;
+class ArrayConst;
 class JsonObject;
 class JsonObjectConst;
 class JsonVariant;
@@ -43,7 +43,7 @@ struct JsonVariantConstAs<JsonObject> {
 };
 
 template <>
-struct JsonVariantConstAs<JsonArray> {
-  typedef JsonArrayConst type;
+struct JsonVariantConstAs<Array> {
+  typedef ArrayConst type;
 };
 }  // namespace ARDUINOJSON_NAMESPACE

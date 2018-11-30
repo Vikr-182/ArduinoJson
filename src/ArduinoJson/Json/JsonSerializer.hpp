@@ -20,10 +20,10 @@ class JsonSerializer {
     _writer.writeFloat(value);
   }
 
-  void visitArray(JsonArrayConst array) {
+  void visitArray(ArrayConst array) {
     _writer.beginArray();
 
-    JsonArrayConst::iterator it = array.begin();
+    ArrayConst::iterator it = array.begin();
     while (it != array.end()) {
       it->accept(*this);
 

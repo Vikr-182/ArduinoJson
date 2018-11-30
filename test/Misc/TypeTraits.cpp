@@ -56,9 +56,9 @@ TEST_CASE("Polyfills/type_traits") {
     CHECK(IsVisitable<JsonPair>::value == false);
     CHECK(IsVisitable<JsonVariant>::value == true);
     CHECK(IsVisitable<JsonVariantConst>::value == true);
-    CHECK(IsVisitable<JsonArray>::value == true);
-    CHECK(IsVisitable<JsonArraySubscript>::value == true);
-    CHECK(IsVisitable<JsonArrayConst>::value == true);
+    CHECK(IsVisitable<Array>::value == true);
+    CHECK(IsVisitable<ArraySubscript>::value == true);
+    CHECK(IsVisitable<ArrayConst>::value == true);
     CHECK(IsVisitable<JsonObject>::value == true);
     CHECK(IsVisitable<JsonObjectSubscript<const char*> >::value == true);
     CHECK(IsVisitable<JsonObjectConst>::value == true);

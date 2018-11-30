@@ -26,10 +26,10 @@ class JsonVariantPtr {
   JsonVariant _variant;
 };
 
-class JsonArrayIterator {
+class ArrayIterator {
  public:
-  JsonArrayIterator() : _slot(0) {}
-  explicit JsonArrayIterator(MemoryPool *memoryPool, VariantSlot *slot)
+  ArrayIterator() : _slot(0) {}
+  explicit ArrayIterator(MemoryPool *memoryPool, VariantSlot *slot)
       : _memoryPool(memoryPool), _slot(slot) {}
 
   JsonVariant operator*() const {
@@ -39,20 +39,20 @@ class JsonArrayIterator {
     return JsonVariantPtr(_memoryPool, &_slot->value);
   }
 
-  bool operator==(const JsonArrayIterator &other) const {
+  bool operator==(const ArrayIterator &other) const {
     return _slot == other._slot;
   }
 
-  bool operator!=(const JsonArrayIterator &other) const {
+  bool operator!=(const ArrayIterator &other) const {
     return _slot != other._slot;
   }
 
-  JsonArrayIterator &operator++() {
+  ArrayIterator &operator++() {
     _slot = _slot->getNext();
     return *this;
   }
 
-  JsonArrayIterator &operator+=(size_t distance) {
+  ArrayIterator &operator+=(size_t distance) {
     _slot = _slot->getNext(distance);
     return *this;
   }
@@ -82,10 +82,10 @@ class JsonVariantConstPtr {
   JsonVariantConst _variant;
 };
 
-class JsonArrayConstIterator {
+class ArrayConstIterator {
  public:
-  JsonArrayConstIterator() : _slot(0) {}
-  explicit JsonArrayConstIterator(const VariantSlot *slot) : _slot(slot) {}
+  ArrayConstIterator() : _slot(0) {}
+  explicit ArrayConstIterator(const VariantSlot *slot) : _slot(slot) {}
 
   JsonVariantConst operator*() const {
     return JsonVariantConst(&_slot->value);
@@ -94,20 +94,20 @@ class JsonArrayConstIterator {
     return JsonVariantConstPtr(&_slot->value);
   }
 
-  bool operator==(const JsonArrayConstIterator &other) const {
+  bool operator==(const ArrayConstIterator &other) const {
     return _slot == other._slot;
   }
 
-  bool operator!=(const JsonArrayConstIterator &other) const {
+  bool operator!=(const ArrayConstIterator &other) const {
     return _slot != other._slot;
   }
 
-  JsonArrayConstIterator &operator++() {
+  ArrayConstIterator &operator++() {
     _slot = _slot->getNext();
     return *this;
   }
 
-  JsonArrayConstIterator &operator+=(size_t distance) {
+  ArrayConstIterator &operator+=(size_t distance) {
     _slot = _slot->getNext(distance);
     return *this;
   }

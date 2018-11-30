@@ -9,7 +9,7 @@
 
 namespace ARDUINOJSON_NAMESPACE {
 
-inline JsonVariantData* arrayAdd(JsonArrayData* arr, MemoryPool* pool) {
+inline JsonVariantData* arrayAdd(ArrayData* arr, MemoryPool* pool) {
   if (!arr) return 0;
 
   VariantSlot* slot = pool->allocVariant();
@@ -31,17 +31,17 @@ inline JsonVariantData* arrayAdd(JsonArrayData* arr, MemoryPool* pool) {
   return &slot->value;
 }
 
-inline VariantSlot* arrayGetSlot(const JsonArrayData* arr, size_t index) {
+inline VariantSlot* arrayGetSlot(const ArrayData* arr, size_t index) {
   if (!arr) return 0;
   return arr->head->getNext(index);
 }
 
-inline JsonVariantData* arrayGet(const JsonArrayData* arr, size_t index) {
+inline JsonVariantData* arrayGet(const ArrayData* arr, size_t index) {
   VariantSlot* slot = arrayGetSlot(arr, index);
   return slot ? &slot->value : 0;
 }
 
-inline void arrayRemove(JsonArrayData* arr, VariantSlot* slot) {
+inline void arrayRemove(ArrayData* arr, VariantSlot* slot) {
   if (!arr || !slot) return;
 
   if (slot->prev)
@@ -54,11 +54,11 @@ inline void arrayRemove(JsonArrayData* arr, VariantSlot* slot) {
     arr->tail = slot->getPrev();
 }
 
-inline void arrayRemove(JsonArrayData* arr, size_t index) {
+inline void arrayRemove(ArrayData* arr, size_t index) {
   arrayRemove(arr, arrayGetSlot(arr, index));
 }
 
-inline void arrayClear(JsonArrayData* arr) {
+inline void arrayClear(ArrayData* arr) {
   if (!arr) return;
   arr->head = 0;
   arr->tail = 0;
@@ -66,8 +66,7 @@ inline void arrayClear(JsonArrayData* arr) {
 
 bool variantCopy(JsonVariantData*, const JsonVariantData*, MemoryPool*);
 
-inline bool arrayCopy(JsonArrayData* dst, const JsonArrayData* src,
-                      MemoryPool* pool) {
+inline bool arrayCopy(ArrayData* dst, const ArrayData* src, MemoryPool* pool) {
   if (!dst || !src) return false;
   arrayClear(dst);
   for (VariantSlot* s = src->head; s; s = s->getNext()) {
@@ -78,7 +77,7 @@ inline bool arrayCopy(JsonArrayData* dst, const JsonArrayData* src,
 
 bool variantEquals(const JsonVariantData*, const JsonVariantData*);
 
-inline bool arrayEquals(const JsonArrayData* a1, const JsonArrayData* a2) {
+inline bool arrayEquals(const ArrayData* a1, const ArrayData* a2) {
   if (a1 == a2) return true;
   if (!a1 || !a2) return false;
   VariantSlot* s1 = a1->head;
@@ -92,7 +91,7 @@ inline bool arrayEquals(const JsonArrayData* a1, const JsonArrayData* a2) {
   }
 }
 
-inline size_t arraySize(const JsonArrayData* arr) {
+inline size_t arraySize(const ArrayData* arr) {
   if (!arr) return 0;
   return slotSize(arr->head);
 }

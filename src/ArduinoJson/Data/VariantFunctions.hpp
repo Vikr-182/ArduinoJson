@@ -66,14 +66,14 @@ inline const char* variantAsString(const JsonVariantData* var) {
   }
 }
 
-inline JsonArrayData* variantAsArray(JsonVariantData* var) {
+inline ArrayData* variantAsArray(JsonVariantData* var) {
   if (var && var->type == JSON_ARRAY)
     return &var->content.asArray;
   else
     return 0;
 }
 
-inline const JsonArrayData* variantAsArray(const JsonVariantData* var) {
+inline const ArrayData* variantAsArray(const JsonVariantData* var) {
   if (var && var->type == JSON_ARRAY)
     return &var->content.asArray;
   else
@@ -186,7 +186,7 @@ inline void variantSetNull(JsonVariantData* var) {
   var->type = JSON_NULL;
 }
 
-inline JsonArrayData* variantToArray(JsonVariantData* var) {
+inline ArrayData* variantToArray(JsonVariantData* var) {
   if (!var) return 0;
   var->type = JSON_ARRAY;
   var->content.asArray.head = 0;

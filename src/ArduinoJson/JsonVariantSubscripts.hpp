@@ -10,11 +10,11 @@
 #include "Strings/StringTypes.hpp"
 
 namespace ARDUINOJSON_NAMESPACE {
-class JsonArray;
+class Array;
 class JsonObject;
 
 // Forward declarations.
-class JsonArraySubscript;
+class ArraySubscript;
 template <typename TKey>
 class JsonObjectSubscript;
 
@@ -23,7 +23,7 @@ class JsonVariantSubscripts {
  public:
   // Mimics an array.
   // Returns the element at specified index if the variant is an array.
-  FORCE_INLINE JsonArraySubscript operator[](size_t index) const;
+  FORCE_INLINE ArraySubscript operator[](size_t index) const;
 
   // Mimics an object.
   // Returns the value associated with the specified key if the variant is

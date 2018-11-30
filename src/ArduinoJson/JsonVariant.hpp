@@ -21,7 +21,7 @@
 namespace ARDUINOJSON_NAMESPACE {
 
 // Forward declarations.
-class JsonArray;
+class Array;
 class JsonObject;
 
 // Contains the methods shared by JsonVariant and JsonVariantConst
@@ -74,12 +74,13 @@ class JsonVariantProxy {
     return variantIsString(_data);
   }
   //
-  // bool is<JsonArray> const;
-  // bool is<const JsonArray> const;
+  // bool is<Array> const;
+  // bool is<const Array> const;
   template <typename T>
-  FORCE_INLINE typename enable_if<
-      is_same<typename remove_const<T>::type, JsonArray>::value, bool>::type
-  is() const {
+  FORCE_INLINE
+      typename enable_if<is_same<typename remove_const<T>::type, Array>::value,
+                         bool>::type
+      is() const {
     return variantIsArray(_data);
   }
   //
@@ -116,7 +117,7 @@ class JsonVariantProxy {
 // - a boolean
 // - a char, short, int or a long (signed or unsigned)
 // - a string (const char*)
-// - a reference to a JsonArray or JsonObject
+// - a reference to a Array or JsonObject
 class JsonVariant : public JsonVariantProxy<JsonVariantData>,
                     public JsonVariantBase<JsonVariant>,
                     public Visitable {
@@ -216,8 +217,8 @@ class JsonVariant : public JsonVariantProxy<JsonVariantData>,
   bool set(JsonVariantConst value) const;
   bool set(JsonVariant value) const;
 
-  FORCE_INLINE bool set(JsonArray array) const;
-  FORCE_INLINE bool set(const JsonArraySubscript &) const;
+  FORCE_INLINE bool set(Array array) const;
+  FORCE_INLINE bool set(const ArraySubscript &) const;
   FORCE_INLINE bool set(JsonObject object) const;
   template <typename TString>
   FORCE_INLINE bool set(const JsonObjectSubscript<TString> &) const;
@@ -227,7 +228,7 @@ class JsonVariant : public JsonVariantProxy<JsonVariantData>,
   // std::string as<std::string>() const;
   // String as<String>() const;
   template <typename T>
-  FORCE_INLINE typename enable_if<!is_same<T, JsonArray>::value &&
+  FORCE_INLINE typename enable_if<!is_same<T, Array>::value &&
                                       !is_same<T, JsonObject>::value &&
                                       !is_same<T, JsonVariant>::value,
                                   typename JsonVariantAs<T>::type>::type
@@ -235,11 +236,10 @@ class JsonVariant : public JsonVariantProxy<JsonVariantData>,
     return variantAs<T>(_data);
   }
   //
-  // JsonArray as<JsonArray>() const;
-  // const JsonArray as<const JsonArray>() const;
+  // Array as<Array>() const;
+  // const Array as<const Array>() const;
   template <typename T>
-  FORCE_INLINE typename enable_if<is_same<T, JsonArray>::value, T>::type as()
-      const;
+  FORCE_INLINE typename enable_if<is_same<T, Array>::value, T>::type as() const;
   //
   // JsonObject as<JsonObject>() const;
   // const JsonObject as<const JsonObject>() const;
@@ -267,9 +267,9 @@ class JsonVariant : public JsonVariantProxy<JsonVariantData>,
 
   // Change the type of the variant
   //
-  // JsonArray to<JsonArray>()
+  // Array to<Array>()
   template <typename T>
-  typename enable_if<is_same<T, JsonArray>::value, JsonArray>::type to() const;
+  typename enable_if<is_same<T, Array>::value, Array>::type to() const;
   //
   // JsonObject to<JsonObject>()
   template <typename T>

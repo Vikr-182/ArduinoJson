@@ -13,13 +13,13 @@
 #endif
 
 namespace ARDUINOJSON_NAMESPACE {
-class JsonArraySubscript : public JsonVariantBase<JsonArraySubscript>,
-                           public Visitable {
+class ArraySubscript : public JsonVariantBase<ArraySubscript>,
+                       public Visitable {
  public:
-  FORCE_INLINE JsonArraySubscript(JsonArray array, size_t index)
+  FORCE_INLINE ArraySubscript(Array array, size_t index)
       : _array(array), _index(index) {}
 
-  FORCE_INLINE JsonArraySubscript& operator=(const JsonArraySubscript& src) {
+  FORCE_INLINE ArraySubscript& operator=(const ArraySubscript& src) {
     get_impl().set(src.as<JsonVariantConst>());
     return *this;
   }
@@ -28,9 +28,9 @@ class JsonArraySubscript : public JsonVariantBase<JsonArraySubscript>,
   //
   // operator=(const TValue&)
   // TValue = bool, long, int, short, float, double, serialized, JsonVariant,
-  //          std::string, String, JsonArray, JsonObject
+  //          std::string, String, Array, JsonObject
   template <typename T>
-  FORCE_INLINE JsonArraySubscript& operator=(const T& src) {
+  FORCE_INLINE ArraySubscript& operator=(const T& src) {
     get_impl().set(src);
     return *this;
   }
@@ -38,7 +38,7 @@ class JsonArraySubscript : public JsonVariantBase<JsonArraySubscript>,
   // operator=(TValue)
   // TValue = char*, const char*, const FlashStringHelper*
   template <typename T>
-  FORCE_INLINE JsonArraySubscript& operator=(T* src) {
+  FORCE_INLINE ArraySubscript& operator=(T* src) {
     get_impl().set(src);
     return *this;
   }
@@ -66,7 +66,7 @@ class JsonArraySubscript : public JsonVariantBase<JsonArraySubscript>,
   //
   // bool set(const TValue&)
   // TValue = bool, long, int, short, float, double, serialized, JsonVariant,
-  //          std::string, String, JsonArray, JsonObject
+  //          std::string, String, Array, JsonObject
   template <typename TValue>
   FORCE_INLINE bool set(const TValue& value) const {
     return get_impl().set(value);
@@ -93,18 +93,18 @@ class JsonArraySubscript : public JsonVariantBase<JsonArraySubscript>,
     return _array.get(_index);
   }
 
-  JsonArray _array;
+  Array _array;
   const size_t _index;
 };
 
 template <typename TImpl>
-inline JsonArraySubscript JsonVariantSubscripts<TImpl>::operator[](
+inline ArraySubscript JsonVariantSubscripts<TImpl>::operator[](
     size_t index) const {
-  return impl()->template as<JsonArray>()[index];
+  return impl()->template as<Array>()[index];
 }
 
-inline JsonArraySubscript JsonArray::operator[](size_t index) const {
-  return JsonArraySubscript(*this, index);
+inline ArraySubscript Array::operator[](size_t index) const {
+  return ArraySubscript(*this, index);
 }
 }  // namespace ARDUINOJSON_NAMESPACE
 

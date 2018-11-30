@@ -5,7 +5,7 @@
 #pragma once
 
 namespace ARDUINOJSON_NAMESPACE {
-class JsonArray;
+class Array;
 class JsonObject;
 class JsonVariant;
 
@@ -15,8 +15,8 @@ template <typename T>
 struct JsonVariantTo {};
 
 template <>
-struct JsonVariantTo<JsonArray> {
-  typedef JsonArray type;
+struct JsonVariantTo<Array> {
+  typedef Array type;
 };
 template <>
 struct JsonVariantTo<JsonObject> {

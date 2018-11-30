@@ -4,16 +4,16 @@
 
 #pragma once
 
-#include "JsonArray.hpp"
+#include "Array.hpp"
 #include "JsonObject.hpp"
 
 namespace ARDUINOJSON_NAMESPACE {
 
-inline JsonArray JsonArray::createNestedArray() const {
-  return add().to<JsonArray>();
+inline Array Array::createNestedArray() const {
+  return add().to<Array>();
 }
 
-inline JsonObject JsonArray::createNestedObject() const {
+inline JsonObject Array::createNestedObject() const {
   return add().to<JsonObject>();
 }
 }  // namespace ARDUINOJSON_NAMESPACE
