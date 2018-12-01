@@ -29,11 +29,11 @@ class VariantSlot {
   // - no inheritance
 
   VariantData* getData() {
-    return reinterpret_cast<VariantData*>(this);
+    return reinterpret_cast<VariantData*>(&_content);
   }
 
   const VariantData* getData() const {
-    return reinterpret_cast<const VariantData*>(this);
+    return reinterpret_cast<const VariantData*>(&_content);
   }
 
   VariantSlot* getNext() {
