@@ -11,6 +11,8 @@
 
 namespace ARDUINOJSON_NAMESPACE {
 
+class VariantSlot;
+
 enum VariantType {
   JSON_NULL,
   JSON_LINKED_RAW,
@@ -26,13 +28,13 @@ enum VariantType {
 };
 
 struct ObjectData {
-  struct VariantSlot *head;
-  struct VariantSlot *tail;
+  VariantSlot *head;
+  VariantSlot *tail;
 };
 
 struct ArrayData {
-  struct VariantSlot *head;
-  struct VariantSlot *tail;
+  VariantSlot *head;
+  VariantSlot *tail;
 };
 
 struct RawData {
