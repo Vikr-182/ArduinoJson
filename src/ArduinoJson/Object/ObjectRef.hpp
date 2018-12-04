@@ -275,7 +275,7 @@ class ObjectRef : public ObjectRefBase<ObjectData>, public Visitable {
 
   template <typename TKey>
   FORCE_INLINE VariantRef set_impl(TKey key) const {
-    return VariantRef(_memoryPool, objectSet(_data, key, _memoryPool));
+    return VariantRef(_memoryPool, _data ? _data->set(key, _memoryPool) : 0);
   }
 
   template <typename TStringRef>

@@ -43,6 +43,18 @@ inline VariantSlot* ObjectData::findSlot(TKey key) const {
   return slot;
 }
 
+template <typename TKey>
+inline VariantData* ObjectData::set(TKey key, MemoryPool* pool) {
+  // ignore null key
+  if (key.isNull()) return 0;
+
+  // search a matching key
+  VariantSlot* slot = findSlot(key);
+  if (slot) return slot->getData();
+
+  return add(key, pool);
+}
+
 template <typename TString>
 inline ArrayRef ObjectRef::createNestedArray(const TString& key) const {
   return set(key).template to<ArrayRef>();
