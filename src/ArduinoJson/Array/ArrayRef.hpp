@@ -110,7 +110,8 @@ class ArrayRef : public ArrayRefBase<ArrayData>, public Visitable {
   }
 
   VariantRef add() const {
-    return VariantRef(_memoryPool, arrayAdd(_data, _memoryPool));
+    if (!_data) return VariantRef();
+    return VariantRef(_memoryPool, _data->add(_memoryPool));
   }
 
   FORCE_INLINE iterator begin() const {

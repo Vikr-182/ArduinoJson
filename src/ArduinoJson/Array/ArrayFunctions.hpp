@@ -9,25 +9,6 @@
 
 namespace ARDUINOJSON_NAMESPACE {
 
-inline VariantData* arrayAdd(ArrayData* arr, MemoryPool* pool) {
-  if (!arr) return 0;
-
-  VariantSlot* slot = pool->allocVariant();
-  if (!slot) return 0;
-
-  slot->init();
-
-  if (arr->tail) {
-    slot->attachTo(arr->tail);
-    arr->tail = slot;
-  } else {
-    arr->head = slot;
-    arr->tail = slot;
-  }
-
-  return slot->getData();
-}
-
 inline VariantSlot* arrayGetSlot(const ArrayData* arr, size_t index) {
   if (!arr) return 0;
   return arr->head->getNext(index);
@@ -67,7 +48,7 @@ inline bool arrayCopy(ArrayData* dst, const ArrayData* src, MemoryPool* pool) {
   if (!dst || !src) return false;
   arrayClear(dst);
   for (VariantSlot* s = src->head; s; s = s->getNext()) {
-    if (!variantCopy(arrayAdd(dst, pool), s->getData(), pool)) return false;
+    if (!variantCopy(dst->add(pool), s->getData(), pool)) return false;
   }
   return true;
 }

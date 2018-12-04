@@ -6,6 +6,7 @@
 
 #include <stddef.h>  // ptrdiff_t, size_t
 
+#include "../Array/ArrayData.hpp"
 #include "../Numbers/Float.hpp"
 #include "../Numbers/Integer.hpp"
 
@@ -28,11 +29,6 @@ enum VariantType {
 };
 
 struct ObjectData {
-  VariantSlot *head;
-  VariantSlot *tail;
-};
-
-struct ArrayData {
   VariantSlot *head;
   VariantSlot *tail;
 };
