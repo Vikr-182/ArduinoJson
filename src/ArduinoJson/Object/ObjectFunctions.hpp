@@ -11,25 +11,6 @@
 namespace ARDUINOJSON_NAMESPACE {
 
 template <typename TKey>
-inline VariantData* objectAdd(ObjectData* obj, TKey key, MemoryPool* pool) {
-  VariantSlot* slot = pool->allocVariant();
-  if (!slot) return 0;
-
-  slot->init();
-
-  if (obj->tail) {
-    slot->attachTo(obj->tail);
-    obj->tail = slot;
-  } else {
-    obj->head = slot;
-    obj->tail = slot;
-  }
-
-  if (!slotSetKey(slot, key, pool)) return 0;
-  return slot->getData();
-}
-
-template <typename TKey>
 inline VariantData* objectSet(ObjectData* obj, TKey key, MemoryPool* pool) {
   if (!obj) return 0;
 
@@ -40,7 +21,7 @@ inline VariantData* objectSet(ObjectData* obj, TKey key, MemoryPool* pool) {
   VariantSlot* slot = obj->findSlot(key);
   if (slot) return slot->getData();
 
-  return objectAdd(obj, key, pool);
+  return obj->add(key, pool);
 }
 
 template <typename TKey>
@@ -81,9 +62,9 @@ inline bool objectCopy(ObjectData* dst, const ObjectData* src,
   for (VariantSlot* s = src->head; s; s = s->getNext()) {
     VariantData* var;
     if (s->ownsKey())
-      var = objectAdd(dst, ZeroTerminatedRamString(s->key()), pool);
+      var = dst->add(ZeroTerminatedRamString(s->key()), pool);
     else
-      var = objectAdd(dst, ZeroTerminatedRamStringConst(s->key()), pool);
+      var = dst->add(ZeroTerminatedRamStringConst(s->key()), pool);
     if (!variantCopy(var, s->getData(), pool)) return false;
   }
   return true;

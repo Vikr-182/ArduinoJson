@@ -23,6 +23,9 @@ struct ObjectData {
   // - no inheritance
 
   template <typename TKey>
+  VariantData *add(TKey key, MemoryPool *pool);
+
+  template <typename TKey>
   bool containsKey(const TKey &key) const;
 
   template <typename TKey>
