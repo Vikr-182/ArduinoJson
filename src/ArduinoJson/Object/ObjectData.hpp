@@ -30,6 +30,8 @@ struct ObjectData {
   template <typename TKey>
   bool containsKey(const TKey &key) const;
 
+  bool copyFrom(const ObjectData &src, MemoryPool *pool);
+
   template <typename TKey>
   VariantSlot *findSlot(TKey key) const;
 

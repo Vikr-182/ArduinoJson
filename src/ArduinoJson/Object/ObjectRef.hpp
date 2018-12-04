@@ -155,7 +155,8 @@ class ObjectRef : public ObjectRefBase<ObjectData>, public Visitable {
   }
 
   FORCE_INLINE bool copyFrom(ObjectConstRef src) {
-    return objectCopy(_data, src._data, _memoryPool);
+    if (!_data || !src._data) return false;
+    return _data->copyFrom(*src._data, _memoryPool);
   }
 
   // Creates and adds a ArrayRef.

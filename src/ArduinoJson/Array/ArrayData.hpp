@@ -24,7 +24,7 @@ struct ArrayData {
 
   VariantData *add(MemoryPool *pool);
   void clear();
-  bool copyFrom(const ArrayData *src, MemoryPool *pool);
+  bool copyFrom(const ArrayData &src, MemoryPool *pool);
   bool equals(const ArrayData &) const;
   VariantData *get(size_t index) const;
   void remove(size_t index);

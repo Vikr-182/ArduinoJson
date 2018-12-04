@@ -210,9 +210,9 @@ inline bool variantCopy(VariantData* dst, const VariantData* src,
   }
   switch (src->type) {
     case JSON_ARRAY:
-      return variantToArray(dst)->copyFrom(&src->content.asArray, pool);
+      return variantToArray(dst)->copyFrom(src->content.asArray, pool);
     case JSON_OBJECT:
-      return objectCopy(variantToObject(dst), &src->content.asObject, pool);
+      return variantToObject(dst)->copyFrom(src->content.asObject, pool);
     case JSON_OWNED_STRING:
       return variantSetString(
           dst, ZeroTerminatedRamString(src->content.asString), pool);

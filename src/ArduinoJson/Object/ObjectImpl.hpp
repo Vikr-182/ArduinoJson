@@ -38,6 +38,19 @@ inline bool ObjectData::containsKey(const TKey& key) const {
   return findSlot(key);
 }
 
+inline bool ObjectData::copyFrom(const ObjectData& src, MemoryPool* pool) {
+  clear();
+  for (VariantSlot* s = src.head; s; s = s->getNext()) {
+    VariantData* var;
+    if (s->ownsKey())
+      var = add(ZeroTerminatedRamString(s->key()), pool);
+    else
+      var = add(ZeroTerminatedRamStringConst(s->key()), pool);
+    if (!variantCopy(var, s->getData(), pool)) return false;
+  }
+  return true;
+}
+
 template <typename TKey>
 inline VariantSlot* ObjectData::findSlot(TKey key) const {
   VariantSlot* slot = this->head;

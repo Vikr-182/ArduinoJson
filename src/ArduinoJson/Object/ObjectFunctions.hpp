@@ -12,21 +12,6 @@ namespace ARDUINOJSON_NAMESPACE {
 
 bool variantCopy(VariantData*, const VariantData*, MemoryPool*);
 
-inline bool objectCopy(ObjectData* dst, const ObjectData* src,
-                       MemoryPool* pool) {
-  if (!dst || !src) return false;
-  dst->clear();
-  for (VariantSlot* s = src->head; s; s = s->getNext()) {
-    VariantData* var;
-    if (s->ownsKey())
-      var = dst->add(ZeroTerminatedRamString(s->key()), pool);
-    else
-      var = dst->add(ZeroTerminatedRamStringConst(s->key()), pool);
-    if (!variantCopy(var, s->getData(), pool)) return false;
-  }
-  return true;
-}
-
 bool variantEquals(const VariantData*, const VariantData*);
 
 inline bool objectEquals(const ObjectData* o1, const ObjectData* o2) {
