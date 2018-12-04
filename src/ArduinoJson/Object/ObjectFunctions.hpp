@@ -10,11 +10,6 @@
 
 namespace ARDUINOJSON_NAMESPACE {
 
-inline size_t objectSize(const ObjectData* obj) {
-  if (!obj) return 0;
-  return slotSize(obj->head);
-}
-
 bool variantCopy(VariantData*, const VariantData*, MemoryPool*);
 
 inline bool objectCopy(ObjectData* dst, const ObjectData* src,

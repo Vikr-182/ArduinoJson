@@ -77,6 +77,10 @@ inline VariantData* ObjectData::set(TKey key, MemoryPool* pool) {
   return add(key, pool);
 }
 
+inline size_t ObjectData::size() const {
+  return slotSize(this->head);
+}
+
 template <typename TString>
 inline ArrayRef ObjectRef::createNestedArray(const TString& key) const {
   return set(key).template to<ArrayRef>();

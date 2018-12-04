@@ -38,7 +38,7 @@ class ObjectRefBase {
   }
 
   FORCE_INLINE size_t size() const {
-    return objectSize(_data);
+    return _data ? _data->size() : 0;
   }
 
  protected:

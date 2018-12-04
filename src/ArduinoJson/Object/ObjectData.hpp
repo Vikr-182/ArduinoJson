@@ -45,5 +45,7 @@ struct ObjectData {
   }
 
   void remove(VariantSlot *slot);
+
+  size_t size() const;
 };
 }  // namespace ARDUINOJSON_NAMESPACE

@@ -102,7 +102,8 @@ class VariantRefBase {
 
   size_t size() const {
     const ArrayData *arr = variantAsArray(_data);
-    return objectSize(variantAsObject(_data)) + (arr ? arr->size() : 0);
+    const ObjectData *obj = variantAsObject(_data);
+    return (obj ? obj->size() : 0) + (arr ? arr->size() : 0);
   }
 
  protected:
