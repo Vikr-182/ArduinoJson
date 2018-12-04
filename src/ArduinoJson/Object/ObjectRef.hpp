@@ -270,8 +270,8 @@ class ObjectRef : public ObjectRefBase<ObjectData>, public Visitable {
   }
 
  private:
-  template <typename TStringRef>
-  FORCE_INLINE VariantRef get_impl(TStringRef key) const {
+  template <typename TKey>
+  FORCE_INLINE VariantRef get_impl(TKey key) const {
     return VariantRef(_memoryPool, _data ? _data->get(key) : 0);
   }
 
@@ -280,10 +280,10 @@ class ObjectRef : public ObjectRefBase<ObjectData>, public Visitable {
     return VariantRef(_memoryPool, _data ? _data->set(key, _memoryPool) : 0);
   }
 
-  template <typename TStringRef>
-  FORCE_INLINE void remove_impl(TStringRef key) const {
+  template <typename TKey>
+  FORCE_INLINE void remove_impl(TKey key) const {
     if (!_data) return;
-    _data->remove(_data->findSlot(key));
+    _data->remove(key);
   }
 
   MemoryPool* _memoryPool;

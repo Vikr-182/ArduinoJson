@@ -39,6 +39,11 @@ struct ObjectData {
   template <typename TKey>
   VariantData *set(TKey key, MemoryPool *pool);
 
+  template <typename TKey>
+  void remove(TKey key) {
+    remove(findSlot(key));
+  }
+
   void remove(VariantSlot *slot);
 };
 }  // namespace ARDUINOJSON_NAMESPACE
