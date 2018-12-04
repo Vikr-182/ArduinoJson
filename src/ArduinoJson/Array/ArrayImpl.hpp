@@ -27,6 +27,32 @@ inline VariantData *ArrayData::add(MemoryPool *pool) {
   return slot->getData();
 }
 
+inline VariantData *ArrayData::get(size_t index) const {
+  VariantSlot *slot = getSlot(index);
+  return slot ? slot->getData() : 0;
+}
+
+inline VariantSlot *ArrayData::getSlot(size_t index) const {
+  return this->head->getNext(index);
+}
+
+inline void ArrayData::remove(VariantSlot *slot) {
+  if (!slot) return;
+
+  VariantSlot *prev = slot->getPrev(this->head);
+  VariantSlot *next = slot->getNext();
+
+  if (prev)
+    prev->setNext(next);
+  else
+    this->head = next;
+  if (!next) this->tail = prev;
+}
+
+inline void ArrayData::remove(size_t index) {
+  remove(getSlot(index));
+}
+
 inline ArrayRef ArrayRef::createNestedArray() const {
   return add().to<ArrayRef>();
 }

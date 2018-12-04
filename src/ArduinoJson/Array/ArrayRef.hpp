@@ -26,7 +26,7 @@ class ArrayRefBase {
   }
 
   FORCE_INLINE VariantConstRef operator[](size_t index) const {
-    return VariantConstRef(arrayGet(_data, index));
+    return VariantConstRef(_data ? _data->get(index) : 0);
   }
 
   FORCE_INLINE size_t size() const {
@@ -191,17 +191,19 @@ class ArrayRef : public ArrayRefBase<ArrayData>, public Visitable {
 
   // Gets the value at the specified index.
   FORCE_INLINE VariantRef get(size_t index) const {
-    return VariantRef(_memoryPool, arrayGet(_data, index));
+    return VariantRef(_memoryPool, _data ? _data->get(index) : 0);
   }
 
   // Removes element at specified position.
   FORCE_INLINE void remove(iterator it) const {
-    arrayRemove(_data, it.internal());
+    if (!_data) return;
+    _data->remove(it.internal());
   }
 
   // Removes element at specified index.
   FORCE_INLINE void remove(size_t index) const {
-    arrayRemove(_data, index);
+    if (!_data) return;
+    _data->remove(index);
   }
 
   template <typename Visitor>

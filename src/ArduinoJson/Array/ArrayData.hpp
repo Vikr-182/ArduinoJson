@@ -15,6 +15,19 @@ struct ArrayData {
   VariantSlot *head;
   VariantSlot *tail;
 
+ public:
+  // Must be a POD!
+  // - no constructor
+  // - no destructor
+  // - no virtual
+  // - no inheritance
+
   VariantData *add(MemoryPool *pool);
+  VariantData *get(size_t index) const;
+  void remove(size_t index);
+  void remove(VariantSlot *slot);
+
+ private:
+  VariantSlot *getSlot(size_t index) const;
 };
 }  // namespace ARDUINOJSON_NAMESPACE

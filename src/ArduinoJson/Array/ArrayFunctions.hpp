@@ -9,33 +9,6 @@
 
 namespace ARDUINOJSON_NAMESPACE {
 
-inline VariantSlot* arrayGetSlot(const ArrayData* arr, size_t index) {
-  if (!arr) return 0;
-  return arr->head->getNext(index);
-}
-
-inline VariantData* arrayGet(const ArrayData* arr, size_t index) {
-  VariantSlot* slot = arrayGetSlot(arr, index);
-  return slot ? slot->getData() : 0;
-}
-
-inline void arrayRemove(ArrayData* arr, VariantSlot* slot) {
-  if (!arr || !slot) return;
-
-  VariantSlot* prev = slot->getPrev(arr->head);
-  VariantSlot* next = slot->getNext();
-
-  if (prev)
-    prev->setNext(next);
-  else
-    arr->head = next;
-  if (!next) arr->tail = prev;
-}
-
-inline void arrayRemove(ArrayData* arr, size_t index) {
-  arrayRemove(arr, arrayGetSlot(arr, index));
-}
-
 inline void arrayClear(ArrayData* arr) {
   if (!arr) return;
   arr->head = 0;
