@@ -324,7 +324,8 @@ class VariantConstRef : public VariantRefBase<const VariantData>,
   FORCE_INLINE
       typename enable_if<IsString<TString *>::value, VariantConstRef>::type
       operator[](TString *key) const {
-    return VariantConstRef(objectGet(variantAsObject(_data), makeString(key)));
+    const ObjectData *obj = variantAsObject(_data);
+    return VariantConstRef(obj ? obj->get(makeString(key)) : 0);
   }
 };
 }  // namespace ARDUINOJSON_NAMESPACE

@@ -22,9 +22,6 @@ struct ObjectData {
   // - no virtual
   // - no inheritance
 
-  template <typename TKey>
-  VariantData *add(TKey key, MemoryPool *pool);
-
   void clear();
 
   template <typename TKey>
@@ -33,9 +30,6 @@ struct ObjectData {
   bool copyFrom(const ObjectData &src, MemoryPool *pool);
 
   bool equals(const ObjectData &other) const;
-
-  template <typename TKey>
-  VariantSlot *findSlot(TKey key) const;
 
   template <typename TKey>
   VariantData *get(TKey key) const;
@@ -51,5 +45,12 @@ struct ObjectData {
   void remove(VariantSlot *slot);
 
   size_t size() const;
+
+ private:
+  template <typename TKey>
+  VariantData *add(TKey key, MemoryPool *pool);
+
+  template <typename TKey>
+  VariantSlot *findSlot(TKey key) const;
 };
 }  // namespace ARDUINOJSON_NAMESPACE
