@@ -9,6 +9,7 @@
 #include "../Array/ArrayData.hpp"
 #include "../Numbers/Float.hpp"
 #include "../Numbers/Integer.hpp"
+#include "../Object/ObjectData.hpp"
 
 namespace ARDUINOJSON_NAMESPACE {
 
@@ -26,11 +27,6 @@ enum VariantType {
   JSON_ARRAY,
   JSON_OBJECT,
   JSON_FLOAT
-};
-
-struct ObjectData {
-  VariantSlot *head;
-  VariantSlot *tail;
 };
 
 struct RawData {

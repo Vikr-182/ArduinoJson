@@ -9,6 +9,16 @@
 
 namespace ARDUINOJSON_NAMESPACE {
 
+template <typename TKey>
+inline VariantSlot* ObjectData::findSlot(TKey key) const {
+  VariantSlot* slot = this->head;
+  while (slot) {
+    if (key.equals(slotGetKey(slot))) break;
+    slot = slot->getNext();
+  }
+  return slot;
+}
+
 template <typename TString>
 inline ArrayRef ObjectRef::createNestedArray(const TString& key) const {
   return set(key).template to<ArrayRef>();

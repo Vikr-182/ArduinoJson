@@ -280,7 +280,8 @@ class ObjectRef : public ObjectRefBase<ObjectData>, public Visitable {
 
   template <typename TStringRef>
   FORCE_INLINE void remove_impl(TStringRef key) const {
-    objectRemove(_data, objectFindSlot(_data, key));
+    if (!_data) return;
+    objectRemove(_data, _data->findSlot(key));
   }
 
   MemoryPool* _memoryPool;
