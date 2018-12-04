@@ -54,6 +54,17 @@ inline VariantData* ObjectData::get(TKey key) const {
   return slot ? slot->getData() : 0;
 }
 
+inline void ObjectData::remove(VariantSlot* slot) {
+  if (!slot) return;
+  VariantSlot* prev = slot->getPrev(this->head);
+  VariantSlot* next = slot->getNext();
+  if (prev)
+    prev->setNext(next);
+  else
+    this->head = next;
+  if (!next) this->tail = prev;
+}
+
 template <typename TKey>
 inline VariantData* ObjectData::set(TKey key, MemoryPool* pool) {
   // ignore null key

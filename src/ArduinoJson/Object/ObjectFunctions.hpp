@@ -10,18 +10,6 @@
 
 namespace ARDUINOJSON_NAMESPACE {
 
-inline void objectRemove(ObjectData* obj, VariantSlot* slot) {
-  if (!obj) return;
-  if (!slot) return;
-  VariantSlot* prev = slot->getPrev(obj->head);
-  VariantSlot* next = slot->getNext();
-  if (prev)
-    prev->setNext(next);
-  else
-    obj->head = next;
-  if (!next) obj->tail = prev;
-}
-
 inline size_t objectSize(const ObjectData* obj) {
   if (!obj) return 0;
   return slotSize(obj->head);

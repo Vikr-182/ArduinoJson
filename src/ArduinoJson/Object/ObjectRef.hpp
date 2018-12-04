@@ -226,7 +226,8 @@ class ObjectRef : public ObjectRefBase<ObjectData>, public Visitable {
   }
 
   FORCE_INLINE void remove(iterator it) const {
-    objectRemove(_data, it.internal());
+    if (!_data) return;
+    _data->remove(it.internal());
   }
 
   // Removes the specified key and the associated value.
@@ -282,7 +283,7 @@ class ObjectRef : public ObjectRefBase<ObjectData>, public Visitable {
   template <typename TStringRef>
   FORCE_INLINE void remove_impl(TStringRef key) const {
     if (!_data) return;
-    objectRemove(_data, _data->findSlot(key));
+    _data->remove(_data->findSlot(key));
   }
 
   MemoryPool* _memoryPool;
