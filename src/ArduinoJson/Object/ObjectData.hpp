@@ -25,6 +25,8 @@ struct ObjectData {
   template <typename TKey>
   VariantData *add(TKey key, MemoryPool *pool);
 
+  void clear();
+
   template <typename TKey>
   bool containsKey(const TKey &key) const;
 

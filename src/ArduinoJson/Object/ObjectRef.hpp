@@ -150,7 +150,8 @@ class ObjectRef : public ObjectRefBase<ObjectData>, public Visitable {
   }
 
   void clear() const {
-    objectClear(_data);
+    if (!_data) return;
+    _data->clear();
   }
 
   FORCE_INLINE bool copyFrom(ObjectConstRef src) {

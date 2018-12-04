@@ -28,6 +28,11 @@ inline VariantData* ObjectData::add(TKey key, MemoryPool* pool) {
   return slot->getData();
 }
 
+inline void ObjectData::clear() {
+  this->head = 0;
+  this->tail = 0;
+}
+
 template <typename TKey>
 inline bool ObjectData::containsKey(const TKey& key) const {
   return findSlot(key);

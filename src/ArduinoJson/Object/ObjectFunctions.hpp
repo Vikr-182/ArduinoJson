@@ -10,12 +10,6 @@
 
 namespace ARDUINOJSON_NAMESPACE {
 
-inline void objectClear(ObjectData* obj) {
-  if (!obj) return;
-  obj->head = 0;
-  obj->tail = 0;
-}
-
 inline void objectRemove(ObjectData* obj, VariantSlot* slot) {
   if (!obj) return;
   if (!slot) return;
@@ -38,7 +32,7 @@ bool variantCopy(VariantData*, const VariantData*, MemoryPool*);
 inline bool objectCopy(ObjectData* dst, const ObjectData* src,
                        MemoryPool* pool) {
   if (!dst || !src) return false;
-  objectClear(dst);
+  dst->clear();
   for (VariantSlot* s = src->head; s; s = s->getNext()) {
     VariantData* var;
     if (s->ownsKey())
