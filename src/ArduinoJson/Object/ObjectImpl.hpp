@@ -10,6 +10,11 @@
 namespace ARDUINOJSON_NAMESPACE {
 
 template <typename TKey>
+inline bool ObjectData::containsKey(const TKey& key) const {
+  return findSlot(key);
+}
+
+template <typename TKey>
 inline VariantSlot* ObjectData::findSlot(TKey key) const {
   VariantSlot* slot = this->head;
   while (slot) {

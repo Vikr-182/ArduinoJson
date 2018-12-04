@@ -11,11 +11,6 @@
 namespace ARDUINOJSON_NAMESPACE {
 
 template <typename TKey>
-inline bool objectContainsKey(const ObjectData* obj, const TKey& key) {
-  return obj ? obj->findSlot(key) != 0 : false;
-}
-
-template <typename TKey>
 inline VariantData* objectAdd(ObjectData* obj, TKey key, MemoryPool* pool) {
   VariantSlot* slot = pool->allocVariant();
   if (!slot) return 0;

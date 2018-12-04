@@ -23,6 +23,9 @@ struct ObjectData {
   // - no inheritance
 
   template <typename TKey>
+  bool containsKey(const TKey &key) const;
+
+  template <typename TKey>
   VariantSlot *findSlot(TKey key) const;
 };
 }  // namespace ARDUINOJSON_NAMESPACE

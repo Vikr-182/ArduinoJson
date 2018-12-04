@@ -23,14 +23,14 @@ class ObjectRefBase {
   // TKey = const std::string&, const String&
   template <typename TKey>
   FORCE_INLINE bool containsKey(const TKey& key) const {
-    return objectContainsKey(_data, makeString(key));
+    return _data && _data->containsKey(makeString(key));
   }
   //
   // bool containsKey(TKey);
   // TKey = char*, const char*, char[], const char[], const FlashStringHelper*
   template <typename TKey>
   FORCE_INLINE bool containsKey(TKey* key) const {
-    return objectContainsKey(_data, makeString(key));
+    return _data && _data->containsKey(makeString(key));
   }
 
   FORCE_INLINE bool isNull() const {
