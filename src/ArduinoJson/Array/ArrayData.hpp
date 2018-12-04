@@ -23,6 +23,7 @@ struct ArrayData {
   // - no inheritance
 
   VariantData *add(MemoryPool *pool);
+  void clear();
   VariantData *get(size_t index) const;
   void remove(size_t index);
   void remove(VariantSlot *slot);

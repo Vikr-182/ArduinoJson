@@ -27,6 +27,11 @@ inline VariantData *ArrayData::add(MemoryPool *pool) {
   return slot->getData();
 }
 
+inline void ArrayData::clear() {
+  this->head = 0;
+  this->tail = 0;
+}
+
 inline VariantData *ArrayData::get(size_t index) const {
   VariantSlot *slot = getSlot(index);
   return slot ? slot->getData() : 0;

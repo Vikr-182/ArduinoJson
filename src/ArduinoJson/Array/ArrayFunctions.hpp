@@ -9,17 +9,11 @@
 
 namespace ARDUINOJSON_NAMESPACE {
 
-inline void arrayClear(ArrayData* arr) {
-  if (!arr) return;
-  arr->head = 0;
-  arr->tail = 0;
-}
-
 bool variantCopy(VariantData*, const VariantData*, MemoryPool*);
 
 inline bool arrayCopy(ArrayData* dst, const ArrayData* src, MemoryPool* pool) {
   if (!dst || !src) return false;
-  arrayClear(dst);
+  dst->clear();
   for (VariantSlot* s = src->head; s; s = s->getNext()) {
     if (!variantCopy(dst->add(pool), s->getData(), pool)) return false;
   }
