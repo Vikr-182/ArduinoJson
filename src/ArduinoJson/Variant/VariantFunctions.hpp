@@ -7,7 +7,6 @@
 #include "../Misc/SerializedValue.hpp"
 #include "../Numbers/parseFloat.hpp"
 #include "../Numbers/parseInteger.hpp"
-#include "../Object/ObjectFunctions.hpp"
 #include "VariantData.hpp"
 
 namespace ARDUINOJSON_NAMESPACE {
@@ -281,7 +280,7 @@ inline bool variantEquals(const VariantData* a, const VariantData* b) {
       return a->content.asArray.equals(b->content.asArray);
 
     case JSON_OBJECT:
-      return objectEquals(&a->content.asObject, &b->content.asObject);
+      return a->content.asObject.equals(b->content.asObject);
 
     case JSON_FLOAT:
       return a->content.asFloat == b->content.asFloat;

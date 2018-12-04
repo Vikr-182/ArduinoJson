@@ -4,7 +4,6 @@
 
 #pragma once
 
-#include "ObjectFunctions.hpp"
 #include "ObjectIterator.hpp"
 
 // Returns the size (in bytes) of an object with n elements.
@@ -112,7 +111,9 @@ class ObjectConstRef : public ObjectRefBase<const ObjectData>,
   }
 
   FORCE_INLINE bool operator==(ObjectConstRef rhs) const {
-    return objectEquals(_data, rhs._data);
+    if (_data == rhs._data) return true;
+    if (!_data || !rhs._data) return false;
+    return _data->equals(*rhs._data);
   }
 
  private:
@@ -223,7 +224,9 @@ class ObjectRef : public ObjectRefBase<ObjectData>, public Visitable {
   }
 
   FORCE_INLINE bool operator==(ObjectRef rhs) const {
-    return objectEquals(_data, rhs._data);
+    if (_data == rhs._data) return true;
+    if (!_data || !rhs._data) return false;
+    return _data->equals(*rhs._data);
   }
 
   FORCE_INLINE void remove(iterator it) const {

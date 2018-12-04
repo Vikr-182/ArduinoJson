@@ -32,6 +32,8 @@ struct ObjectData {
 
   bool copyFrom(const ObjectData &src, MemoryPool *pool);
 
+  bool equals(const ObjectData &other) const;
+
   template <typename TKey>
   VariantSlot *findSlot(TKey key) const;
 

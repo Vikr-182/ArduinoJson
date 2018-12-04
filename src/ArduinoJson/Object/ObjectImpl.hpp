@@ -51,6 +51,15 @@ inline bool ObjectData::copyFrom(const ObjectData& src, MemoryPool* pool) {
   return true;
 }
 
+inline bool ObjectData::equals(const ObjectData& other) const {
+  for (VariantSlot* s = this->head; s; s = s->getNext()) {
+    VariantData* v1 = s->getData();
+    VariantData* v2 = other.get(makeString(slotGetKey(s)));
+    if (!variantEquals(v1, v2)) return false;
+  }
+  return true;
+}
+
 template <typename TKey>
 inline VariantSlot* ObjectData::findSlot(TKey key) const {
   VariantSlot* slot = this->head;
