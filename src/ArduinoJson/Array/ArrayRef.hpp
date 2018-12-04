@@ -153,7 +153,8 @@ class ArrayRef : public ArrayRefBase<ArrayData>, public Visitable {
 
   // Copy a ArrayRef
   FORCE_INLINE bool copyFrom(ArrayRef src) const {
-    return arrayCopy(_data, src._data, _memoryPool);
+    if (!_data) return false;
+    return _data->copyFrom(src._data, _memoryPool);
   }
 
   // Exports a 1D array

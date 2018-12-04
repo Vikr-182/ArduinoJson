@@ -32,6 +32,15 @@ inline void ArrayData::clear() {
   this->tail = 0;
 }
 
+inline bool ArrayData::copyFrom(const ArrayData *src, MemoryPool *pool) {
+  if (!src) return false;
+  clear();
+  for (VariantSlot *s = src->head; s; s = s->getNext()) {
+    if (!variantCopy(add(pool), s->getData(), pool)) return false;
+  }
+  return true;
+}
+
 inline VariantData *ArrayData::get(size_t index) const {
   VariantSlot *slot = getSlot(index);
   return slot ? slot->getData() : 0;

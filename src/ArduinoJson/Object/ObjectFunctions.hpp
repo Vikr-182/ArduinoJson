@@ -88,7 +88,7 @@ inline size_t objectSize(const ObjectData* obj) {
   return slotSize(obj->head);
 }
 
-// bool variantCopy(VariantData*, const VariantData*, MemoryPool*);
+bool variantCopy(VariantData*, const VariantData*, MemoryPool*);
 
 inline bool objectCopy(ObjectData* dst, const ObjectData* src,
                        MemoryPool* pool) {
