@@ -44,6 +44,12 @@ inline VariantSlot* ObjectData::findSlot(TKey key) const {
 }
 
 template <typename TKey>
+inline VariantData* ObjectData::get(TKey key) const {
+  VariantSlot* slot = findSlot(key);
+  return slot ? slot->getData() : 0;
+}
+
+template <typename TKey>
 inline VariantData* ObjectData::set(TKey key, MemoryPool* pool) {
   // ignore null key
   if (key.isNull()) return 0;

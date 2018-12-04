@@ -10,12 +10,6 @@
 
 namespace ARDUINOJSON_NAMESPACE {
 
-template <typename TKey>
-inline VariantData* objectGet(const ObjectData* obj, TKey key) {
-  VariantSlot* slot = obj ? obj->findSlot(key) : 0;
-  return slot ? slot->getData() : 0;
-}
-
 inline void objectClear(ObjectData* obj) {
   if (!obj) return;
   obj->head = 0;
@@ -64,7 +58,7 @@ inline bool objectEquals(const ObjectData* o1, const ObjectData* o2) {
 
   for (VariantSlot* s = o1->head; s; s = s->getNext()) {
     VariantData* v1 = s->getData();
-    VariantData* v2 = objectGet(o2, makeString(slotGetKey(s)));
+    VariantData* v2 = o2->get(makeString(slotGetKey(s)));
     if (!variantEquals(v1, v2)) return false;
   }
   return true;
