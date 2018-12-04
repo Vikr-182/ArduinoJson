@@ -4,7 +4,6 @@
 
 #pragma once
 
-#include "../Array/ArrayFunctions.hpp"
 #include "../Misc/SerializedValue.hpp"
 #include "../Numbers/parseFloat.hpp"
 #include "../Numbers/parseInteger.hpp"
@@ -279,7 +278,7 @@ inline bool variantEquals(const VariantData* a, const VariantData* b) {
       return a->content.asInteger == b->content.asInteger;
 
     case JSON_ARRAY:
-      return arrayEquals(&a->content.asArray, &b->content.asArray);
+      return a->content.asArray.equals(b->content.asArray);
 
     case JSON_OBJECT:
       return objectEquals(&a->content.asObject, &b->content.asObject);

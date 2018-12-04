@@ -105,6 +105,8 @@ inline bool objectCopy(ObjectData* dst, const ObjectData* src,
   return true;
 }
 
+bool variantEquals(const VariantData*, const VariantData*);
+
 inline bool objectEquals(const ObjectData* o1, const ObjectData* o2) {
   if (o1 == o2) return true;
   if (!o1 || !o2) return false;

@@ -41,6 +41,18 @@ inline bool ArrayData::copyFrom(const ArrayData *src, MemoryPool *pool) {
   return true;
 }
 
+inline bool ArrayData::equals(const ArrayData &other) const {
+  VariantSlot *s1 = this->head;
+  VariantSlot *s2 = other.head;
+  for (;;) {
+    if (s1 == s2) return true;
+    if (!s1 || !s2) return false;
+    if (!variantEquals(s1->getData(), s2->getData())) return false;
+    s1 = s1->getNext();
+    s2 = s2->getNext();
+  }
+}
+
 inline VariantData *ArrayData::get(size_t index) const {
   VariantSlot *slot = getSlot(index);
   return slot ? slot->getData() : 0;
@@ -65,6 +77,10 @@ inline void ArrayData::remove(VariantSlot *slot) {
 
 inline void ArrayData::remove(size_t index) {
   remove(getSlot(index));
+}
+
+inline size_t ArrayData::size() const {
+  return slotSize(this->head);
 }
 
 inline ArrayRef ArrayRef::createNestedArray() const {

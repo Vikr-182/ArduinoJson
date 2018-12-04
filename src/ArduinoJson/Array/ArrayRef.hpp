@@ -5,7 +5,6 @@
 #pragma once
 
 #include "../Variant/VariantData.hpp"
-#include "ArrayFunctions.hpp"
 #include "ArrayIterator.hpp"
 
 // Returns the size (in bytes) of an array with n elements.
@@ -30,7 +29,7 @@ class ArrayRefBase {
   }
 
   FORCE_INLINE size_t size() const {
-    return arraySize(_data);
+    return _data ? _data->size() : 0;
   }
 
  protected:
@@ -66,7 +65,9 @@ class ArrayConstRef : public ArrayRefBase<const ArrayData>, public Visitable {
   FORCE_INLINE ArrayConstRef(const ArrayData* data) : base_type(data) {}
 
   FORCE_INLINE bool operator==(ArrayConstRef rhs) const {
-    return arrayEquals(_data, rhs._data);
+    if (_data == rhs._data) return true;
+    if (!_data || !rhs._data) return false;
+    return _data->equals(*rhs._data);
   }
 };
 
@@ -187,7 +188,9 @@ class ArrayRef : public ArrayRefBase<ArrayData>, public Visitable {
   FORCE_INLINE ArraySubscript operator[](size_t index) const;
 
   FORCE_INLINE bool operator==(ArrayRef rhs) const {
-    return arrayEquals(_data, rhs._data);
+    if (_data == rhs._data) return true;
+    if (!_data || !rhs._data) return false;
+    return _data->equals(*rhs._data);
   }
 
   // Gets the value at the specified index.
